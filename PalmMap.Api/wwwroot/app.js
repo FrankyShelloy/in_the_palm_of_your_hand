@@ -60,11 +60,82 @@ async function api(path, options = {}) {
   if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(`${apiBase}${path}`, { ...options, headers });
   if (!res.ok) {
-    const msg = await res.text();
-    throw new Error(msg || res.statusText);
+    let errorData;
+    try {
+      errorData = await res.json();
+    } catch {
+      errorData = await res.text();
+    }
+    throw errorData;
   }
   if (res.status === 204) return null;
   return res.json();
+}
+
+function formatError(err) {
+  if (!err) return "Неизвестная ошибка";
+  
+  // Если это строка (например, JSON), пробуем распарсить
+  if (typeof err === 'string') {
+    try {
+      const parsed = JSON.parse(err);
+      return formatError(parsed);
+    } catch (e) {
+      return err; // Просто строка
+    }
+  }
+
+  // Обработка 401 Unauthorized (стандартный ответ ASP.NET Core)
+  if (err.status === 401 || err.title === "Unauthorized") {
+    return "Неверный email или пароль.";
+  }
+
+  // Массив ошибок Identity
+  if (Array.isArray(err)) {
+    return err.map(e => translateIdentityError(e)).join('<br>');
+  }
+
+  // Объект с сообщением (наш кастомный формат { message: "..." })
+  if (err.message) {
+    // Если message это JSON строка, пробуем распарсить
+    if (typeof err.message === 'string' && err.message.trim().startsWith('{')) {
+        try {
+            const parsed = JSON.parse(err.message);
+            return formatError(parsed);
+        } catch {}
+    }
+    return err.message;
+  }
+  
+  // ValidationProblemDetails (errors: { Field: ["Error"] })
+  if (err.errors) {
+    // Собираем все ошибки валидации в один список
+    return Object.values(err.errors).flat().join('<br>');
+  }
+
+  // Если есть заголовок ошибки, но нет деталей (например, 400 Bad Request без body)
+  if (err.title) {
+      return err.title;
+  }
+
+  return "Произошла ошибка при выполнении запроса.";
+}
+
+function translateIdentityError(error) {
+    const code = error.code;
+    switch (code) {
+        case "DuplicateEmail": return "Этот Email уже зарегистрирован.";
+        case "DuplicateUserName": return "Это имя пользователя уже занято.";
+        case "InvalidEmail": return "Некорректный Email.";
+        case "PasswordTooShort": return "Пароль слишком короткий (минимум 6 символов).";
+        case "PasswordRequiresNonAlphanumeric": return "Пароль должен содержать спецсимвол (!?@...).";
+        case "PasswordRequiresDigit": return "Пароль должен содержать цифру.";
+        case "PasswordRequiresLower": return "Пароль должен содержать строчную букву.";
+        case "PasswordRequiresUpper": return "Пароль должен содержать заглавную букву.";
+        case "InvalidToken": return "Неверный или устаревший токен.";
+        case "PasswordMismatch": return "Неверный пароль.";
+        default: return error.description || "Произошла ошибка.";
+    }
 }
 
 async function loadProfile() {
@@ -158,7 +229,8 @@ els.loginForm?.addEventListener("submit", async (e) => {
     hideModal();
     await loadProfile();
   } catch (err) {
-    els.loginError.textContent = "Ошибка входа: " + (err.message || "неизвестная ошибка");
+    const msg = formatError(err);
+    els.loginError.innerHTML = "<strong>Ошибка входа:</strong><br>" + msg;
     els.loginError.classList.add("error");
   }
 });
@@ -180,8 +252,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (res.ok) {
           alert("Письмо для сброса пароля отправлено! Проверьте ваш email.");
         } else {
-          const msg = await res.text();
-          alert("Ошибка: " + msg);
+          let errorData;
+          try {
+            errorData = await res.json();
+          } catch {
+            errorData = await res.text();
+          }
+          alert("Ошибка: " + formatError(errorData));
         }
       } catch (error) {
         alert("Ошибка подключения к серверу");
@@ -212,12 +289,18 @@ els.registerForm?.addEventListener("submit", async (e) => {
       return;
     }
     if (!res.ok) {
-      const msg = await res.text();
-      throw new Error(msg);
+      let errorData;
+      try {
+        errorData = await res.json();
+      } catch {
+        errorData = await res.text();
+      }
+      throw errorData;
     }
     hideModal();
   } catch (err) {
-    els.registerError.textContent = "Ошибка регистрации: " + (err.message || "неизвестная ошибка");
+    const msg = formatError(err);
+    els.registerError.innerHTML = "<strong>Ошибка регистрации:</strong><br>" + msg;
     els.registerError.classList.add("error");
   }
 });
@@ -236,7 +319,7 @@ els.reviewForm?.addEventListener("submit", async (e) => {
     els.reviewStatus.textContent = "Сохранено";
     await loadProfile();
   } catch (err) {
-    els.reviewStatus.textContent = "Не удалось";
+    els.reviewStatus.innerHTML = '<strong>Ошибка:</strong> ' + formatError(err);
     els.reviewStatus.classList.add("error");
   }
 });

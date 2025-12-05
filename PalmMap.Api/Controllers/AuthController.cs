@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PalmMap.Api.Dtos;
@@ -34,10 +35,21 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
+        if (string.IsNullOrWhiteSpace(request.DisplayName))
+        {
+             return BadRequest(new { message = "Имя пользователя обязательно" });
+        }
+
         var existing = await _userManager.FindByEmailAsync(request.Email);
         if (existing != null)
         {
-            return Conflict(new { message = "User already exists" });
+            return Conflict(new { message = "Пользователь с таким email уже существует" });
+        }
+
+        var nameExists = await _userManager.Users.AnyAsync(u => u.DisplayName == request.DisplayName);
+        if (nameExists)
+        {
+            return Conflict(new { message = "Пользователь с таким именем уже существует" });
         }
 
         var user = new ApplicationUser
@@ -111,7 +123,10 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null) return Ok(); // don't reveal
+        if (user == null) 
+        {
+            return BadRequest(new { message = "Пользователь с таким email не зарегистрирован" });
+        }
 
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         var encoded = WebUtility.UrlEncode(token);
@@ -120,7 +135,7 @@ public class AuthController : ControllerBase
         var html = $"<p>Здравствуйте!</p><p>Чтобы сбросить пароль, перейдите по ссылке:</p><p><a href=\"{resetLink}\">Сбросить пароль</a></p>";
         await _emailSender.SendEmailAsync(user.Email!, "Сброс пароля — НаЛадони", html);
 
-        return Ok(new { message = "Если пользователь существует, письмо отправлено" });
+        return Ok(new { message = "Письмо для сброса пароля отправлено" });
     }
 
     [HttpPost("reset-password")]
