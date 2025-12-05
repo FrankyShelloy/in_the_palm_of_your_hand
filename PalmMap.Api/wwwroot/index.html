@@ -21,9 +21,29 @@
     <section class="panel wide" id="map-panel">
       <div class="panel-header">
         <h2>Карта</h2>
-        <span class="tag">заглушка</span>
+        <span class="tag">Тульская область</span>
       </div>
-      <div class="map-placeholder">Здесь будет карта</div>
+      <div class="map-container-wrapper">
+        <div id="map"></div>
+
+        <!-- Панель фильтров -->
+        <div id="filters">
+            <h4>Объекты инфраструктуры</h4>
+            <label><input type="checkbox" data-type="pharmacy" checked> Аптеки 💊</label>
+            <label><input type="checkbox" data-type="health_center" checked> Центры здоровья 🩺</label>
+            <label><input type="checkbox" data-type="hospital" checked> Больницы 🏥</label>
+            <label><input type="checkbox" data-type="dentist" checked> Стоматологии 🦷</label>
+            <label><input type="checkbox" data-type="lab" checked> Лаборатории 🔬</label>
+            <label><input type="checkbox" data-type="clinic" checked> Поликлиники 🏨</label>
+            <label><input type="checkbox" data-type="other_med" checked> Другие мед. учреждения ⚕️</label>
+            <label><input type="checkbox" data-type="healthy_food" checked> Здоровое питание 🍏</label>
+            <label><input type="checkbox" data-type="alcohol" checked> Алкоголь / табак 🍷</label>
+            <label><input type="checkbox" data-type="gym" checked> Спорт / активность 🏋️</label>
+        </div>
+
+        <!-- Кнопка добавления -->
+        <!-- <button id="add-place-btn">➕ Добавить объект</button> -->
+      </div>
     </section>
 
     <section class="panel" id="profile-panel">
@@ -109,6 +129,62 @@
     </div>
   </div>
 
-  <script src="/app.js"></script>
+  <!-- Модальное окно добавления -->
+  <div id="add-place-modal">
+      <div>
+          <h3>Добавить объект инфраструктуры</h3>
+          <label>Название:</label>
+          <input type="text" id="place-name" placeholder="Например: Аптека 'Улыбка'">
+
+          <label>Тип:</label>
+          <select id="place-type">
+              <option value="healthy_food">Здоровое питание 🍏</option>
+              <option value="alcohol">Алкоголь / табак 🍷</option>
+              <option value="pharmacy">Аптека 💊</option>
+              <option value="health_center">Центр здоровья 🩺</option>
+              <option value="hospital">Больница 🏥</option>
+              <option value="dentist">Стоматология 🦷</option>
+              <option value="lab">Лаборатория 🔬</option>
+              <option value="clinic">Поликлиника 🏨</option>
+              <option value="gym">Спорт / активность 🏋️</option>
+              <option value="other_med">Другое (мед.) ⚕️</option>
+          </select>
+
+          <div style="margin-top:16px; display:flex; gap:10px;">
+              <button id="submit-place" style="flex:1; padding:8px; background:#2196F3; color:white; border:none; border-radius:4px;">Добавить</button>
+              <button id="cancel-place" style="flex:1; padding:8px; background:#ccc; border:none; border-radius:4px;">Отмена</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- Модальное окно отзыва -->
+  <div id="review-modal">
+      <div>
+          <h3>Оцените объект</h3>
+          <p id="review-place-name" style="margin:8px 0; font-weight:bold;"></p>
+
+          <div id="star-rating" style="display:flex; margin:12px 0;">
+              <span data-value="1" style="font-size:28px; cursor:pointer;">☆</span>
+              <span data-value="2" style="font-size:28px; cursor:pointer;">☆</span>
+              <span data-value="3" style="font-size:28px; cursor:pointer;">☆</span>
+              <span data-value="4" style="font-size:28px; cursor:pointer;">☆</span>
+              <span data-value="5" style="font-size:28px; cursor:pointer;">☆</span>
+          </div>
+
+          <label>Комментарий (необязательно):</label>
+          <textarea id="review-comment" placeholder="Расскажите подробнее..."></textarea>
+
+          <div style="margin-top:16px; display:flex; gap:10px;">
+              <button id="submit-review" style="flex:1; padding:8px; background:#FF9800; color:white; border:none; border-radius:4px;">Отправить</button>
+              <button id="cancel-review" style="flex:1; padding:8px; background:#ccc; border:none; border-radius:4px;">Отмена</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- Yandex Maps API -->
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=87e01821-8363-499b-a7d4-e5679708fc84&lang=ru_RU" type="text/javascript"></script>
+
+  <!-- Основной скрипт -->
+  <script src="app.js"></script>
 </body>
 </html>

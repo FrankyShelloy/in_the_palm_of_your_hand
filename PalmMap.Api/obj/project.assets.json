@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {
+    "net9.0": {
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -3515,7 +3515,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net8.0": [
+    "net9.0": [
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.8",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 8.0.8",
       "Microsoft.AspNetCore.OpenApi >= 8.0.8",
@@ -3525,29 +3525,30 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nat00\\.nuget\\packages\\": {}
+    "/home/frankyshelloy/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\PalmMap.Api.csproj",
+      "projectUniqueName": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/PalmMap.Api.csproj",
       "projectName": "PalmMap.Api",
-      "projectPath": "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\PalmMap.Api.csproj",
-      "packagesPath": "C:\\Users\\nat00\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\obj\\",
+      "projectPath": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/PalmMap.Api.csproj",
+      "packagesPath": "/home/frankyshelloy/.nuget/packages/",
+      "outputPath": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\nat00\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/frankyshelloy/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
-        "net8.0"
+        "net9.0"
       ],
       "sources": {
+        "/usr/lib/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "projectReferences": {}
         }
       },
@@ -3561,11 +3562,11 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
-      "net8.0": {
-        "targetAlias": "net8.0",
+      "net9.0": {
+        "targetAlias": "net9.0",
         "dependencies": {
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
@@ -3605,24 +3606,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[8.0.20, 8.0.20]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[8.0.20, 8.0.20]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[8.0.20, 8.0.20]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[8.0.20, 8.0.20]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -3631,7 +3614,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.111/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
