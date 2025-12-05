@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PalmMap</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">PalmMap</div>
+    <div class="auth-actions" id="auth-actions">
+      <button id="btn-show-login" class="ghost">Login</button>
+      <button id="btn-show-register" class="primary">Register</button>
+      <div id="user-info" class="user-info hidden"></div>
+      <button id="btn-logout" class="ghost hidden">Logout</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel wide" id="map-panel">
+      <div class="panel-header">
+        <h2>Map</h2>
+        <span class="tag">placeholder</span>
+      </div>
+      <div class="map-placeholder">Map will be integrated here</div>
+    </section>
+
+    <section class="panel" id="profile-panel">
+      <div class="panel-header">
+        <h2>Profile</h2>
+        <span class="tag" id="profile-level">Level 1</span>
+      </div>
+      <div class="profile-body">
+        <div class="stat">
+          <span class="label">Email</span>
+          <span id="profile-email" class="value">-</span>
+        </div>
+        <div class="stat">
+          <span class="label">Display Name</span>
+          <span id="profile-name" class="value">-</span>
+        </div>
+        <div class="stat">
+          <span class="label">Reviews</span>
+          <span id="profile-reviews" class="value">0</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="achievements-panel">
+      <div class="panel-header">
+        <h2>Achievements</h2>
+      </div>
+      <ul id="achievements-list" class="list"></ul>
+    </section>
+
+    <section class="panel wide" id="reviews-panel">
+      <div class="panel-header">
+        <h2>Reviews</h2>
+      </div>
+      <form id="review-form" class="stack">
+        <label class="field">
+          <span>Add review</span>
+          <textarea id="review-text" rows="3" placeholder="Write something..." required></textarea>
+        </label>
+        <button type="submit" class="primary">Send</button>
+        <div id="review-status" class="status"></div>
+      </form>
+      <div id="reviews-list" class="reviews"></div>
+    </section>
+  </main>
+
+  <div class="modal hidden" id="modal-auth">
+    <div class="modal-content">
+      <div class="tabs">
+        <button data-tab="login" class="tab active">Login</button>
+        <button data-tab="register" class="tab">Register</button>
+      </div>
+      <form id="login-form" class="stack" data-mode="login">
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="login-email" required />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" id="login-password" required />
+        </label>
+        <div id="login-error" class="status"></div>
+        <button type="submit" class="primary">Login</button>
+      </form>
+      <form id="register-form" class="stack hidden" data-mode="register">
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="register-email" required />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" id="register-password" minlength="6" required />
+        </label>
+        <label class="field">
+          <span>Display name</span>
+          <input type="text" id="register-name" />
+        </label>
+        <div id="register-error" class="status"></div>
+        <button type="submit" class="primary">Register</button>
+      </form>
+      <button id="modal-close" class="ghost close">Close</button>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
