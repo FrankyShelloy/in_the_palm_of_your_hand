@@ -158,27 +158,66 @@ els.loginForm?.addEventListener("submit", async (e) => {
     hideModal();
     await loadProfile();
   } catch (err) {
-    els.loginError.textContent = "Ошибка входа";
+    els.loginError.textContent = "Ошибка входа: " + (err.message || "неизвестная ошибка");
     els.loginError.classList.add("error");
+  }
+});
+
+// Forgot password button handler - must be inside a deferred function
+document.addEventListener("DOMContentLoaded", () => {
+  const btnForgotPassword = document.getElementById("btn-forgot-password");
+  if (btnForgotPassword) {
+    btnForgotPassword.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const email = prompt("Введите ваш email для сброса пароля:");
+      if (!email) return;
+      try {
+        const res = await fetch(`${apiBase}/auth/forgot-password`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+        if (res.ok) {
+          alert("Письмо для сброса пароля отправлено! Проверьте ваш email.");
+        } else {
+          const msg = await res.text();
+          alert("Ошибка: " + msg);
+        }
+      } catch (error) {
+        alert("Ошибка подключения к серверу");
+      }
+    });
   }
 });
 
 els.registerForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   els.registerError.textContent = "";
+  els.registerError.classList.remove("error", "success");
   try {
     const email = document.getElementById("register-email").value.trim();
     const password = document.getElementById("register-password").value;
     const displayName = document.getElementById("register-name").value.trim();
-    const res = await api("/auth/register", {
+    const res = await fetch(`${apiBase}/auth/register`, {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, displayName }),
     });
-    saveToken(res.token);
+    if (res.status === 202) {
+      els.registerError.textContent = "Регистрация успешна! Проверьте email для подтверждения.";
+      els.registerError.classList.add("success");
+      document.getElementById("register-email").value = "";
+      document.getElementById("register-password").value = "";
+      document.getElementById("register-name").value = "";
+      return;
+    }
+    if (!res.ok) {
+      const msg = await res.text();
+      throw new Error(msg);
+    }
     hideModal();
-    await loadProfile();
   } catch (err) {
-    els.registerError.textContent = "Ошибка регистрации";
+    els.registerError.textContent = "Ошибка регистрации: " + (err.message || "неизвестная ошибка");
     els.registerError.classList.add("error");
   }
 });

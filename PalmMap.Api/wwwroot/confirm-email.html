@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение Email - НаЛадони</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>НаЛадони</h1>
+        <div id="message-container" style="text-align: center; padding: 2rem;">
+            <p id="status-message">Подтверждение вашего email...</p>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="/" class="btn">Вернуться на главную</a>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+        const token = urlParams.get('token');
+
+        async function confirmEmail() {
+            if (!userId || !token) {
+                document.getElementById('status-message').innerHTML = 
+                    '<strong style="color: red;">Ошибка:</strong> Неверная ссылка подтверждения.';
+                return;
+            }
+
+            try {
+                // Токен пришел из URL (уже декодирован браузером), 
+                // отправляем его закодированным для правильной обработки на сервере
+                const response = await fetch(`/api/auth/confirm-email?userId=${encodeURIComponent(userId)}&token=${encodeURIComponent(token)}`);
+                
+                if (response.ok) {
+                    document.getElementById('status-message').innerHTML = 
+                        '<strong style="color: green;">✓ Email успешно подтверждён!</strong><br><br>Теперь вы можете войти в систему.';
+                } else {
+                    const error = await response.text();
+                    document.getElementById('status-message').innerHTML = 
+                        `<strong style="color: red;">Ошибка подтверждения:</strong><br>${error}`;
+                }
+            } catch (error) {
+                document.getElementById('status-message').innerHTML = 
+                    '<strong style="color: red;">Ошибка:</strong> Не удалось подключиться к серверу.';
+            }
+        }
+
+        confirmEmail();
+    </script>
+</body>
+</html>

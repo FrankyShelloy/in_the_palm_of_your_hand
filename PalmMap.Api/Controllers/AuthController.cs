@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PalmMap.Api.Dtos;
 using PalmMap.Api.Models;
+using PalmMap.Api.Services;
 
 namespace PalmMap.Api.Controllers;
 
@@ -17,11 +19,16 @@ public class AuthController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IConfiguration _configuration;
+    private readonly IEmailSenderDev _emailSender;
 
-    public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+    private readonly string _frontendUrl;
+
+    public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration, IEmailSenderDev emailSender)
     {
         _userManager = userManager;
         _configuration = configuration;
+        _emailSender = emailSender;
+        _frontendUrl = configuration.GetValue<string>("FrontendUrl") ?? "http://localhost:5014";
     }
 
     [HttpPost("register")]
@@ -48,8 +55,19 @@ public class AuthController : ControllerBase
             return BadRequest(result.Errors);
         }
 
-        var token = GenerateJwt(user);
-        return Ok(new AuthResponse(token, user.Email!, user.DisplayName));
+        // generate email confirmation token and send confirmation link
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var encodedToken = WebUtility.UrlEncode(token);
+        var encodedUserId = WebUtility.UrlEncode(user.Id);
+        var confirmLink = $"{_frontendUrl}/confirm-email?userId={encodedUserId}&token={encodedToken}";
+
+        var html = $"<p>Здравствуйте {WebUtility.HtmlEncode(user.DisplayName ?? user.Email)}!</p>" +
+                   $"<p>Спасибо за регистрацию на НаЛадони. Подтвердите почту, перейдя по ссылке:</p>" +
+                   $"<p><a href=\"{confirmLink}\">Подтвердить почту</a></p>";
+
+        await _emailSender.SendEmailAsync(user.Email!, "Подтверждение регистрации — НаЛадони", html);
+
+        return Accepted(new { message = "Пользователь создан. Проверьте почту для подтверждения." });
     }
 
     [HttpPost("login")]
@@ -67,8 +85,62 @@ public class AuthController : ControllerBase
             return Unauthorized();
         }
 
+        if (!user.EmailConfirmed)
+        {
+            return BadRequest(new { message = "Email не подтвержден. Проверьте почту и подтвердите email." });
+        }
+
         var token = GenerateJwt(user);
         return Ok(new AuthResponse(token, user.Email!, user.DisplayName));
+    }
+
+    [HttpGet("confirm-email")]
+    public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return NotFound();
+
+        // ASP.NET Core автоматически декодирует query-параметры
+        var res = await _userManager.ConfirmEmailAsync(user, token);
+        if (!res.Succeeded) return BadRequest(res.Errors);
+
+        return Ok(new { message = "Email подтверждён" });
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null) return Ok(); // don't reveal
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var encoded = WebUtility.UrlEncode(token);
+        var resetLink = $"{_frontendUrl}/reset-password?userId={WebUtility.UrlEncode(user.Id)}&token={encoded}";
+
+        var html = $"<p>Здравствуйте!</p><p>Чтобы сбросить пароль, перейдите по ссылке:</p><p><a href=\"{resetLink}\">Сбросить пароль</a></p>";
+        await _emailSender.SendEmailAsync(user.Email!, "Сброс пароля — НаЛадони", html);
+
+        return Ok(new { message = "Если пользователь существует, письмо отправлено" });
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest req)
+    {
+        var user = await _userManager.FindByIdAsync(req.UserId);
+        if (user == null) return NotFound();
+
+        // Токен приходит уже декодированным из JSON body
+        var res = await _userManager.ResetPasswordAsync(user, req.Token, req.NewPassword);
+        if (!res.Succeeded) return BadRequest(res.Errors);
+
+        // Auto-confirm email after password reset
+        if (!user.EmailConfirmed)
+        {
+            user.EmailConfirmed = true;
+            await _userManager.UpdateAsync(user);
+        }
+
+        return Ok(new { message = "Пароль успешно сброшен" });
     }
 
     [Authorize]
