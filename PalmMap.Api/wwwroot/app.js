@@ -78,7 +78,7 @@ async function loadProfile() {
 
     els.profileEmail.textContent = data.email;
     els.profileName.textContent = data.displayName ?? "—";
-    els.profileLevel.textContent = `Level ${data.level}`;
+    els.profileLevel.textContent = `Уровень ${data.level}`;
     els.profileReviews.textContent = data.reviewCount ?? 0;
 
     await loadAchievements();
@@ -94,12 +94,12 @@ async function loadAchievements() {
     const list = profile.achievements ?? [];
     els.achievements.innerHTML = "";
     if (list.length === 0) {
-      els.achievements.innerHTML = '<li class="muted">No achievements yet</li>';
+      els.achievements.innerHTML = '<li class="muted">Достижений пока нет</li>';
       return;
     }
     list.forEach((a) => {
       const li = document.createElement("li");
-      li.innerHTML = `<div class="title">${a.title}</div><div class="desc">${a.description}</div><div class="tag">${a.requiredReviews} reviews</div>`;
+      li.innerHTML = `<div class="title">${a.title}</div><div class="desc">${a.description}</div><div class="tag">${a.requiredReviews} отзывов</div>`;
       els.achievements.appendChild(li);
     });
   } catch (err) {
@@ -158,7 +158,7 @@ els.loginForm?.addEventListener("submit", async (e) => {
     hideModal();
     await loadProfile();
   } catch (err) {
-    els.loginError.textContent = "Login failed";
+    els.loginError.textContent = "Ошибка входа";
     els.loginError.classList.add("error");
   }
 });
@@ -178,7 +178,7 @@ els.registerForm?.addEventListener("submit", async (e) => {
     hideModal();
     await loadProfile();
   } catch (err) {
-    els.registerError.textContent = "Register failed";
+    els.registerError.textContent = "Ошибка регистрации";
     els.registerError.classList.add("error");
   }
 });
@@ -194,10 +194,10 @@ els.reviewForm?.addEventListener("submit", async (e) => {
       body: JSON.stringify({ content }),
     });
     els.reviewText.value = "";
-    els.reviewStatus.textContent = "Saved";
+    els.reviewStatus.textContent = "Сохранено";
     await loadProfile();
   } catch (err) {
-    els.reviewStatus.textContent = "Failed";
+    els.reviewStatus.textContent = "Не удалось";
     els.reviewStatus.classList.add("error");
   }
 });

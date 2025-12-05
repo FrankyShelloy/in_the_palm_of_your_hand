@@ -45,24 +45,24 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             {
                 Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                 Code = "first-review",
-                Title = "First Review",
-                Description = "Submit your first review",
+                Title = "Первый отзыв",
+                Description = "Оставьте первый отзыв",
                 RequiredReviews = 1
             },
             new Achievement
             {
                 Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
                 Code = "five-reviews",
-                Title = "Reviewer",
-                Description = "Leave 5 reviews",
+                Title = "Рецензент",
+                Description = "Оставьте 5 отзывов",
                 RequiredReviews = 5
             },
             new Achievement
             {
                 Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
                 Code = "ten-reviews",
-                Title = "Storyteller",
-                Description = "Leave 10 reviews",
+                Title = "Рассказчик",
+                Description = "Оставьте 10 отзывов",
                 RequiredReviews = 10
             });
     }
