@@ -17,7 +17,6 @@ echo Текущая ветка: %CURRENT_BRANCH%
 echo.
 
 REM Проверка наличия несохраненных изменений
-git status --porcelain > nul 2>&1
 for /f %%i in ('git status --porcelain ^| find /c /v ""') do set CHANGES=%%i
 
 if %CHANGES% gtr 0 (
@@ -44,7 +43,7 @@ echo.
 
 REM Проверка статуса относительно удаленной ветки
 for /f "tokens=*" %%i in ('git rev-parse @') do set LOCAL=%%i
-for /f "tokens=*" %%i in ('git rev-parse @{u} 2^>nul') do set REMOTE=%%i
+for /f "tokens=*" %%i in ('git rev-parse @{u} 2>nul') do set REMOTE=%%i
 
 if not defined REMOTE (
     echo [ВНИМАНИЕ] Удаленная ветка не найдена. Возможно, это новая ветка.
