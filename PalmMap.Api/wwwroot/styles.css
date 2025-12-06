@@ -431,16 +431,24 @@ button:active { transform: translateY(1px); }
 }
 #map { position: relative; z-index: 8; }
 
+.map-controls-container {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
 #filters {
-  position: absolute;
-  top: 12px;
-  right: 12px;
+  pointer-events: auto;
   background: white;
   padding: 14px;
   border-radius: 12px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.2);
-  /* place filters behind the topbar/logo but above the map */
-  z-index: 9;
   max-width: 260px;
   color: #000; /* Force black text for filters on white bg */
 }
@@ -465,18 +473,24 @@ button:active { transform: translateY(1px); }
 
 /* Кнопка добавления */
 #add-place-btn {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000;
-    padding: 10px 16px;
-    background: #4CAF50;
-    color: white;
+    pointer-events: auto;
+    position: static;
+    z-index: auto;
+    padding: 12px 20px;
     border: none;
-    border-radius: 6px;
+    border-radius: 12px;
     font-size: 14px;
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+    background: var(--accent);
+    color: #0b1220;
+    font-weight: 700;
+}
+
+#add-place-btn:hover {
+    transform: translateY(-2px);
+    background: var(--accent-strong);
 }
 
 /* Модальное окно добавления */

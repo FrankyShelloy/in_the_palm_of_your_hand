@@ -446,11 +446,33 @@ async function initMap() {
     window.openReviewForm = openReviewForm;
 }
 
-// Загрузка данных из JSON
+// Загрузка данных из JSON и API
 async function loadPlacesFromJson() {
     try {
+        // 1. Загружаем статические данные
         const res = await fetch('data/tula-objects.json');
-        const dbObjects = await res.json();
+        let dbObjects = await res.json();
+
+        // 2. Загружаем данные из БД
+        try {
+            const resApi = await fetch(`${apiBase}/places`);
+            if (resApi.ok) {
+                const apiPlaces = await resApi.json();
+                // Мапим API объекты в формат приложения, если нужно, или просто добавляем
+                // API возвращает: { id, name, type, latitude, longitude, address }
+                const mappedApiPlaces = apiPlaces.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    type: p.type,
+                    lat: p.latitude,
+                    lng: p.longitude,
+                    address: p.address
+                }));
+                dbObjects = [...dbObjects, ...mappedApiPlaces];
+            }
+        } catch (e) {
+            console.error('Ошибка загрузки мест из API:', e);
+        }
 
         basePlaces = dbObjects.map((obj, index) => {
             // ОСНОВНОЕ ИСПРАВЛЕНИЕ: Преобразуем id в строку для единообразия
@@ -460,7 +482,7 @@ async function loadPlacesFromJson() {
                 id: id, // Теперь это строка
                 name: obj.name || 'Мед. объект',
                 type: obj.type || 'other_med',
-                lat: parseFloat(obj.lat),
+                lat: parseFloat(obj.lat), // JSON uses lat/lng
                 lng: parseFloat(obj.lng),
                 address: obj.address || 'Адрес не указан',
                 avgRating: 0,
@@ -473,18 +495,15 @@ async function loadPlacesFromJson() {
             return place;
         });
 
-        // Также добавляем userAddedPlaces в карту
-        userAddedPlaces.forEach(place => {
-            allPlacesMap.set(place.id, place);
-        });
-
-        renderPlaces([...basePlaces, ...userAddedPlaces]);
+        // userAddedPlaces теперь не нужен для персистентности, но оставим для совместимости если что-то еще его использует
+        // renderPlaces([...basePlaces, ...userAddedPlaces]);
+        renderPlaces(basePlaces);
         console.log('Загружено объектов:', basePlaces.length);
     } catch (e) {
-        console.error('Ошибка загрузки tula-objects.json:', e);
+        console.error('Ошибка загрузки данных:', e);
         // alert('Не удалось загрузить объекты. Убедитесь, что data/tula-objects.json существует и валиден.');
         basePlaces = [];
-        renderPlaces([...basePlaces, ...userAddedPlaces]);
+        renderPlaces(basePlaces);
     }
 }
 
@@ -640,7 +659,7 @@ function onMapClick(e) {
     document.getElementById('add-place-modal').style.display = 'flex';
 }
 
-function submitNewPlace() {
+async function submitNewPlace() {
     const name = document.getElementById('place-name').value.trim();
     const type = document.getElementById('place-type').value;
 
@@ -650,23 +669,43 @@ function submitNewPlace() {
     }
 
     const [lat, lng] = pendingCoords;
-    const newPlace = {
-        id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        name,
-        type,
-        lat,
-        lng,
-        address: `Добавлено пользователем (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
-        avgRating: 0,
-        count: 0
-    };
 
-    userAddedPlaces.push(newPlace);
-    allPlacesMap.set(newPlace.id, newPlace);
-    renderPlaces([...basePlaces, ...userAddedPlaces]);
+    try {
+        // Отправляем на сервер
+        const res = await api('/places', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: name,
+                type: type,
+                latitude: lat,
+                longitude: lng,
+                address: `Добавлено пользователем (${lat.toFixed(4)}, ${lng.toFixed(4)})`
+            })
+        });
 
-    document.getElementById('place-name').value = '';
-    document.getElementById('add-place-modal').style.display = 'none';
+        const newPlace = {
+            id: String(res.id),
+            name: res.name,
+            type: res.type,
+            lat: res.latitude,
+            lng: res.longitude,
+            address: res.address,
+            avgRating: 0,
+            count: 0
+        };
+
+        // Добавляем в список и на карту
+        basePlaces.push(newPlace);
+        allPlacesMap.set(newPlace.id, newPlace);
+        renderPlaces(basePlaces);
+
+        document.getElementById('place-name').value = '';
+        document.getElementById('add-place-modal').style.display = 'none';
+        alert('Объект успешно добавлен!');
+    } catch (e) {
+        console.error(e);
+        alert('Ошибка при добавлении объекта: ' + (e.title || e));
+    }
 }
 
 // === СИСТЕМА ОТЗЫВОВ (через API) ===
@@ -720,7 +759,7 @@ function calculateRatingSync(placeId) {
 
 async function openReviewForm(placeId) {
     const idStr = String(placeId);
-    const place = allPlacesMap.get(idStr) || [...basePlaces, ...userAddedPlaces].find(p => String(p.id) === idStr);
+    const place = allPlacesMap.get(idStr) || basePlaces.find(p => String(p.id) === idStr);
     
     if (!place) {
         alert(`Объект не найден. ID: ${placeId}`);
@@ -812,7 +851,7 @@ function setupReviewModal() {
                 
                 // Обновить карту и профиль
                 await loadPlaceReviewsForMap();
-                renderPlaces([...basePlaces, ...userAddedPlaces]);
+                renderPlaces(basePlaces);
                 
                 // Обновить профиль если авторизован
                 if (getToken()) {
@@ -830,7 +869,7 @@ function setupReviewModal() {
 
 // Загрузка всех отзывов для объектов на карте
 async function loadPlaceReviewsForMap() {
-    const placeIds = [...basePlaces, ...userAddedPlaces].map(p => p.id);
+    const placeIds = basePlaces.map(p => p.id);
     for (const placeId of placeIds) {
         await getPlaceReviews(placeId);
     }
