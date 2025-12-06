@@ -223,6 +223,11 @@ a { color: var(--accent); }
 
 .panel.wide { flex: 2 1 600px; }
 
+/* Remove shadow for the main map panel so profile menu doesn't cast a shadow over the map */
+#map-panel {
+  box-shadow: none;
+}
+
 /* Profile Collapsed State */
 #profile-panel.collapsed {
   flex: 0 0 60px;
@@ -231,6 +236,10 @@ a { color: var(--accent); }
   overflow: hidden;
 }
 
+/* When profile panel is hidden, remove its box shadow */
+#profile-panel.panel-hidden {
+  box-shadow: none !important;
+}
 #profile-panel.collapsed .profile-body,
 #profile-panel.collapsed .profile-reviews-section,
 #profile-panel.collapsed .tag,
