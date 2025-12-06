@@ -11,6 +11,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<ReviewVote> ReviewVotes => Set<ReviewVote>();
     public DbSet<Place> Places => Set<Place>();
     public DbSet<Achievement> Achievements => Set<Achievement>();
     public DbSet<UserAchievement> UserAchievements => Set<UserAchievement>();
@@ -35,6 +36,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(ua => ua.Achievement)
             .WithMany(a => a.UserAchievements)
             .HasForeignKey(ua => ua.AchievementId);
+
+        builder.Entity<ReviewVote>()
+            .HasIndex(rv => new { rv.ReviewId, rv.UserId })
+            .IsUnique();
 
         builder.Entity<Review>()
             .HasOne(r => r.User)

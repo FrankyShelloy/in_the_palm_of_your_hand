@@ -17,4 +17,6 @@ public class Review
     public string? Comment { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public ICollection<ReviewVote> Votes { get; set; } = new List<ReviewVote>();
 }

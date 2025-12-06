@@ -1,7 +1,10 @@
 const apiBase = "/api";
 const tokenKey = "palmmap_token";
+let currentUser = null;
 
+// DOM Elements
 const els = {
+
   authActions: document.getElementById("auth-actions"),
   userInfo: document.getElementById("user-info"),
   logout: document.getElementById("btn-logout"),
@@ -76,9 +79,8 @@ async function api(path, options = {}) {
   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
   if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(`${apiBase}${path}`, { ...options, headers });
+  
   if (!res.ok) {
-    // Use a cloned response when attempting to read the body so we don't
-    // encounter "body stream already read" if something else accessed it.
     let errorData;
     try {
       errorData = await res.clone().json();
@@ -86,14 +88,22 @@ async function api(path, options = {}) {
       try {
         errorData = await res.clone().text();
       } catch (e) {
-        // Fallback: return status text
         errorData = res.statusText || `HTTP ${res.status}`;
       }
     }
     throw errorData;
   }
+
   if (res.status === 204) return null;
-  return res.json();
+  
+  const text = await res.text();
+  if (!text) return null;
+  
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    return text;
+  }
 }
 
 function formatError(err) {
@@ -165,6 +175,7 @@ function translateIdentityError(error) {
 async function loadProfile() {
   try {
     const data = await api("/auth/me");
+    currentUser = data;
     els.userInfo.textContent = data.email;
     els.userInfo.classList.remove("hidden");
     els.logout.classList.remove("hidden");
@@ -216,10 +227,27 @@ async function loadReviews() {
       div.className = "review-card-small";
       const date = new Date(r.createdAt).toLocaleDateString();
       const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+      
+      const likeActive = r.userVote === 1 ? 'active' : '';
+      const dislikeActive = r.userVote === -1 ? 'active' : '';
+      
+      const safePlaceName = (r.placeName || '').replace(/'/g, "\\'");
+
       div.innerHTML = `
         <div class="place-name">${r.placeName}</div>
         <div class="rating">${stars} <span style="color:var(--muted);font-size:0.8em;margin-left:6px">${date}</span></div>
         ${r.comment ? `<div style="margin-top:4px;font-size:0.85em;color:var(--text)">${r.comment}</div>` : ''}
+        
+        <div class="review-footer" style="margin-top: 8px; border-top: 1px solid var(--border); padding-top: 6px;">
+            <div class="vote-controls" style="display: flex; gap: 10px;">
+                <button class="vote-btn ${likeActive}" onclick="voteReview('${r.id}', true, '${r.placeId}', '${safePlaceName}')">
+                    👍 <span class="count">${r.likes}</span>
+                </button>
+                <button class="vote-btn ${dislikeActive}" onclick="voteReview('${r.id}', false, '${r.placeId}', '${safePlaceName}')">
+                    👎 <span class="count">${r.dislikes}</span>
+                </button>
+            </div>
+        </div>
       `;
       els.userReviewsList.appendChild(div);
     });
@@ -543,6 +571,25 @@ async function showObjectReviews(placeId, placeName) {
             const date = new Date(r.createdAt).toLocaleDateString();
             const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
             
+            const isAuthor = currentUser && currentUser.id === r.userId;
+            
+            // Escape strings for onclick
+            const safePlaceName = placeName.replace(/'/g, "\\'");
+            const safeComment = (r.comment || '').replace(/'/g, "\\'");
+
+            let actionsHtml = '';
+            if (isAuthor) {
+                actionsHtml = `
+                    <div class="review-actions">
+                        <button class="icon-btn small" onclick="editReview('${r.id}', ${r.rating}, '${safeComment}', '${placeId}')" title="Редактировать">✏️</button>
+                        <button class="icon-btn small" onclick="deleteReview('${r.id}', '${placeId}', '${safePlaceName}')" title="Удалить">🗑️</button>
+                    </div>
+                `;
+            }
+
+            const likeActive = r.userVote === 1 ? 'active' : '';
+            const dislikeActive = r.userVote === -1 ? 'active' : '';
+
             div.innerHTML = `
                 <div class="review-header">
                     <span class="review-author">
@@ -551,15 +598,87 @@ async function showObjectReviews(placeId, placeName) {
                     </span>
                     <span class="review-date">${date}</span>
                 </div>
-                <div style="color:#fbbf24;margin-bottom:6px;">${stars}</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                    <div style="color:#fbbf24;">${stars}</div>
+                    ${actionsHtml}
+                </div>
                 ${r.comment ? `<div class="review-text">${r.comment}</div>` : ''}
+                
+                <div class="review-footer" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 8px;">
+                    <div class="vote-controls" style="display: flex; gap: 12px;">
+                        <button class="vote-btn ${likeActive}" onclick="voteReview('${r.id}', true, '${placeId}', '${safePlaceName}')">
+                            👍 <span class="count">${r.likes}</span>
+                        </button>
+                        <button class="vote-btn ${dislikeActive}" onclick="voteReview('${r.id}', false, '${placeId}', '${safePlaceName}')">
+                            👎 <span class="count">${r.dislikes}</span>
+                        </button>
+                    </div>
+                </div>
             `;
             els.objectReviewsContent.appendChild(div);
         });
     } catch (e) {
+        console.error(e);
         els.objectReviewsContent.innerHTML = '<div class="error">Не удалось загрузить отзывы</div>';
     }
 }
+
+// Global functions for review actions
+window.voteReview = async function(reviewId, isLike, placeId, placeName) {
+    if (!currentUser) {
+        alert('Войдите, чтобы голосовать');
+        return;
+    }
+    try {
+        await api(`/reviews/${reviewId}/vote`, {
+            method: 'POST',
+            body: JSON.stringify({ isLike })
+        });
+        
+        // Очистить кэш чтобы получить свежие голоса
+        placeReviewsCache.delete(placeId);
+        
+        // Refresh reviews panel if open
+        if (els.objectReviewsPanel && !els.objectReviewsPanel.classList.contains('hidden') && els.objectReviewsTitle.textContent.includes(placeName)) {
+             await showObjectReviews(placeId, placeName);
+        }
+        
+        // Also refresh profile if we are logged in
+        if (getToken()) {
+            await loadReviews();
+        }
+    } catch (e) {
+        console.error(e);
+        alert('Ошибка при голосовании: ' + formatError(e));
+    }
+};
+
+window.deleteReview = async function(reviewId, placeId, placeName) {
+    if (!confirm('Вы уверены, что хотите удалить этот отзыв?')) return;
+    try {
+        await api(`/reviews/${reviewId}`, { method: 'DELETE' });
+        
+        // Очистить кэш
+        placeReviewsCache.delete(placeId);
+        
+        await showObjectReviews(placeId, placeName);
+        if (getToken()) {
+            await loadProfile();
+        }
+        
+        // Обновить карту
+        await loadPlacesFromJson();
+    } catch (e) {
+        console.error(e);
+        alert('Ошибка при удалении: ' + formatError(e));
+    }
+};
+
+window.editReview = function(reviewId, rating, comment, placeId) {
+    // Reuse the review form but change its behavior
+    openReviewForm(placeId, reviewId, rating, comment);
+};
+
 
 // Создание метки
 function createPlacemark(place) {
@@ -757,7 +876,7 @@ function calculateRatingSync(placeId) {
     };
 }
 
-async function openReviewForm(placeId) {
+async function openReviewForm(placeId, reviewId = null, rating = 0, comment = '') {
     const idStr = String(placeId);
     const place = allPlacesMap.get(idStr) || basePlaces.find(p => String(p.id) === idStr);
     
@@ -773,29 +892,34 @@ async function openReviewForm(placeId) {
         return;
     }
 
-    // Проверяем, не оставлял ли пользователь уже отзыв
-    try {
-        const res = await api(`/reviews/check/${idStr}`);
-        if (res.hasReview) {
-            alert('Вы уже оставили отзыв на этот объект');
-            return;
+    // Если это новый отзыв, проверяем, не оставлял ли пользователь уже отзыв
+    if (!reviewId) {
+        try {
+            const res = await api(`/reviews/check/${idStr}`);
+            if (res.hasReview) {
+                alert('Вы уже оставили отзыв на этот объект');
+                return;
+            }
+        } catch (e) {
+            console.error('Ошибка проверки отзыва:', e);
         }
-    } catch (e) {
-        console.error('Ошибка проверки отзыва:', e);
     }
 
     window.currentReviewPlaceId = idStr;
     window.currentReviewPlaceName = place.name;
-    document.getElementById('review-place-name').textContent = place.name;
+    window.currentReviewId = reviewId;
+
+    document.getElementById('review-place-name').textContent = reviewId ? `Редактирование: ${place.name}` : place.name;
     document.getElementById('review-modal').style.display = 'flex';
     
     // Сбросить форму
-    window.selectedRating = 0;
-    document.querySelectorAll('#star-rating span').forEach(s => {
-        s.textContent = '☆';
-        s.classList.remove('star-active');
+    window.selectedRating = rating;
+    document.querySelectorAll('#star-rating span').forEach((s, i) => {
+        const isActive = i + 1 <= rating;
+        s.textContent = isActive ? '★' : '☆';
+        s.classList.toggle('star-active', isActive);
     });
-    document.getElementById('review-comment').value = '';
+    document.getElementById('review-comment').value = comment;
 }
 
 function setupReviewModal() {
@@ -827,6 +951,7 @@ function setupReviewModal() {
             const comment = document.getElementById('review-comment').value.trim();
             const placeId = window.currentReviewPlaceId;
             const placeName = window.currentReviewPlaceName;
+            const reviewId = window.currentReviewId;
 
             if (!rating) {
                 alert('Пожалуйста, поставьте оценку');
@@ -834,15 +959,25 @@ function setupReviewModal() {
             }
 
             try {
-                await api('/reviews', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        placeId: placeId,
-                        placeName: placeName,
-                        rating: rating,
-                        comment: comment || null
-                    })
-                });
+                if (reviewId) {
+                    await api(`/reviews/${reviewId}`, {
+                        method: 'PUT',
+                        body: JSON.stringify({
+                            rating: rating,
+                            comment: comment || null
+                        })
+                    });
+                } else {
+                    await api('/reviews', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            placeId: placeId,
+                            placeName: placeName,
+                            rating: rating,
+                            comment: comment || null
+                        })
+                    });
+                }
 
                 // Очистить кэш для этого места
                 placeReviewsCache.delete(placeId);
@@ -858,7 +993,12 @@ function setupReviewModal() {
                     await loadProfile();
                 }
                 
-                alert('Спасибо за ваш отзыв!');
+                // Refresh reviews panel if open
+                if (els.objectReviewsPanel && els.objectReviewsTitle.textContent.includes(placeName)) {
+                    showObjectReviews(placeId, placeName);
+                }
+                
+                alert(reviewId ? 'Отзыв обновлен!' : 'Спасибо за ваш отзыв!');
             } catch (err) {
                 const msg = formatError(err);
                 alert('Ошибка: ' + msg);
