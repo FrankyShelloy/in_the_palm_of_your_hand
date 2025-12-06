@@ -10,8 +10,9 @@
 ./sync.sh
 ```
 
-### Подробное руководство
-Смотрите [SYNC_GUIDE.md](SYNC_GUIDE.md) для полных инструкций по работе с Git и GitHub.
+### Документация
+- [SYNC_GUIDE.md](SYNC_GUIDE.md) - Полное руководство по синхронизации с GitHub
+- [GIT_QUICK_REF.md](GIT_QUICK_REF.md) - Быстрая справка по командам Git
 
 ### Основные команды
 
