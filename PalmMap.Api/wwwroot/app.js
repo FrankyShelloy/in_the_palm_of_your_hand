@@ -535,13 +535,9 @@ async function loadPlacesFromJson() {
             return place;
         });
 
-        // userAddedPlaces теперь не нужен для персистентности, но оставим для совместимости если что-то еще его использует
-        // renderPlaces([...basePlaces, ...userAddedPlaces]);
         renderPlaces(basePlaces);
-        console.log('Загружено объектов:', basePlaces.length);
     } catch (e) {
         console.error('Ошибка загрузки данных:', e);
-        // alert('Не удалось загрузить объекты. Убедитесь, что data/tula-objects.json существует и валиден.');
         basePlaces = [];
         renderPlaces(basePlaces);
     }

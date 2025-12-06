@@ -310,10 +310,25 @@ public class ReviewsController : ControllerBase
         var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "reviews");
         Directory.CreateDirectory(uploadsDir);
 
-        // Генерируем уникальное имя файла
-        var extension = Path.GetExtension(photo.FileName);
-        var fileName = $"{reviewId}_{DateTime.UtcNow:yyyyMMddHHmmss}{extension}";
+        // Генерируем уникальное имя файла (защита от path traversal)
+        var originalExtension = Path.GetExtension(photo.FileName);
+        var safeExtension = originalExtension?.ToLowerInvariant() switch
+        {
+            ".jpg" or ".jpeg" => ".jpg",
+            ".png" => ".png",
+            ".webp" => ".webp",
+            ".gif" => ".gif",
+            _ => ".jpg" // fallback
+        };
+        var fileName = $"{reviewId}_{DateTime.UtcNow:yyyyMMddHHmmss}{safeExtension}";
         var filePath = Path.Combine(uploadsDir, fileName);
+        
+        // Дополнительная проверка что путь не выходит за пределы uploads
+        var fullPath = Path.GetFullPath(filePath);
+        if (!fullPath.StartsWith(Path.GetFullPath(uploadsDir)))
+        {
+            return BadRequest(new { message = "Недопустимое имя файла" });
+        }
 
         // Удаляем старое фото если есть
         if (!string.IsNullOrEmpty(review.PhotoPath))

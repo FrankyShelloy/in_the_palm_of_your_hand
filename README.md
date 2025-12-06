@@ -15,22 +15,21 @@
 - .NET 9.0 SDK
 - SQLite
 
-## Настройка VK OAuth
+## Настройка
 
-Для работы авторизации через VK необходимо:
+### Переменные окружения (рекомендуется)
+
+```bash
+export JWT_SECRET_KEY="your-secret-key-min-32-characters-long"
+export VK_CLIENT_ID="your_vk_app_id"
+export VK_CLIENT_SECRET="your_vk_client_secret"
+```
+
+### VK OAuth
 
 1. Создайте приложение на [VK для разработчиков](https://dev.vk.com/)
-2. В настройках приложения укажите Redirect URI: `http://localhost/api/auth/vk/callback`
-3. Откройте файл `PalmMap.Api/appsettings.json`
-4. Замените плейсхолдеры на ваши данные:
-
-```json
-"Vk": {
-  "ClientId": "YOUR_VK_APP_ID",        // ID вашего приложения VK
-  "ClientSecret": "YOUR_VK_CLIENT_SECRET",  // Защищённый ключ приложения
-  "ApiVersion": "5.131"
-}
-```
+2. Укажите Redirect URI: `http://localhost/api/auth/vk/callback`
+3. Настройте ключи через env переменные (см. выше) или в `appsettings.json`
 
 ⚠️ **Важно**: Не коммитьте реальные ключи в репозиторий!
 
@@ -41,12 +40,9 @@ cd PalmMap.Api
 dotnet run --launch-profile vk-auth
 ```
 
-Приложение будет доступно по адресу: http://localhost
+Приложение: http://localhost
 
-## Структура проекта
+## Структура
 
-- `PalmMap.Api/` - Backend на ASP.NET Core
-  - `Controllers/` - API контроллеры
-  - `Models/` - Модели данных
-  - `wwwroot/` - Frontend (HTML, CSS, JS)
-- `marky/` - Прототип карты
+- `PalmMap.Api/` - Backend (ASP.NET Core)
+- `wwwroot/` - Frontend (HTML, CSS, JS)

@@ -5,8 +5,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PalmMap.Api.Dtos;
 using PalmMap.Api.Models;
@@ -16,6 +16,7 @@ namespace PalmMap.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[EnableRateLimiting("api")]
 public class AuthController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -38,9 +39,10 @@ public class AuthController : ControllerBase
     [HttpGet("vk/login")]
     public IActionResult VkLogin()
     {
-        var vk = _configuration.GetSection("Vk");
-        var clientId = vk["ClientId"];
-        if (string.IsNullOrWhiteSpace(clientId)) return BadRequest(new { message = "VK ClientId not configured" });
+        var clientId = Environment.GetEnvironmentVariable("VK_CLIENT_ID") 
+            ?? _configuration.GetSection("Vk")["ClientId"];
+        if (string.IsNullOrWhiteSpace(clientId)) 
+            return BadRequest(new { message = "VK ClientId not configured" });
 
         var redirectUri = $"{_frontendUrl}/api/auth/vk/callback";
         
@@ -101,9 +103,9 @@ public class AuthController : ControllerBase
         Response.Cookies.Delete("vk_code_verifier");
         Response.Cookies.Delete("vk_state");
 
-        var vk = _configuration.GetSection("Vk");
-        var clientId = vk["ClientId"];
-        var clientSecret = vk["ClientSecret"];
+        var vkSection = _configuration.GetSection("Vk");
+        var clientId = Environment.GetEnvironmentVariable("VK_CLIENT_ID") ?? vkSection["ClientId"];
+        var clientSecret = Environment.GetEnvironmentVariable("VK_CLIENT_SECRET") ?? vkSection["ClientSecret"];
         if (string.IsNullOrWhiteSpace(clientId) || string.IsNullOrWhiteSpace(clientSecret))
             return BadRequest(new { message = "VK client credentials not configured" });
 
@@ -285,6 +287,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
+    [EnableRateLimiting("auth")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.DisplayName))
@@ -335,6 +338,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [EnableRateLimiting("auth")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
