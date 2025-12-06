@@ -290,6 +290,41 @@ a { color: var(--accent); }
   font-size: 0.8rem;
 }
 
+/* Moderation Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.status-pending {
+  background: rgba(243, 156, 18, 0.2);
+  color: #f39c12;
+}
+.status-approved {
+  background: rgba(39, 174, 96, 0.2);
+  color: #27ae60;
+}
+.status-rejected {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+[data-theme="light"] .status-pending {
+  background: #ffeaa7;
+  color: #d68910;
+}
+[data-theme="light"] .status-approved {
+  background: #d5f5e3;
+  color: #1e8449;
+}
+[data-theme="light"] .status-rejected {
+  background: #fadbd8;
+  color: #c0392b;
+}
+
 /* Object Reviews */
 .object-review-card {
   background: var(--card);

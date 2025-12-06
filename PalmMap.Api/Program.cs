@@ -86,6 +86,12 @@ if (jwtKey.Length < 32)
     throw new InvalidOperationException("JWT key must be at least 32 characters long");
 }
 
+// Security: Warn if using default development key in production
+if (!builder.Environment.IsDevelopment() && jwtKey.Contains("dev_secret_key"))
+{
+    throw new InvalidOperationException("SECURITY ERROR: Cannot use development JWT key in production. Set JWT_SECRET_KEY environment variable with a secure random key.");
+}
+
 var key = Encoding.UTF8.GetBytes(jwtKey);
 
 builder.Services.AddAuthentication(options =>
@@ -158,6 +164,25 @@ using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         db.Database.Migrate();
+        
+        // Check for --set-admin argument
+        var setAdminIndex = Array.IndexOf(args, "--set-admin");
+        if (setAdminIndex >= 0 && setAdminIndex + 1 < args.Length)
+        {
+            var email = args[setAdminIndex + 1];
+            var user = db.Users.FirstOrDefault(u => u.Email == email);
+            if (user != null)
+            {
+                user.IsAdmin = true;
+                db.SaveChanges();
+                Console.WriteLine($"✅ User {email} is now admin.");
+            }
+            else
+            {
+                Console.WriteLine($"❌ User {email} not found.");
+            }
+            return; // Exit after setting admin
+        }
     }
     catch (Exception ex)
     {

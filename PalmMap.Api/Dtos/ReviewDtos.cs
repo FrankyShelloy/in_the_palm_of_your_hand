@@ -19,7 +19,9 @@ public record ReviewResponse(
     DateTime CreatedAt,
     int Likes,
     int Dislikes,
-    int UserVote
+    int UserVote,
+    [property: JsonPropertyName("moderationStatus")] string ModerationStatus,
+    [property: JsonPropertyName("rejectionReason")] string? RejectionReason = null
 );
 
 // Для отображения отзывов на объекте карты (без привязки к пользователю)
@@ -34,7 +36,8 @@ public record PlaceReviewResponse(
     [property: JsonPropertyName("createdAt")] DateTime CreatedAt,
     [property: JsonPropertyName("likes")] int Likes,
     [property: JsonPropertyName("dislikes")] int Dislikes,
-    [property: JsonPropertyName("userVote")] int UserVote // 1 = like, -1 = dislike, 0 = none
+    [property: JsonPropertyName("userVote")] int UserVote, // 1 = like, -1 = dislike, 0 = none
+    [property: JsonPropertyName("moderationStatus")] string ModerationStatus = "approved"
 );
 
 public record UpdateReviewRequest(
@@ -61,5 +64,31 @@ public record UserRatingsResponse(
     [property: JsonPropertyName("top10")] List<UserRatingEntry> Top10,
     [property: JsonPropertyName("currentUserPosition")] int CurrentUserPosition,
     [property: JsonPropertyName("currentUser")] UserRatingEntry CurrentUser
+);
+
+// DTO для модерации
+public record ModerationReviewResponse(
+    [property: JsonPropertyName("id")] Guid Id,
+    [property: JsonPropertyName("userId")] string UserId,
+    [property: JsonPropertyName("userName")] string UserName,
+    [property: JsonPropertyName("placeId")] string PlaceId,
+    [property: JsonPropertyName("placeName")] string PlaceName,
+    [property: JsonPropertyName("rating")] int Rating,
+    [property: JsonPropertyName("comment")] string? Comment,
+    [property: JsonPropertyName("photoUrl")] string? PhotoUrl,
+    [property: JsonPropertyName("createdAt")] DateTime CreatedAt,
+    [property: JsonPropertyName("moderationStatus")] string ModerationStatus
+);
+
+public record ModerateRequest(
+    [property: JsonPropertyName("action")] string Action, // "approve" или "reject"
+    [property: JsonPropertyName("reason")] string? Reason = null
+);
+
+public record ModerationStatsResponse(
+    [property: JsonPropertyName("pending")] int Pending,
+    [property: JsonPropertyName("approved")] int Approved,
+    [property: JsonPropertyName("rejected")] int Rejected,
+    [property: JsonPropertyName("total")] int Total
 );
 
