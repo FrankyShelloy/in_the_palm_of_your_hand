@@ -1,0 +1,2402 @@
+{
+  "Version": 1,
+  "Hash": "24FjIUc77Hu+ltrhaib7nfNRyzP761v8aeSLi0fjv5c=",
+  "Source": "PalmMap.Api",
+  "BasePath": "_content/PalmMap.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "PalmMap.Api/wwwroot",
+      "Source": "PalmMap.Api",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/",
+      "BasePath": "_content/PalmMap.Api",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "styles#[.{fingerprint=k1mt084xqs}]?.css.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/styles.css",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "uwlbegro5u",
+      "Integrity": "rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/styles.css"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "index#[.{fingerprint=0galkhuv6g}]?.html.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "1muasem4cp",
+      "Integrity": "h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g86d0gu4vh-yu388uzyuh.gz",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "reset-password#[.{fingerprint=yu388uzyuh}]?.html.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/reset-password.html",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "pi96emhfd9",
+      "Integrity": "sSusZt1pGBx6wkeow/n9aKT9ijz31w1b7Vf9uooj224=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/reset-password.html"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/o3xg8ddrzp-rc59pwh7fw.gz",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "data/tula-objects#[.{fingerprint=rc59pwh7fw}]?.json.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/data/tula-objects.json",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "zkxzx4wprz",
+      "Integrity": "wyWvmrwbbmctDbraRPJr/hEYk7wV+NIr1KDVMf2LnKM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/data/tula-objects.json"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "app#[.{fingerprint=ce8i3h2252}]?.js.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/app.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "v2z1e8dv8x",
+      "Integrity": "KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/app.js"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/y9ynojd09q-18wa336ur3.gz",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "confirm-email#[.{fingerprint=18wa336ur3}]?.html.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/confirm-email.html",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "dd5v0r0nzt",
+      "Integrity": "D8eL+Z5JDImkGNo/xMR4T7xJ9Km6nDdh0uL8GeH3kiE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/confirm-email.html"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ywkbb5opda-yglxrz46tf.gz",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72#[.{fingerprint=yglxrz46tf}]?.html.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "yqtlvu38qc",
+      "Integrity": "Jo89uaXwi5nT2WO4FxlvlW+CMpND/tH28wFcIJgpjg0=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/app.js",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "app#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ce8i3h2252",
+      "Integrity": "/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/app.js"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/confirm-email.html",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "confirm-email#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "18wa336ur3",
+      "Integrity": "oXDRs2IYiBVmWeLjOGzSxwJFPIKsVHtEjQdKdvdpkKA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/confirm-email.html"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/data/tula-objects.json",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "data/tula-objects#[.{fingerprint}]?.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "rc59pwh7fw",
+      "Integrity": "pXOR7LTj88C+QPsrLSvod1KVquOhUovz2f16/3epb44=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/data/tula-objects.json"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yglxrz46tf",
+      "Integrity": "8hH7fm3iErYkNrluC/IiLX5sF0S+o9zt+MMyMOkKP4w=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "index#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "0galkhuv6g",
+      "Integrity": "IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.html"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/reset-password.html",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "reset-password#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yu388uzyuh",
+      "Integrity": "irUn80jUY1RYMu47zsvRYFYR0lAGxHX2u1tduSyzgsE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/reset-password.html"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/styles.css",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "styles#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "k1mt084xqs",
+      "Integrity": "KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/styles.css"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "app.ce8i3h2252.js",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000146262981"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6836"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ce8i3h2252"
+        },
+        {
+          "Name": "label",
+          "Value": "app.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8="
+        }
+      ]
+    },
+    {
+      "Route": "app.ce8i3h2252.js",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/app.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "23216"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ce8i3h2252"
+        },
+        {
+          "Name": "label",
+          "Value": "app.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8="
+        }
+      ]
+    },
+    {
+      "Route": "app.ce8i3h2252.js.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6836"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ce8i3h2252"
+        },
+        {
+          "Name": "label",
+          "Value": "app.js.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8="
+        }
+      ]
+    },
+    {
+      "Route": "app.js",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000146262981"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6836"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8="
+        }
+      ]
+    },
+    {
+      "Route": "app.js",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/app.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "23216"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8="
+        }
+      ]
+    },
+    {
+      "Route": "app.js.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6836"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8="
+        }
+      ]
+    },
+    {
+      "Route": "confirm-email.18wa336ur3.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/y9ynojd09q-18wa336ur3.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000956022945"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1045"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"D8eL+Z5JDImkGNo/xMR4T7xJ9Km6nDdh0uL8GeH3kiE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"oXDRs2IYiBVmWeLjOGzSxwJFPIKsVHtEjQdKdvdpkKA=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "18wa336ur3"
+        },
+        {
+          "Name": "label",
+          "Value": "confirm-email.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-oXDRs2IYiBVmWeLjOGzSxwJFPIKsVHtEjQdKdvdpkKA="
+        }
+      ]
+    },
+    {
+      "Route": "confirm-email.18wa336ur3.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/confirm-email.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2514"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oXDRs2IYiBVmWeLjOGzSxwJFPIKsVHtEjQdKdvdpkKA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "18wa336ur3"
+        },
+        {
+          "Name": "label",
+          "Value": "confirm-email.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-oXDRs2IYiBVmWeLjOGzSxwJFPIKsVHtEjQdKdvdpkKA="
+        }
+      ]
+    },
+    {
+      "Route": "confirm-email.18wa336ur3.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/y9ynojd09q-18wa336ur3.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1045"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"D8eL+Z5JDImkGNo/xMR4T7xJ9Km6nDdh0uL8GeH3kiE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "18wa336ur3"
+        },
+        {
+          "Name": "label",
+          "Value": "confirm-email.html.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-D8eL+Z5JDImkGNo/xMR4T7xJ9Km6nDdh0uL8GeH3kiE="
+        }
+      ]
+    },
+    {
+      "Route": "confirm-email.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/y9ynojd09q-18wa336ur3.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000956022945"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1045"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"D8eL+Z5JDImkGNo/xMR4T7xJ9Km6nDdh0uL8GeH3kiE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"oXDRs2IYiBVmWeLjOGzSxwJFPIKsVHtEjQdKdvdpkKA=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-oXDRs2IYiBVmWeLjOGzSxwJFPIKsVHtEjQdKdvdpkKA="
+        }
+      ]
+    },
+    {
+      "Route": "confirm-email.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/confirm-email.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2514"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oXDRs2IYiBVmWeLjOGzSxwJFPIKsVHtEjQdKdvdpkKA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-oXDRs2IYiBVmWeLjOGzSxwJFPIKsVHtEjQdKdvdpkKA="
+        }
+      ]
+    },
+    {
+      "Route": "confirm-email.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/y9ynojd09q-18wa336ur3.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1045"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"D8eL+Z5JDImkGNo/xMR4T7xJ9Km6nDdh0uL8GeH3kiE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-D8eL+Z5JDImkGNo/xMR4T7xJ9Km6nDdh0uL8GeH3kiE="
+        }
+      ]
+    },
+    {
+      "Route": "data/tula-objects.json",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/o3xg8ddrzp-rc59pwh7fw.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001615508885"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "618"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wyWvmrwbbmctDbraRPJr/hEYk7wV+NIr1KDVMf2LnKM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:56:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"pXOR7LTj88C+QPsrLSvod1KVquOhUovz2f16/3epb44=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-pXOR7LTj88C+QPsrLSvod1KVquOhUovz2f16/3epb44="
+        }
+      ]
+    },
+    {
+      "Route": "data/tula-objects.json",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/data/tula-objects.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1819"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"pXOR7LTj88C+QPsrLSvod1KVquOhUovz2f16/3epb44=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:56:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-pXOR7LTj88C+QPsrLSvod1KVquOhUovz2f16/3epb44="
+        }
+      ]
+    },
+    {
+      "Route": "data/tula-objects.json.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/o3xg8ddrzp-rc59pwh7fw.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "618"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wyWvmrwbbmctDbraRPJr/hEYk7wV+NIr1KDVMf2LnKM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:56:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-wyWvmrwbbmctDbraRPJr/hEYk7wV+NIr1KDVMf2LnKM="
+        }
+      ]
+    },
+    {
+      "Route": "data/tula-objects.rc59pwh7fw.json",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/o3xg8ddrzp-rc59pwh7fw.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001615508885"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "618"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wyWvmrwbbmctDbraRPJr/hEYk7wV+NIr1KDVMf2LnKM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:56:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"pXOR7LTj88C+QPsrLSvod1KVquOhUovz2f16/3epb44=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "rc59pwh7fw"
+        },
+        {
+          "Name": "label",
+          "Value": "data/tula-objects.json"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-pXOR7LTj88C+QPsrLSvod1KVquOhUovz2f16/3epb44="
+        }
+      ]
+    },
+    {
+      "Route": "data/tula-objects.rc59pwh7fw.json",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/data/tula-objects.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1819"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"pXOR7LTj88C+QPsrLSvod1KVquOhUovz2f16/3epb44=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:56:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "rc59pwh7fw"
+        },
+        {
+          "Name": "label",
+          "Value": "data/tula-objects.json"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-pXOR7LTj88C+QPsrLSvod1KVquOhUovz2f16/3epb44="
+        }
+      ]
+    },
+    {
+      "Route": "data/tula-objects.rc59pwh7fw.json.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/o3xg8ddrzp-rc59pwh7fw.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "618"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wyWvmrwbbmctDbraRPJr/hEYk7wV+NIr1KDVMf2LnKM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:56:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "rc59pwh7fw"
+        },
+        {
+          "Name": "label",
+          "Value": "data/tula-objects.json.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-wyWvmrwbbmctDbraRPJr/hEYk7wV+NIr1KDVMf2LnKM="
+        }
+      ]
+    },
+    {
+      "Route": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ywkbb5opda-yglxrz46tf.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001683501684"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "593"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Jo89uaXwi5nT2WO4FxlvlW+CMpND/tH28wFcIJgpjg0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:50:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"8hH7fm3iErYkNrluC/IiLX5sF0S+o9zt+MMyMOkKP4w=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-8hH7fm3iErYkNrluC/IiLX5sF0S+o9zt+MMyMOkKP4w="
+        }
+      ]
+    },
+    {
+      "Route": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "729"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"8hH7fm3iErYkNrluC/IiLX5sF0S+o9zt+MMyMOkKP4w=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:50:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-8hH7fm3iErYkNrluC/IiLX5sF0S+o9zt+MMyMOkKP4w="
+        }
+      ]
+    },
+    {
+      "Route": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ywkbb5opda-yglxrz46tf.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "593"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Jo89uaXwi5nT2WO4FxlvlW+CMpND/tH28wFcIJgpjg0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:50:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Jo89uaXwi5nT2WO4FxlvlW+CMpND/tH28wFcIJgpjg0="
+        }
+      ]
+    },
+    {
+      "Route": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.yglxrz46tf.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ywkbb5opda-yglxrz46tf.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001683501684"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "593"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Jo89uaXwi5nT2WO4FxlvlW+CMpND/tH28wFcIJgpjg0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:50:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"8hH7fm3iErYkNrluC/IiLX5sF0S+o9zt+MMyMOkKP4w=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yglxrz46tf"
+        },
+        {
+          "Name": "label",
+          "Value": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-8hH7fm3iErYkNrluC/IiLX5sF0S+o9zt+MMyMOkKP4w="
+        }
+      ]
+    },
+    {
+      "Route": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.yglxrz46tf.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "729"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"8hH7fm3iErYkNrluC/IiLX5sF0S+o9zt+MMyMOkKP4w=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:50:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yglxrz46tf"
+        },
+        {
+          "Name": "label",
+          "Value": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-8hH7fm3iErYkNrluC/IiLX5sF0S+o9zt+MMyMOkKP4w="
+        }
+      ]
+    },
+    {
+      "Route": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.yglxrz46tf.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ywkbb5opda-yglxrz46tf.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "593"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Jo89uaXwi5nT2WO4FxlvlW+CMpND/tH28wFcIJgpjg0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:50:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yglxrz46tf"
+        },
+        {
+          "Name": "label",
+          "Value": "emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Jo89uaXwi5nT2WO4FxlvlW+CMpND/tH28wFcIJgpjg0="
+        }
+      ]
+    },
+    {
+      "Route": "index.0galkhuv6g.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000420875421"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2375"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "0galkhuv6g"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado="
+        }
+      ]
+    },
+    {
+      "Route": "index.0galkhuv6g.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8721"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "0galkhuv6g"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado="
+        }
+      ]
+    },
+    {
+      "Route": "index.0galkhuv6g.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2375"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "0galkhuv6g"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000420875421"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2375"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8721"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado="
+        }
+      ]
+    },
+    {
+      "Route": "index.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2375"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU="
+        }
+      ]
+    },
+    {
+      "Route": "reset-password.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g86d0gu4vh-yu388uzyuh.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000668002672"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1496"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sSusZt1pGBx6wkeow/n9aKT9ijz31w1b7Vf9uooj224=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"irUn80jUY1RYMu47zsvRYFYR0lAGxHX2u1tduSyzgsE=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-irUn80jUY1RYMu47zsvRYFYR0lAGxHX2u1tduSyzgsE="
+        }
+      ]
+    },
+    {
+      "Route": "reset-password.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/reset-password.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4111"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"irUn80jUY1RYMu47zsvRYFYR0lAGxHX2u1tduSyzgsE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-irUn80jUY1RYMu47zsvRYFYR0lAGxHX2u1tduSyzgsE="
+        }
+      ]
+    },
+    {
+      "Route": "reset-password.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g86d0gu4vh-yu388uzyuh.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1496"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sSusZt1pGBx6wkeow/n9aKT9ijz31w1b7Vf9uooj224=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-sSusZt1pGBx6wkeow/n9aKT9ijz31w1b7Vf9uooj224="
+        }
+      ]
+    },
+    {
+      "Route": "reset-password.yu388uzyuh.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g86d0gu4vh-yu388uzyuh.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000668002672"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1496"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sSusZt1pGBx6wkeow/n9aKT9ijz31w1b7Vf9uooj224=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"irUn80jUY1RYMu47zsvRYFYR0lAGxHX2u1tduSyzgsE=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yu388uzyuh"
+        },
+        {
+          "Name": "label",
+          "Value": "reset-password.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-irUn80jUY1RYMu47zsvRYFYR0lAGxHX2u1tduSyzgsE="
+        }
+      ]
+    },
+    {
+      "Route": "reset-password.yu388uzyuh.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/reset-password.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4111"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"irUn80jUY1RYMu47zsvRYFYR0lAGxHX2u1tduSyzgsE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yu388uzyuh"
+        },
+        {
+          "Name": "label",
+          "Value": "reset-password.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-irUn80jUY1RYMu47zsvRYFYR0lAGxHX2u1tduSyzgsE="
+        }
+      ]
+    },
+    {
+      "Route": "reset-password.yu388uzyuh.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g86d0gu4vh-yu388uzyuh.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1496"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sSusZt1pGBx6wkeow/n9aKT9ijz31w1b7Vf9uooj224=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:35:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yu388uzyuh"
+        },
+        {
+          "Name": "label",
+          "Value": "reset-password.html.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-sSusZt1pGBx6wkeow/n9aKT9ijz31w1b7Vf9uooj224="
+        }
+      ]
+    },
+    {
+      "Route": "styles.css",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000390472472"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2560"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY="
+        }
+      ]
+    },
+    {
+      "Route": "styles.css",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8926"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY="
+        }
+      ]
+    },
+    {
+      "Route": "styles.css.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2560"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ="
+        }
+      ]
+    },
+    {
+      "Route": "styles.k1mt084xqs.css",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000390472472"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2560"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "k1mt084xqs"
+        },
+        {
+          "Name": "label",
+          "Value": "styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY="
+        }
+      ]
+    },
+    {
+      "Route": "styles.k1mt084xqs.css",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8926"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "k1mt084xqs"
+        },
+        {
+          "Name": "label",
+          "Value": "styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY="
+        }
+      ]
+    },
+    {
+      "Route": "styles.k1mt084xqs.css.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2560"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "k1mt084xqs"
+        },
+        {
+          "Name": "label",
+          "Value": "styles.css.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ="
+        }
+      ]
+    }
+  ]
+}
