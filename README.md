@@ -9,6 +9,7 @@
 - 🔐 Авторизация через email или VK
 - 🏆 Система очков и достижений
 - 🌙 Тёмная/светлая тема
+- 🔌 API для интеграции с городскими системами
 
 ## Требования
 
@@ -46,3 +47,23 @@ dotnet run --launch-profile vk-auth
 
 - `PalmMap.Api/` - Backend (ASP.NET Core)
 - `wwwroot/` - Frontend (HTML, CSS, JS)
+
+## API интеграции
+
+REST API для городских информационных систем. Требует заголовок `X-Api-Key`.
+
+```bash
+export INTEGRATION_API_KEY="your-api-key"
+```
+
+**Эндпоинты:**
+
+- `GET /api/v1/integration/places` — места с фильтрами
+- `GET /api/v1/integration/places/{id}` — детали места
+- `GET /api/v1/integration/places/nearby?lat=...&lon=...` — места рядом
+- `GET /api/v1/integration/stats` — статистика платформы
+- `GET /api/v1/integration/export/geojson` — экспорт GeoJSON
+
+```bash
+curl -H "X-Api-Key: $API_KEY" http://localhost/api/v1/integration/stats
+```
