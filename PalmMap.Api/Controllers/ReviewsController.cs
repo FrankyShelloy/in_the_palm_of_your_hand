@@ -55,7 +55,9 @@ public class ReviewsController : ControllerBase
                 r.CreatedAt,
                 r.Votes.Count(v => v.IsLike),
                 r.Votes.Count(v => !v.IsLike),
-                userVote
+                userVote,
+                r.ModerationStatus.ToString().ToLower(),
+                r.RejectionReason
             );
         });
 
@@ -63,6 +65,7 @@ public class ReviewsController : ControllerBase
     }
 
     // Получить все отзывы для конкретного места (для карты, без авторизации)
+    // Показываются только одобренные отзывы
     [HttpGet("place/{placeId}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetByPlace(string placeId)
@@ -70,7 +73,7 @@ public class ReviewsController : ControllerBase
         var currentUserId = _userManager.GetUserId(User);
 
         var reviews = await _db.Reviews
-            .Where(r => r.PlaceId == placeId)
+            .Where(r => r.PlaceId == placeId && r.ModerationStatus == ModerationStatus.Approved)
             .OrderByDescending(r => r.CreatedAt)
             .Include(r => r.User)
             .Include(r => r.Votes)
@@ -95,7 +98,8 @@ public class ReviewsController : ControllerBase
                 r.CreatedAt,
                 r.Votes.Count(v => v.IsLike),
                 r.Votes.Count(v => !v.IsLike),
-                userVote
+                userVote,
+                r.ModerationStatus.ToString().ToLower()
             );
         });
 
@@ -119,6 +123,12 @@ public class ReviewsController : ControllerBase
         if (request.Rating < 1 || request.Rating > 5)
         {
             return BadRequest(new { message = "Рейтинг должен быть от 1 до 5" });
+        }
+
+        // Валидация длины комментария
+        if (request.Comment != null && request.Comment.Length > 2000)
+        {
+            return BadRequest(new { message = "Комментарий не должен превышать 2000 символов" });
         }
 
         review.Rating = request.Rating;
@@ -158,7 +168,9 @@ public class ReviewsController : ControllerBase
 
         return Ok(new ReviewResponse(review.Id, review.PlaceId, review.PlaceName, review.Rating, review.Comment, 
             review.PhotoPath != null ? $"/uploads/reviews/{review.PhotoPath}" : null, 
-            review.CreatedAt, likes, dislikes, userVote));
+            review.CreatedAt, likes, dislikes, userVote,
+            review.ModerationStatus.ToString().ToLower(),
+            review.RejectionReason));
     }
 
     [HttpDelete("{id}")]
@@ -177,11 +189,10 @@ public class ReviewsController : ControllerBase
 
         _db.Reviews.Remove(review);
         
-        // Decrement user review count
+        // Decrement user review count and recalculate level
         user.ReviewCount = Math.Max(0, user.ReviewCount - 1);
-        // Recalculate level (simplified logic, ideally should be in service)
-        // For now just keep it simple or call service if needed. 
-        // Assuming level only goes up for now or stays.
+        user.Points = Math.Max(0, user.Points - 10); // -10 очков за удалённый отзыв
+        user.Level = Math.Max(1, 1 + (user.ReviewCount / 5)); // Пересчёт уровня
         
         await _db.SaveChangesAsync();
         return Ok();
@@ -193,38 +204,51 @@ public class ReviewsController : ControllerBase
         var user = await _userManager.GetUserAsync(User);
         if (user == null) return Unauthorized();
 
-        var review = await _db.Reviews.Include(r => r.Votes).FirstOrDefaultAsync(r => r.Id == id);
-        if (review == null) return NotFound();
-
-        var existingVote = review.Votes.FirstOrDefault(v => v.UserId == user.Id);
-
-        if (existingVote != null)
+        // Используем транзакцию для предотвращения race condition
+        using var transaction = await _db.Database.BeginTransactionAsync();
+        try
         {
-            if (existingVote.IsLike == request.IsLike)
+            var review = await _db.Reviews.Include(r => r.Votes).FirstOrDefaultAsync(r => r.Id == id);
+            if (review == null) return NotFound();
+
+            var existingVote = await _db.ReviewVotes
+                .FirstOrDefaultAsync(v => v.ReviewId == id && v.UserId == user.Id);
+
+            if (existingVote != null)
             {
-                // Toggle off (remove vote)
-                _db.ReviewVotes.Remove(existingVote);
+                if (existingVote.IsLike == request.IsLike)
+                {
+                    // Toggle off (remove vote)
+                    _db.ReviewVotes.Remove(existingVote);
+                }
+                else
+                {
+                    // Change vote
+                    existingVote.IsLike = request.IsLike;
+                }
             }
             else
             {
-                // Change vote
-                existingVote.IsLike = request.IsLike;
+                // New vote
+                var vote = new ReviewVote
+                {
+                    ReviewId = id,
+                    UserId = user.Id,
+                    IsLike = request.IsLike
+                };
+                _db.ReviewVotes.Add(vote);
             }
-        }
-        else
-        {
-            // New vote
-            var vote = new ReviewVote
-            {
-                ReviewId = id,
-                UserId = user.Id,
-                IsLike = request.IsLike
-            };
-            _db.ReviewVotes.Add(vote);
-        }
 
-        await _db.SaveChangesAsync();
-        return Ok();
+            await _db.SaveChangesAsync();
+            await transaction.CommitAsync();
+            return Ok();
+        }
+        catch (DbUpdateException)
+        {
+            await transaction.RollbackAsync();
+            // Duplicate vote was attempted, just return OK
+            return Ok();
+        }
     }
 
     // Проверить, оставлял ли пользователь отзыв на это место
@@ -254,6 +278,18 @@ public class ReviewsController : ControllerBase
             return BadRequest(new { message = "Рейтинг должен быть от 1 до 5" });
         }
 
+        // Валидация длины комментария
+        if (request.Comment != null && request.Comment.Length > 2000)
+        {
+            return BadRequest(new { message = "Комментарий не должен превышать 2000 символов" });
+        }
+
+        // Валидация длины названия места
+        if (request.PlaceName != null && request.PlaceName.Length > 200)
+        {
+            return BadRequest(new { message = "Название места слишком длинное" });
+        }
+
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {
@@ -275,7 +311,8 @@ public class ReviewsController : ControllerBase
             PlaceId = request.PlaceId,
             PlaceName = request.PlaceName ?? "Объект",
             Rating = request.Rating,
-            Comment = request.Comment?.Trim()
+            Comment = request.Comment?.Trim(),
+            ModerationStatus = ModerationStatus.Pending // Новые отзывы отправляются на модерацию
         };
 
         _db.Reviews.Add(review);
@@ -289,7 +326,7 @@ public class ReviewsController : ControllerBase
         await _achievementService.AwardAsync(user);
 
         return CreatedAtAction(nameof(Get), new { id = review.Id }, 
-            new ReviewResponse(review.Id, review.PlaceId, review.PlaceName, review.Rating, review.Comment, null, review.CreatedAt, 0, 0, 0));
+            new ReviewResponse(review.Id, review.PlaceId, review.PlaceName, review.Rating, review.Comment, null, review.CreatedAt, 0, 0, 0, "pending"));
     }
 
     // Загрузить фото к отзыву
@@ -307,11 +344,18 @@ public class ReviewsController : ControllerBase
             return BadRequest(new { message = "Размер файла не должен превышать 5MB" });
         }
 
-        // Проверка типа файла
+        // Проверка типа файла по ContentType
         var allowedTypes = new[] { "image/jpeg", "image/png", "image/webp", "image/gif" };
         if (!allowedTypes.Contains(photo.ContentType.ToLower()))
         {
             return BadRequest(new { message = "Допустимые форматы: JPEG, PNG, WebP, GIF" });
+        }
+
+        // Проверка magic bytes (реального типа файла)
+        var magicBytesValid = await ValidateImageMagicBytes(photo);
+        if (!magicBytesValid)
+        {
+            return BadRequest(new { message = "Недопустимый формат файла. Загрузите настоящее изображение." });
         }
 
         var user = await _userManager.GetUserAsync(User);
@@ -370,5 +414,39 @@ public class ReviewsController : ControllerBase
         await _db.SaveChangesAsync();
 
         return Ok(new { photoUrl = $"/uploads/reviews/{fileName}" });
+    }
+
+    /// <summary>
+    /// Проверяет magic bytes файла для определения реального типа изображения
+    /// </summary>
+    private static async Task<bool> ValidateImageMagicBytes(IFormFile file)
+    {
+        // Magic bytes для различных форматов изображений
+        var signatures = new Dictionary<string, byte[][]>
+        {
+            { "jpeg", new[] { new byte[] { 0xFF, 0xD8, 0xFF } } },
+            { "png", new[] { new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A } } },
+            { "gif", new[] { new byte[] { 0x47, 0x49, 0x46, 0x38, 0x37, 0x61 }, new byte[] { 0x47, 0x49, 0x46, 0x38, 0x39, 0x61 } } },
+            { "webp", new[] { new byte[] { 0x52, 0x49, 0x46, 0x46 } } } // RIFF header, WebP has WEBP at offset 8
+        };
+
+        var maxHeaderLength = signatures.Values.SelectMany(s => s).Max(s => s.Length);
+        var header = new byte[maxHeaderLength];
+
+        using var stream = file.OpenReadStream();
+        var bytesRead = await stream.ReadAsync(header, 0, maxHeaderLength);
+
+        foreach (var format in signatures.Values)
+        {
+            foreach (var signature in format)
+            {
+                if (header.Take(signature.Length).SequenceEqual(signature))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

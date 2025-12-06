@@ -51,6 +51,7 @@ public class ProfileController : ControllerBase
             user.Level,
             user.ReviewCount,
             user.Points,
+            user.IsAdmin,
             Achievements = achievements
         });
     }

@@ -22,16 +22,18 @@ public class AuthController : ControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IConfiguration _configuration;
     private readonly IEmailSenderDev _emailSender;
+    private readonly IWebHostEnvironment _env;
 
     private readonly string _frontendUrl;
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration, IEmailSenderDev emailSender, IHttpClientFactory httpClientFactory)
+    public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration, IEmailSenderDev emailSender, IHttpClientFactory httpClientFactory, IWebHostEnvironment env)
     {
         _userManager = userManager;
         _configuration = configuration;
         _emailSender = emailSender;
         _httpClientFactory = httpClientFactory;
+        _env = env;
         _frontendUrl = configuration.GetValue<string>("FrontendUrl") ?? "http://localhost";
     }
 
@@ -55,14 +57,14 @@ public class AuthController : ControllerBase
         Response.Cookies.Append("vk_code_verifier", codeVerifier, new CookieOptions
         {
             HttpOnly = true,
-            Secure = false, // для localhost
+            Secure = !_env.IsDevelopment(), // Secure в production
             SameSite = SameSiteMode.Lax,
             MaxAge = TimeSpan.FromMinutes(10)
         });
         Response.Cookies.Append("vk_state", state, new CookieOptions
         {
             HttpOnly = true,
-            Secure = false,
+            Secure = !_env.IsDevelopment(), // Secure в production
             SameSite = SameSiteMode.Lax,
             MaxAge = TimeSpan.FromMinutes(10)
         });
@@ -130,7 +132,9 @@ public class AuthController : ControllerBase
         
         if (!tokenRes.IsSuccessStatusCode) 
         {
-            return BadRequest(new { message = "Failed to exchange code for VK token", details = tokenJson });
+            // Log details for debugging but don't expose to user
+            Console.WriteLine($"VK token exchange failed: {tokenJson}");
+            return BadRequest(new { message = "Ошибка авторизации через VK. Попробуйте позже." });
         }
 
         using var doc = System.Text.Json.JsonDocument.Parse(tokenJson);
@@ -138,7 +142,8 @@ public class AuthController : ControllerBase
         
         if (!root.TryGetProperty("access_token", out var accessTokenEl))
         {
-            return BadRequest(new { message = "No access_token in response", details = tokenJson });
+            Console.WriteLine($"VK response missing access_token: {tokenJson}");
+            return BadRequest(new { message = "Ошибка авторизации через VK. Попробуйте позже." });
         }
         
         var accessToken = accessTokenEl.GetString();

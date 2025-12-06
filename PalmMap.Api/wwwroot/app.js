@@ -2,6 +2,14 @@ const apiBase = "/api";
 const tokenKey = "palmmap_token";
 let currentUser = null;
 
+// XSS Protection: Escape HTML entities
+function escapeHtml(text) {
+  if (text == null) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
 // DOM Elements
 const els = {
 
@@ -54,6 +62,9 @@ const els = {
   userRank: document.getElementById("user-rank"),
   userName: document.getElementById("user-name"),
   userPoints: document.getElementById("user-points"),
+  
+  // Admin
+  adminPanelBtn: document.getElementById("btn-admin-panel"),
 };
 
 function saveToken(token) {
@@ -222,10 +233,19 @@ async function loadProfile() {
     els.profileLevel.textContent = `Уровень ${data.level}`;
     els.profileReviews.textContent = data.reviewCount ?? 0;
     
-    // Загрузим полные данные профиля включая очки
+    // Загрузим полные данные профиля включая очки и isAdmin
     const profile = await api("/profile");
     if (els.profilePoints) {
       els.profilePoints.textContent = profile.points ?? 0;
+    }
+    
+    // Показать кнопку админ-панели только для админов
+    if (els.adminPanelBtn) {
+      if (profile.isAdmin) {
+        els.adminPanelBtn.classList.remove("hidden");
+      } else {
+        els.adminPanelBtn.classList.add("hidden");
+      }
     }
 
     await loadAchievements();
@@ -246,7 +266,7 @@ async function loadAchievements() {
     }
     list.forEach((a) => {
       const li = document.createElement("li");
-      li.innerHTML = `<div class="title">${a.title}</div><div class="desc">${a.description}</div><div class="tag">${a.requiredReviews} отзывов</div>`;
+      li.innerHTML = `<div class="title">${escapeHtml(a.title)}</div><div class="desc">${escapeHtml(a.description)}</div><div class="tag">${escapeHtml(a.requiredReviews)} отзывов</div>`;
       els.achievements.appendChild(li);
     });
   } catch (err) {
@@ -266,25 +286,35 @@ async function loadReviews() {
       const div = document.createElement("div");
       div.className = "review-card-small";
       const date = new Date(r.createdAt).toLocaleDateString();
-      const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+      const stars = '★'.repeat(Math.min(5, Math.max(0, r.rating))) + '☆'.repeat(5 - Math.min(5, Math.max(0, r.rating)));
       
       const likeActive = r.userVote === 1 ? 'active' : '';
       const dislikeActive = r.userVote === -1 ? 'active' : '';
       
-      const safePlaceName = (r.placeName || '').replace(/'/g, "\\'");
+      const safePlaceName = escapeHtml(r.placeName || '').replace(/'/g, "\\'");
+      const safeComment = escapeHtml(r.comment);
+      const safeRejectionReason = escapeHtml(r.rejectionReason);
+
+      // Статус модерации
+      let statusBadge = '';
+      if (r.moderationStatus === 'pending') {
+        statusBadge = '<span class="status-badge status-pending">⏳ На модерации</span>';
+      } else if (r.moderationStatus === 'rejected') {
+        statusBadge = `<span class="status-badge status-rejected">❌ Отклонён${safeRejectionReason ? `: ${safeRejectionReason}` : ''}</span>`;
+      }
 
       div.innerHTML = `
-        <div class="place-name">${r.placeName}</div>
-        <div class="rating">${stars} <span style="color:var(--muted);font-size:0.8em;margin-left:6px">${date}</span></div>
-        ${r.comment ? `<div style="margin-top:4px;font-size:0.85em;color:var(--text)">${r.comment}</div>` : ''}
+        <div class="place-name">${escapeHtml(r.placeName)} ${statusBadge}</div>
+        <div class="rating">${stars} <span style="color:var(--muted);font-size:0.8em;margin-left:6px">${escapeHtml(date)}</span></div>
+        ${r.comment ? `<div style="margin-top:4px;font-size:0.85em;color:var(--text)">${safeComment}</div>` : ''}
         
         <div class="review-footer" style="margin-top: 8px; border-top: 1px solid var(--border); padding-top: 6px;">
             <div class="vote-controls" style="display: flex; gap: 10px;">
-                <button class="vote-btn ${likeActive}" onclick="voteReview('${r.id}', true, '${r.placeId}', '${safePlaceName}')">
-                    👍 <span class="count">${r.likes}</span>
+                <button class="vote-btn ${likeActive}" onclick="voteReview('${escapeHtml(r.id)}', true, '${escapeHtml(r.placeId)}', '${safePlaceName}')">
+                    👍 <span class="count">${parseInt(r.likes) || 0}</span>
                 </button>
-                <button class="vote-btn ${dislikeActive}" onclick="voteReview('${r.id}', false, '${r.placeId}', '${safePlaceName}')">
-                    👎 <span class="count">${r.dislikes}</span>
+                <button class="vote-btn ${dislikeActive}" onclick="voteReview('${escapeHtml(r.id)}', false, '${escapeHtml(r.placeId)}', '${safePlaceName}')">
+                    👎 <span class="count">${parseInt(r.dislikes) || 0}</span>
                 </button>
             </div>
         </div>
@@ -302,6 +332,7 @@ function logout() {
   els.logout.classList.add("hidden");
   els.topbarProfileToggle.classList.add("hidden");
   els.ratingsBtn.classList.add("hidden");
+  if (els.adminPanelBtn) els.adminPanelBtn.classList.add("hidden");
   els.btnShowLogin.classList.remove("hidden");
   els.btnShowRegister.classList.remove("hidden");
   els.profileEmail.textContent = "-";
@@ -330,9 +361,9 @@ async function loadRatings() {
             
             // Свойства могут быть displayName, points, level (camelCase)
             const rawName = user.displayName || user.DisplayName || 'Аноним';
-            const name = isCurrentUser ? 'Вы' : rawName;
-            const points = user.points || user.Points || 0;
-            const level = user.level || user.Level || 1;
+            const name = isCurrentUser ? 'Вы' : escapeHtml(rawName);
+            const points = parseInt(user.points || user.Points) || 0;
+            const level = parseInt(user.level || user.Level) || 1;
             
             // Определить медаль и цвет для первых трёх мест
             let medal = '';
@@ -366,7 +397,7 @@ async function loadRatings() {
             const medalHtml = medal ? `<span style="margin-right:6px; font-size:16px;">${medal}</span>` : '';
             const medalStyle = medalColor ? `style="color:${medalColor}; font-weight:bold; ${textColor}"` : `style="${textColor}"`;
             
-            div.innerHTML = `<div ${medalStyle}><span style="font-weight:bold; margin-right:4px;">${medalHtml}${user.position}.</span> <span style="font-size:16px; font-weight:600;">${name}</span> — <span style="font-weight:600;">${points}</span> <span style="font-weight:600;">очков</span> (Lvl <span style="font-weight:600;">${level}</span>)</div>`;
+            div.innerHTML = `<div ${medalStyle}><span style="font-weight:bold; margin-right:4px;">${medalHtml}${parseInt(user.position) || 0}.</span> <span style="font-size:16px; font-weight:600;">${name}</span> — <span style="font-weight:600;">${points}</span> <span style="font-weight:600;">очков</span> (Lvl <span style="font-weight:600;">${level}</span>)</div>`;
             div.style.cssText += combinedBg;
             els.ratingsList.appendChild(div);
         });
@@ -375,8 +406,8 @@ async function loadRatings() {
         if (data.currentUserPosition > 10) {
             els.currentUserRating.style.display = 'block';
             els.userRank.textContent = data.currentUserPosition;
-            els.userName.textContent = data.currentUser.displayName || data.currentUser.DisplayName || 'Аноним';
-            els.userPoints.textContent = data.currentUser.points || data.currentUser.Points || 0;
+            els.userName.textContent = escapeHtml(data.currentUser.displayName || data.currentUser.DisplayName || 'Аноним');
+            els.userPoints.textContent = parseInt(data.currentUser.points || data.currentUser.Points) || 0;
         } else {
             els.currentUserRating.style.display = 'none';
         }
@@ -680,21 +711,24 @@ async function showObjectReviews(placeId, placeName) {
             const div = document.createElement("div");
             div.className = "object-review-card";
             const date = new Date(r.createdAt).toLocaleDateString();
-            const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+            const rating = Math.min(5, Math.max(0, parseInt(r.rating) || 0));
+            const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
             
             const isAuthor = currentUser && currentUser.id === r.userId;
             
-            // Escape strings for onclick
-            const safePlaceName = placeName.replace(/'/g, "\\'");
-            const safeComment = (r.comment || '').replace(/'/g, "\\'");
-            const safePhotoUrl = (r.photoUrl || '').replace(/'/g, "\\'");
+            // Escape strings for onclick - prevent XSS
+            const safePlaceName = escapeHtml(placeName).replace(/'/g, "\\'");
+            const safeComment = escapeHtml(r.comment || '').replace(/'/g, "\\'");
+            const safePhotoUrl = escapeHtml(r.photoUrl || '').replace(/'/g, "\\'");
+            const safeReviewId = escapeHtml(r.id);
+            const safePlaceId = escapeHtml(placeId);
 
             let actionsHtml = '';
                 if (isAuthor) {
                 actionsHtml = `
                     <div class="review-actions">
-                        <button class="icon-btn small" onclick="editReview('${r.id}', ${r.rating}, '${safeComment}', '${placeId}', '${safePhotoUrl}')" title="Редактировать">✏️</button>
-                        <button class="icon-btn small" onclick="deleteReview('${r.id}', '${placeId}', '${safePlaceName}')" title="Удалить">🗑️</button>
+                        <button class="icon-btn small" onclick="editReview('${safeReviewId}', ${rating}, '${safeComment}', '${safePlaceId}', '${safePhotoUrl}')" title="Редактировать">✏️</button>
+                        <button class="icon-btn small" onclick="deleteReview('${safeReviewId}', '${safePlaceId}', '${safePlaceName}')" title="Удалить">🗑️</button>
                     </div>
                 `;
             }
@@ -704,32 +738,36 @@ async function showObjectReviews(placeId, placeName) {
 
             let photoHtml = '';
             if (r.photoUrl) {
-                photoHtml = `<div class="review-photo"><img src="${r.photoUrl}" alt="Фото отзыва" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px; cursor:pointer;" onclick="window.open('${r.photoUrl}', '_blank')"></div>`;
+                // Validate photoUrl starts with expected path
+                const photoUrl = r.photoUrl.startsWith('/uploads/') ? escapeHtml(r.photoUrl) : '';
+                if (photoUrl) {
+                    photoHtml = `<div class="review-photo"><img src="${photoUrl}" alt="Фото отзыва" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px; cursor:pointer;" onclick="window.open('${photoUrl}', '_blank')"></div>`;
+                }
             }
             
-            const displayName = (currentUser && r.userId === currentUser.id) ? 'Вы' : r.userName;
+            const displayName = (currentUser && r.userId === currentUser.id) ? 'Вы' : escapeHtml(r.userName);
             div.innerHTML = `
                 <div class="review-header">
                     <span class="review-author">
                         👤 ${displayName}
-                        <span class="level-badge">Lvl ${r.userLevel || 1}</span>
+                        <span class="level-badge">Lvl ${parseInt(r.userLevel) || 1}</span>
                     </span>
-                    <span class="review-date">${date}</span>
+                    <span class="review-date">${escapeHtml(date)}</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
                     <div style="color:#fbbf24;">${stars}</div>
                     ${actionsHtml}
                 </div>
-                ${r.comment ? `<div class="review-text">${r.comment}</div>` : ''}
+                ${r.comment ? `<div class="review-text">${escapeHtml(r.comment)}</div>` : ''}
                 ${photoHtml}
                 
                 <div class="review-footer" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 8px;">
                     <div class="vote-controls" style="display: flex; gap: 12px;">
-                        <button class="vote-btn ${likeActive}" onclick="voteReview('${r.id}', true, '${placeId}', '${safePlaceName}')">
-                            👍 <span class="count">${r.likes}</span>
+                        <button class="vote-btn ${likeActive}" onclick="voteReview('${safeReviewId}', true, '${safePlaceId}', '${safePlaceName}')">
+                            👍 <span class="count">${parseInt(r.likes) || 0}</span>
                         </button>
-                        <button class="vote-btn ${dislikeActive}" onclick="voteReview('${r.id}', false, '${placeId}', '${safePlaceName}')">
-                            👎 <span class="count">${r.dislikes}</span>
+                        <button class="vote-btn ${dislikeActive}" onclick="voteReview('${safeReviewId}', false, '${safePlaceId}', '${safePlaceName}')">
+                            👎 <span class="count">${parseInt(r.dislikes) || 0}</span>
                         </button>
                     </div>
                 </div>
@@ -1217,7 +1255,7 @@ function setupReviewModal() {
                     showObjectReviews(placeId, placeName);
                 }
                 
-                alert(reviewId ? 'Отзыв обновлен!' : 'Спасибо за ваш отзыв!');
+                alert(reviewId ? 'Отзыв обновлен!' : 'Спасибо за ваш отзыв! Он будет опубликован после модерации.');
             } catch (err) {
                 const msg = formatError(err);
                 alert('Ошибка: ' + msg);
