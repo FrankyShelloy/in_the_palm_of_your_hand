@@ -329,7 +329,8 @@ async function loadRatings() {
             div.style.marginBottom = '4px';
             
             // Свойства могут быть displayName, points, level (camelCase)
-            const name = user.displayName || user.DisplayName || 'Аноним';
+            const rawName = user.displayName || user.DisplayName || 'Аноним';
+            const name = isCurrentUser ? 'Вы' : rawName;
             const points = user.points || user.Points || 0;
             const level = user.level || user.Level || 1;
             
@@ -706,10 +707,11 @@ async function showObjectReviews(placeId, placeName) {
                 photoHtml = `<div class="review-photo"><img src="${r.photoUrl}" alt="Фото отзыва" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px; cursor:pointer;" onclick="window.open('${r.photoUrl}', '_blank')"></div>`;
             }
             
+            const displayName = (currentUser && r.userId === currentUser.id) ? 'Вы' : r.userName;
             div.innerHTML = `
                 <div class="review-header">
                     <span class="review-author">
-                        👤 ${r.userName}
+                        👤 ${displayName}
                         <span class="level-badge">Lvl ${r.userLevel || 1}</span>
                     </span>
                     <span class="review-date">${date}</span>
