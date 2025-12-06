@@ -15,6 +15,7 @@ public record ReviewResponse(
     string PlaceName, 
     int Rating, 
     string? Comment, 
+    string? PhotoUrl,
     DateTime CreatedAt
 );
 
@@ -24,5 +25,6 @@ public record PlaceReviewResponse(
     [property: JsonPropertyName("userLevel")] int UserLevel,
     [property: JsonPropertyName("rating")] int Rating,
     [property: JsonPropertyName("comment")] string? Comment,
+    [property: JsonPropertyName("photoUrl")] string? PhotoUrl,
     [property: JsonPropertyName("createdAt")] DateTime CreatedAt
 );

@@ -49,6 +49,7 @@ public class ProfileController : ControllerBase
             user.DisplayName,
             user.Level,
             user.ReviewCount,
+            user.Points,
             Achievements = achievements
         });
     }

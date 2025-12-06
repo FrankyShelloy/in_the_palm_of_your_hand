@@ -81,6 +81,10 @@
               <span class="label">Отзывы</span>
               <span id="profile-reviews" class="value">0</span>
             </div>
+            <div class="stat">
+              <span class="label">🏆 Очки</span>
+              <span id="profile-points" class="value" style="color:#fbbf24;font-weight:bold;">0</span>
+            </div>
           </div>
           
           <!-- Collapsible Reviews -->
@@ -200,6 +204,13 @@
 
           <label>Комментарий (необязательно):</label>
           <textarea id="review-comment" placeholder="Расскажите подробнее..."></textarea>
+
+          <label style="display:block; margin-top:12px;">Фото (необязательно, макс. 5MB):</label>
+          <input type="file" id="review-photo" accept="image/jpeg,image/png,image/webp,image/gif" style="margin:8px 0;">
+          <div id="photo-preview" style="display:none; margin:8px 0;">
+              <img id="photo-preview-img" style="max-width:200px; max-height:150px; border-radius:8px;">
+              <button type="button" id="remove-photo" style="margin-left:8px; padding:4px 8px; background:#ff5252; color:white; border:none; border-radius:4px;">✕</button>
+          </div>
 
           <div style="margin-top:16px; display:flex; gap:10px;">
               <button id="submit-review" style="flex:1; padding:8px; background:#FF9800; color:white; border:none; border-radius:4px;">Отправить</button>

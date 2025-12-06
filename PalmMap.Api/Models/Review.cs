@@ -16,5 +16,8 @@ public class Review
     // Комментарий (необязательный)
     public string? Comment { get; set; }
     
+    // Фотография (путь к файлу)
+    public string? PhotoPath { get; set; }
+    
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
