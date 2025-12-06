@@ -18,6 +18,144 @@
               var(--bg);
 }
 
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --card: #f1f5f9;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #0891b2;
+  --accent-strong: #0284c7;
+  --danger: #ef4444;
+  --border: #cbd5e1;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  
+  background: radial-gradient(circle at 20% 20%, rgba(8, 145, 178, 0.05), transparent 25%),
+              radial-gradient(circle at 80% 0%, rgba(2, 132, 199, 0.06), transparent 30%),
+              var(--bg);
+}
+
+/* Theme Switcher */
+.theme-switcher {
+  display: flex;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+  margin-left: 12px;
+}
+
+.theme-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-btn:hover {
+  color: var(--text);
+  background: rgba(125, 125, 125, 0.1);
+}
+
+.theme-btn.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Adjustments for light mode specific elements */
+[data-theme="light"] .brand-initial {
+    text-shadow: 0 0 15px rgba(8, 145, 178, 0.4);
+}
+
+[data-theme="light"] .map-placeholder {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+}
+
+[data-theme="light"] input, 
+[data-theme="light"] textarea {
+    background: #ffffff;
+    border-color: #cbd5e1;
+}
+
+[data-theme="light"] .form-group input {
+    background: #ffffff;
+}
+
+[data-theme="light"] .form-group input:focus {
+    background: #ffffff;
+}
+
+[data-theme="light"] .level-badge {
+    background: rgba(217, 119, 6, 0.15); /* Amber-600 with opacity */
+    color: #b45309; /* Amber-700 */
+    border-color: rgba(180, 83, 9, 0.3);
+}
+
+/* Light Theme Enhancements */
+[data-theme="light"] .tag {
+    background: rgba(8, 145, 178, 0.15);
+    color: #0e7490; /* Cyan-700 */
+    border: 1px solid rgba(8, 145, 178, 0.3);
+    font-weight: 600;
+}
+
+[data-theme="light"] .compact-list li,
+[data-theme="light"] .review-card-small,
+[data-theme="light"] .review-card,
+[data-theme="light"] .object-review-card,
+[data-theme="light"] .panel {
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .compact-list li,
+[data-theme="light"] .review-card-small {
+    background: #ffffff;
+}
+
+[data-theme="light"] .compact-list .title {
+    color: #0369a1; /* Sky-700 */
+    font-weight: 700;
+}
+
+[data-theme="light"] .compact-list .desc {
+    color: #334155; /* Slate-700 */
+}
+
+[data-theme="light"] .section-header:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+[data-theme="light"] .topbar {
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid var(--border);
+}
+
+[data-theme="light"] .user-info {
+    color: #334155; /* Slate-700 */
+    font-weight: 500;
+}
+
+[data-theme="light"] .ghost {
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+[data-theme="light"] .ghost:hover {
+    background: rgba(0,0,0,0.05);
+}
+
 * { box-sizing: border-box; }
 body { margin: 0; min-height: 100vh; }
 

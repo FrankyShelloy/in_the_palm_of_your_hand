@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>НаЛадони</title>
   <link rel="stylesheet" href="/styles.css" />
+  <script src="/theme.js"></script>
 </head>
 <body>
   <header class="topbar">
@@ -12,6 +13,11 @@
       <span class="brand-initial">Н</span>а<span class="brand-initial">Л</span>адони
     </div>
     <div class="auth-actions" id="auth-actions">
+      <div class="theme-switcher">
+        <button class="theme-btn" data-theme="light" title="Светлая тема">☀</button>
+        <button class="theme-btn" data-theme="dark" title="Тёмная тема">🌙</button>
+        <button class="theme-btn" data-theme="system" title="Системная тема">💻</button>
+      </div>
       <button id="btn-show-login" class="ghost">Вход</button>
       <button id="btn-show-register" class="primary">Регистрация</button>
       <div id="user-info" class="user-info hidden"></div>
