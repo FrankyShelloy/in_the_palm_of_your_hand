@@ -2,6 +2,7 @@
 
 :root {
   --bg: #0f172a;
+  --bg-secondary: #1e293b;
   --panel: #111827;
   --card: #1f2937;
   --text: #e5e7eb;
@@ -20,6 +21,7 @@
 
 [data-theme="light"] {
   --bg: #f8fafc;
+  --bg-secondary: #e2e8f0;
   --panel: #ffffff;
   --card: #f1f5f9;
   --text: #0f172a;
@@ -221,6 +223,11 @@ a { color: var(--accent); }
 
 .panel.wide { flex: 2 1 600px; }
 
+/* Remove shadow for the main map panel so profile menu doesn't cast a shadow over the map */
+#map-panel {
+  box-shadow: none;
+}
+
 /* Profile Collapsed State */
 #profile-panel.collapsed {
   flex: 0 0 60px;
@@ -229,6 +236,10 @@ a { color: var(--accent); }
   overflow: hidden;
 }
 
+/* When profile panel is hidden, remove its box shadow */
+#profile-panel.panel-hidden {
+  box-shadow: none !important;
+}
 #profile-panel.collapsed .profile-body,
 #profile-panel.collapsed .profile-reviews-section,
 #profile-panel.collapsed .tag,
@@ -418,8 +429,8 @@ button:active { transform: translateY(1px); }
   border: 1px solid #1f2937;
 }
 .tabs { display: flex; gap: 6px; margin-bottom: 10px; }
-.tab { flex: 1; border-radius: 10px; background: #0b1220; color: var(--text); padding: 10px; border: 1px solid #1f2937; }
-.tab.active { border-color: var(--accent); color: var(--accent); }
+.tab { flex: 1; border-radius: 10px; background: var(--bg-secondary); color: var(--text); padding: 10px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+.tab.active { border-color: var(--accent); color: var(--accent); background: var(--bg); }
 .close { margin-top: 8px; width: 100%; }
 
 @media (max-width: 768px) {

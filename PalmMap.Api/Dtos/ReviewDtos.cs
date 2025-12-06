@@ -47,3 +47,19 @@ public record UpdateReviewRequest(
 public record VoteRequest(
     [property: JsonPropertyName("isLike")] bool IsLike
 );
+
+// DTO для рейтинга пользователей
+public record UserRatingEntry(
+    [property: JsonPropertyName("position")] int Position,
+    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("displayName")] string DisplayName,
+    [property: JsonPropertyName("points")] int Points,
+    [property: JsonPropertyName("level")] int Level
+);
+
+public record UserRatingsResponse(
+    [property: JsonPropertyName("top10")] List<UserRatingEntry> Top10,
+    [property: JsonPropertyName("currentUserPosition")] int CurrentUserPosition,
+    [property: JsonPropertyName("currentUser")] UserRatingEntry CurrentUser
+);
+
