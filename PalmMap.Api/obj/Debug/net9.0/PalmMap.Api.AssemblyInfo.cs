@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PalmMap.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+109bfee84c1ee22ba20287990107716964f11faa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b3dac99a30adfd0c0b2f7488791b7fd3225f7b8b")]
 [assembly: System.Reflection.AssemblyProductAttribute("PalmMap.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PalmMap.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

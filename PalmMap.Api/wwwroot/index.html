@@ -13,6 +13,7 @@
       <button id="btn-show-login" class="ghost">Вход</button>
       <button id="btn-show-register" class="primary">Регистрация</button>
       <div id="user-info" class="user-info hidden"></div>
+      <button id="topbar-profile-toggle" class="icon-btn hidden" title="Показать/Скрыть профиль">👤</button>
       <button id="btn-logout" class="ghost hidden">Выход</button>
     </div>
   </header>
@@ -24,7 +25,6 @@
             <h2>Карта</h2>
             <div class="header-controls">
                 <span class="tag">Тульская область</span>
-                <button id="map-profile-toggle" class="icon-btn" title="Показать/Скрыть профиль">👤</button>
             </div>
           </div>
           <div class="map-container-wrapper">
@@ -79,7 +79,7 @@
                 <h3>Мои отзывы</h3>
                 <span class="arrow">▼</span>
             </div>
-            <div id="user-reviews-container" class="section-content hidden">
+            <div id="user-reviews-container" class="section-content">
                 <div id="user-reviews-list" class="reviews-list-small"></div>
             </div>
           </div>
@@ -90,7 +90,7 @@
                 <h3>Достижения</h3>
                 <span class="arrow">▼</span>
             </div>
-            <div id="user-achievements-container" class="section-content hidden">
+            <div id="user-achievements-container" class="section-content">
                 <ul id="achievements-list" class="list compact-list"></ul>
             </div>
           </div>

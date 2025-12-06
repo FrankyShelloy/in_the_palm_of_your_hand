@@ -39,7 +39,7 @@ const els = {
   
   // Profile visibility
   profileClose: document.getElementById("profile-close"),
-  mapProfileToggle: document.getElementById("map-profile-toggle"),
+  topbarProfileToggle: document.getElementById("topbar-profile-toggle"),
 };
 
 function saveToken(token) {
@@ -168,6 +168,7 @@ async function loadProfile() {
     els.userInfo.textContent = data.email;
     els.userInfo.classList.remove("hidden");
     els.logout.classList.remove("hidden");
+    els.topbarProfileToggle.classList.remove("hidden");
     els.btnShowLogin.classList.add("hidden");
     els.btnShowRegister.classList.add("hidden");
 
@@ -231,6 +232,7 @@ function logout() {
   clearToken();
   els.userInfo.classList.add("hidden");
   els.logout.classList.add("hidden");
+  els.topbarProfileToggle.classList.add("hidden");
   els.btnShowLogin.classList.remove("hidden");
   els.btnShowRegister.classList.remove("hidden");
   els.profileEmail.textContent = "-";
@@ -243,19 +245,20 @@ function logout() {
 
 // Event wiring
 function toggleProfileVisibility() {
-    els.profilePanel.classList.toggle("hidden");
-    setTimeout(() => {
-        if (typeof myMap !== 'undefined' && myMap) myMap.container.fitToViewport();
-    }, 350);
+    const panel = els.profilePanel;
+    // Just toggle the class. CSS handles the sliding.
+    // No need to resize map or mess with display:none since it's an overlay.
+    panel.classList.toggle("panel-hidden");
 }
 
 els.profileClose?.addEventListener("click", toggleProfileVisibility);
-els.mapProfileToggle?.addEventListener("click", toggleProfileVisibility);
+els.topbarProfileToggle?.addEventListener("click", toggleProfileVisibility);
 
 function setupCollapsible(header, container) {
     if (!header || !container) return;
     header.addEventListener('click', () => {
-        container.classList.toggle('hidden');
+        container.classList.toggle('open');
+        // container.classList.toggle('hidden'); // Removed to prevent conflict with CSS transitions
         header.classList.toggle('active');
     });
 }

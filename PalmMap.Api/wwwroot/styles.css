@@ -578,11 +578,28 @@ button:active { transform: translateY(1px); }
 }
 
 .section-content {
+  max-height: 0;
+  opacity: 0;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
 }
 
-/* Compact Achievements List */
+.section-content.open {
+  max-height: 500px; /* Arbitrary large height */
+  opacity: 1;
+}
+
+/* Profile Panel Transitions */
+#profile-panel {
+  width: 300px;
+  flex-shrink: 0;
+  opacity: 1;
+  overflow: hidden;
+  transition: width 0.4s ease, opacity 0.3s ease, padding 0.4s ease, margin 0.4s ease;
+}
+
+
+
 .compact-list {
   gap: 8px;
   max-height: 300px;
@@ -664,21 +681,38 @@ button:active { transform: translateY(1px); }
   gap: 16px;
   width: 100%;
   flex-wrap: wrap; /* Allow wrapping on mobile */
+  position: relative; /* For absolute positioning of profile */
+  overflow: hidden; /* Clip the sliding profile */
 }
 
 #map-panel {
   flex: 1;
-  min-width: 300px;
+  min-width: 0;
+  width: 100%; /* Always full width */
 }
 
 #profile-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
   width: 300px;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
+  z-index: 20;
+  background: var(--panel); /* Ensure background is opaque */
+  box-shadow: -5px 0 15px rgba(0,0,0,0.3); /* Shadow on the left */
+  
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(0);
 }
 
-#profile-panel.hidden {
-  display: none;
+#profile-panel.panel-hidden {
+  transform: translateX(100%);
+  /* Reset other properties that might have been set before */
+  width: 300px !important;
+  padding: 16px !important;
+  margin: 0 !important;
+  opacity: 1;
+  border: 1px solid var(--border);
 }
 
 #object-reviews-panel {
