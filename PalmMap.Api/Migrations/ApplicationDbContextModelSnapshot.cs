@@ -251,6 +251,9 @@ namespace PalmMap.Api.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Points")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ReviewCount")
                         .HasColumnType("INTEGER");
 
@@ -322,6 +325,9 @@ namespace PalmMap.Api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhotoPath")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PlaceId")

@@ -59,6 +59,8 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddAuthorization();
+// HttpClient used to talk to external providers (VK)
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<AchievementService>();
 builder.Services.AddSingleton<IEmailSenderDev, EmailSender>();
 

@@ -23,13 +23,265 @@ public class AuthController : ControllerBase
     private readonly IEmailSenderDev _emailSender;
 
     private readonly string _frontendUrl;
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration, IEmailSenderDev emailSender)
+    public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration, IEmailSenderDev emailSender, IHttpClientFactory httpClientFactory)
     {
         _userManager = userManager;
         _configuration = configuration;
         _emailSender = emailSender;
-        _frontendUrl = configuration.GetValue<string>("FrontendUrl") ?? "http://localhost:5014";
+        _httpClientFactory = httpClientFactory;
+        _frontendUrl = configuration.GetValue<string>("FrontendUrl") ?? "http://localhost";
+    }
+
+    // Начать VK OAuth с PKCE: перенаправляет пользователя на страницу авторизации VK ID
+    [HttpGet("vk/login")]
+    public IActionResult VkLogin()
+    {
+        var vk = _configuration.GetSection("Vk");
+        var clientId = vk["ClientId"];
+        if (string.IsNullOrWhiteSpace(clientId)) return BadRequest(new { message = "VK ClientId not configured" });
+
+        var redirectUri = $"{_frontendUrl}/api/auth/vk/callback";
+        
+        // Генерация PKCE параметров
+        var codeVerifier = GenerateCodeVerifier();
+        var codeChallenge = GenerateCodeChallenge(codeVerifier);
+        var state = Guid.NewGuid().ToString("N");
+        
+        // Сохраняем code_verifier в cookie для использования в callback
+        Response.Cookies.Append("vk_code_verifier", codeVerifier, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = false, // для localhost
+            SameSite = SameSiteMode.Lax,
+            MaxAge = TimeSpan.FromMinutes(10)
+        });
+        Response.Cookies.Append("vk_state", state, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = false,
+            SameSite = SameSiteMode.Lax,
+            MaxAge = TimeSpan.FromMinutes(10)
+        });
+
+        // VK ID OAuth 2.1 URL
+        var authorize = $"https://id.vk.com/authorize?" +
+            $"response_type=code" +
+            $"&client_id={WebUtility.UrlEncode(clientId)}" +
+            $"&redirect_uri={WebUtility.UrlEncode(redirectUri)}" +
+            $"&state={state}" +
+            $"&code_challenge={codeChallenge}" +
+            $"&code_challenge_method=S256" +
+            $"&scope=vkid.personal_info%20email";
+            
+        return Redirect(authorize);
+    }
+
+    // Callback endpoint VK redirects to with `code`
+    [HttpGet("vk/callback")]
+    public async Task<IActionResult> VkCallback([FromQuery] string code, [FromQuery] string state, [FromQuery] string? device_id)
+    {
+        if (string.IsNullOrWhiteSpace(code)) return BadRequest(new { message = "Code is required" });
+
+        // Проверка state
+        var savedState = Request.Cookies["vk_state"];
+        if (string.IsNullOrWhiteSpace(savedState) || savedState != state)
+        {
+            return BadRequest(new { message = "Invalid state parameter" });
+        }
+
+        var codeVerifier = Request.Cookies["vk_code_verifier"];
+        if (string.IsNullOrWhiteSpace(codeVerifier))
+        {
+            return BadRequest(new { message = "Code verifier not found" });
+        }
+
+        // Удаляем cookies
+        Response.Cookies.Delete("vk_code_verifier");
+        Response.Cookies.Delete("vk_state");
+
+        var vk = _configuration.GetSection("Vk");
+        var clientId = vk["ClientId"];
+        var clientSecret = vk["ClientSecret"];
+        if (string.IsNullOrWhiteSpace(clientId) || string.IsNullOrWhiteSpace(clientSecret))
+            return BadRequest(new { message = "VK client credentials not configured" });
+
+        var redirectUri = $"{_frontendUrl}/api/auth/vk/callback";
+
+        var http = _httpClientFactory.CreateClient();
+        
+        // Exchange code for access token через VK ID API
+        var tokenRequestContent = new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["grant_type"] = "authorization_code",
+            ["code"] = code,
+            ["client_id"] = clientId,
+            ["client_secret"] = clientSecret,
+            ["redirect_uri"] = redirectUri,
+            ["code_verifier"] = codeVerifier,
+            ["device_id"] = device_id ?? Guid.NewGuid().ToString()
+        });
+
+        var tokenRes = await http.PostAsync("https://id.vk.com/oauth2/auth", tokenRequestContent);
+        var tokenJson = await tokenRes.Content.ReadAsStringAsync();
+        
+        if (!tokenRes.IsSuccessStatusCode) 
+        {
+            return BadRequest(new { message = "Failed to exchange code for VK token", details = tokenJson });
+        }
+
+        using var doc = System.Text.Json.JsonDocument.Parse(tokenJson);
+        var root = doc.RootElement;
+        
+        if (!root.TryGetProperty("access_token", out var accessTokenEl))
+        {
+            return BadRequest(new { message = "No access_token in response", details = tokenJson });
+        }
+        
+        var accessToken = accessTokenEl.GetString();
+        var vkUserId = root.TryGetProperty("user_id", out var userIdEl) ? userIdEl.GetInt64() : 0;
+
+        // Получаем данные пользователя из id_token или через API
+        string? email = null;
+        string? firstName = null;
+        string? lastName = null;
+        string? photo = null;
+
+        // Попробуем получить данные из id_token (JWT)
+        if (root.TryGetProperty("id_token", out var idTokenEl))
+        {
+            var idToken = idTokenEl.GetString();
+            if (!string.IsNullOrEmpty(idToken))
+            {
+                var payload = DecodeJwtPayload(idToken);
+                if (payload.HasValue)
+                {
+                    var p = payload.Value;
+                    email = p.TryGetProperty("email", out var e) ? e.GetString() : null;
+                    firstName = p.TryGetProperty("given_name", out var fn) ? fn.GetString() : null;
+                    lastName = p.TryGetProperty("family_name", out var ln) ? ln.GetString() : null;
+                    photo = p.TryGetProperty("picture", out var pic) ? pic.GetString() : null;
+                    if (vkUserId == 0 && p.TryGetProperty("sub", out var sub))
+                    {
+                        long.TryParse(sub.GetString(), out vkUserId);
+                    }
+                }
+            }
+        }
+
+        // Если не получили данные из id_token, попробуем через VK API
+        if (string.IsNullOrEmpty(firstName) && vkUserId > 0)
+        {
+            var userInfoUrl = $"https://api.vk.com/method/users.get?user_ids={vkUserId}&fields=first_name,last_name,photo_200&access_token={accessToken}&v=5.131";
+            var infoRes = await http.GetAsync(userInfoUrl);
+            if (infoRes.IsSuccessStatusCode)
+            {
+                var infoJson = await infoRes.Content.ReadAsStringAsync();
+                using var infoDoc = System.Text.Json.JsonDocument.Parse(infoJson);
+                if (infoDoc.RootElement.TryGetProperty("response", out var respArr) && respArr.GetArrayLength() > 0)
+                {
+                    var response = respArr[0];
+                    firstName = response.TryGetProperty("first_name", out var fn) ? fn.GetString() : null;
+                    lastName = response.TryGetProperty("last_name", out var ln) ? ln.GetString() : null;
+                    photo = response.TryGetProperty("photo_200", out var ph) ? ph.GetString() : null;
+                }
+            }
+        }
+
+        // Find or create user
+        ApplicationUser? user = null;
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            user = await _userManager.FindByEmailAsync(email);
+        }
+
+        if (user == null && vkUserId > 0)
+        {
+            // Try by username vk_{id}@vk.local (full username format)
+            var userName = $"vk_{vkUserId}@vk.local";
+            user = await _userManager.FindByNameAsync(userName);
+        }
+
+        if (user == null)
+        {
+            var displayName = string.Join(' ', new[] { firstName, lastName }.Where(s => !string.IsNullOrWhiteSpace(s)));
+            if (string.IsNullOrWhiteSpace(displayName)) displayName = $"VK User {vkUserId}";
+            
+            var newUser = new ApplicationUser
+            {
+                UserName = !string.IsNullOrWhiteSpace(email) ? email : $"vk_{vkUserId}@vk.local",
+                Email = !string.IsNullOrWhiteSpace(email) ? email : null,
+                DisplayName = displayName,
+                EmailConfirmed = true
+            };
+            var createRes = await _userManager.CreateAsync(newUser);
+            if (!createRes.Succeeded)
+            {
+                return BadRequest(createRes.Errors);
+            }
+            user = newUser;
+        }
+
+        // Update avatar if available
+        if (!string.IsNullOrWhiteSpace(photo))
+        {
+            user.AvatarUrl = photo;
+            await _userManager.UpdateAsync(user);
+        }
+
+        // Generate JWT and redirect to frontend with token
+        var jwt = GenerateJwt(user);
+        var redirect = _frontendUrl + $"/?vk_token={WebUtility.UrlEncode(jwt)}";
+        return Redirect(redirect);
+    }
+
+    // PKCE helpers
+    private static string GenerateCodeVerifier()
+    {
+        var bytes = new byte[32];
+        using var rng = System.Security.Cryptography.RandomNumberGenerator.Create();
+        rng.GetBytes(bytes);
+        return Base64UrlEncode(bytes);
+    }
+
+    private static string GenerateCodeChallenge(string codeVerifier)
+    {
+        using var sha256 = System.Security.Cryptography.SHA256.Create();
+        var hash = sha256.ComputeHash(Encoding.ASCII.GetBytes(codeVerifier));
+        return Base64UrlEncode(hash);
+    }
+
+    private static string Base64UrlEncode(byte[] bytes)
+    {
+        return Convert.ToBase64String(bytes)
+            .TrimEnd('=')
+            .Replace('+', '-')
+            .Replace('/', '_');
+    }
+
+    private static System.Text.Json.JsonElement? DecodeJwtPayload(string jwt)
+    {
+        try
+        {
+            var parts = jwt.Split('.');
+            if (parts.Length != 3) return null;
+            var payload = parts[1];
+            // Add padding
+            payload = payload.Replace('-', '+').Replace('_', '/');
+            switch (payload.Length % 4)
+            {
+                case 2: payload += "=="; break;
+                case 3: payload += "="; break;
+            }
+            var json = Encoding.UTF8.GetString(Convert.FromBase64String(payload));
+            using var doc = System.Text.Json.JsonDocument.Parse(json);
+            return doc.RootElement.Clone();
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     [HttpPost("register")]
@@ -174,7 +426,9 @@ public class AuthController : ControllerBase
             user.Email,
             user.DisplayName,
             user.Level,
-            user.ReviewCount
+            user.ReviewCount,
+            user.Points,
+            user.AvatarUrl
         });
     }
 

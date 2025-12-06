@@ -21,6 +21,7 @@ const els = {
   profileName: document.getElementById("profile-name"),
   profileLevel: document.getElementById("profile-level"),
   profileReviews: document.getElementById("profile-reviews"),
+  profilePoints: document.getElementById("profile-points"),
   achievements: document.getElementById("achievements-list"),
   reviewForm: document.getElementById("review-form"),
   reviewText: document.getElementById("review-text"),
@@ -73,6 +74,28 @@ function switchTab(mode) {
   els.loginForm.classList.toggle("hidden", mode !== "login");
   els.registerForm.classList.toggle("hidden", mode !== "register");
 }
+
+// VK login button handler: перенаправляет на серверную точку входа в VK OAuth
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('btn-vk-login');
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = '/api/auth/vk/login';
+    });
+  }
+
+  // Check for VK token in URL (after VK OAuth callback redirect)
+  const urlParams = new URLSearchParams(window.location.search);
+  const vkToken = urlParams.get('vk_token');
+  if (vkToken) {
+    saveToken(vkToken);
+    // Clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+    // Refresh UI
+    updateUI();
+  }
+});
 
 async function api(path, options = {}) {
   const token = getToken();
@@ -187,6 +210,12 @@ async function loadProfile() {
     els.profileName.textContent = data.displayName ?? "—";
     els.profileLevel.textContent = `Уровень ${data.level}`;
     els.profileReviews.textContent = data.reviewCount ?? 0;
+    
+    // Загрузим полные данные профиля включая очки
+    const profile = await api("/profile");
+    if (els.profilePoints) {
+      els.profilePoints.textContent = profile.points ?? 0;
+    }
 
     await loadAchievements();
     await loadReviews();
@@ -390,24 +419,7 @@ els.registerForm?.addEventListener("submit", async (e) => {
   }
 });
 
-els.reviewForm?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  els.reviewStatus.textContent = "";
-  try {
-    const content = els.reviewText.value.trim();
-    if (!content) return;
-    await api("/reviews", {
-      method: "POST",
-      body: JSON.stringify({ content }),
-    });
-    els.reviewText.value = "";
-    els.reviewStatus.textContent = "Сохранено";
-    await loadProfile();
-  } catch (err) {
-    els.reviewStatus.innerHTML = '<strong>Ошибка:</strong> ' + formatError(err);
-    els.reviewStatus.classList.add("error");
-  }
-});
+// Старая форма отзывов удалена - используется setupReviewModal()
 
 // Init
 if (getToken()) {
@@ -590,6 +602,11 @@ async function showObjectReviews(placeId, placeName) {
             const likeActive = r.userVote === 1 ? 'active' : '';
             const dislikeActive = r.userVote === -1 ? 'active' : '';
 
+            let photoHtml = '';
+            if (r.photoUrl) {
+                photoHtml = `<div class="review-photo"><img src="${r.photoUrl}" alt="Фото отзыва" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px; cursor:pointer;" onclick="window.open('${r.photoUrl}', '_blank')"></div>`;
+            }
+            
             div.innerHTML = `
                 <div class="review-header">
                     <span class="review-author">
@@ -603,6 +620,7 @@ async function showObjectReviews(placeId, placeName) {
                     ${actionsHtml}
                 </div>
                 ${r.comment ? `<div class="review-text">${r.comment}</div>` : ''}
+                ${photoHtml}
                 
                 <div class="review-footer" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 8px;">
                     <div class="vote-controls" style="display: flex; gap: 12px;">
@@ -937,10 +955,49 @@ function setupReviewModal() {
         });
     });
 
+    // Обработка превью фото
+    const photoInput = document.getElementById('review-photo');
+    const photoPreview = document.getElementById('photo-preview');
+    const photoPreviewImg = document.getElementById('photo-preview-img');
+    const removePhotoBtn = document.getElementById('remove-photo');
+
+    if (photoInput) {
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Проверка размера
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Размер файла не должен превышать 5MB');
+                    photoInput.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    photoPreviewImg.src = ev.target.result;
+                    photoPreview.style.display = 'flex';
+                    photoPreview.style.alignItems = 'center';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (removePhotoBtn) {
+        removePhotoBtn.addEventListener('click', () => {
+            photoInput.value = '';
+            photoPreview.style.display = 'none';
+            photoPreviewImg.src = '';
+        });
+    }
+
     const cancelBtn = document.getElementById('cancel-review');
     if(cancelBtn) {
         cancelBtn.addEventListener('click', () => {
             document.getElementById('review-modal').style.display = 'none';
+            // Очистить форму
+            photoInput.value = '';
+            photoPreview.style.display = 'none';
         });
     }
 
@@ -952,6 +1009,7 @@ function setupReviewModal() {
             const placeId = window.currentReviewPlaceId;
             const placeName = window.currentReviewPlaceName;
             const reviewId = window.currentReviewId;
+            const photoFile = photoInput?.files[0];
 
             if (!rating) {
                 alert('Пожалуйста, поставьте оценку');
@@ -959,8 +1017,10 @@ function setupReviewModal() {
             }
 
             try {
+                let reviewResponse;
                 if (reviewId) {
-                    await api(`/reviews/${reviewId}`, {
+                    // Обновление существующего отзыва
+                    reviewResponse = await api(`/reviews/${reviewId}`, {
                         method: 'PUT',
                         body: JSON.stringify({
                             rating: rating,
@@ -968,7 +1028,8 @@ function setupReviewModal() {
                         })
                     });
                 } else {
-                    await api('/reviews', {
+                    // Создание нового отзыва
+                    reviewResponse = await api('/reviews', {
                         method: 'POST',
                         body: JSON.stringify({
                             placeId: placeId,
@@ -979,10 +1040,29 @@ function setupReviewModal() {
                     });
                 }
 
+                // 2. Если есть фото - загружаем его отдельно
+                if (photoFile && reviewResponse?.id) {
+                    const formData = new FormData();
+                    formData.append('photo', photoFile);
+                    
+                    const token = getToken();
+                    await fetch(`/api/reviews/${reviewResponse.id}/photo`, {
+                        method: 'POST',
+                        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+                        body: formData
+                    });
+                }
+
                 // Очистить кэш для этого места
                 placeReviewsCache.delete(placeId);
                 
                 document.getElementById('review-modal').style.display = 'none';
+                
+                // Очистить форму
+                if (photoInput) {
+                    photoInput.value = '';
+                    photoPreview.style.display = 'none';
+                }
                 
                 // Обновить карту и профиль
                 await loadPlaceReviewsForMap();
