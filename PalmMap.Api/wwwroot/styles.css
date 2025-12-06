@@ -173,7 +173,7 @@ a { color: var(--accent); }
   border-bottom: 1px solid #1f2937;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 50; /* Increased z-index to stay above profile panel */
 }
 
 .brand {
@@ -602,8 +602,28 @@ button:active { transform: translateY(1px); }
   color: #000; /* Force black text for filters on white bg */
 }
 
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.filters-header .arrow {
+    transition: transform 0.3s ease;
+}
+
+#filters.collapsed .filters-header .arrow {
+    transform: rotate(-90deg);
+}
+
+#filters.collapsed #filters-content {
+    display: none;
+}
+
 #filters h4 {
-    margin-top: 0;
+    margin: 0;
     font-size: 16px;
     color: #000;
 }
@@ -635,6 +655,9 @@ button:active { transform: translateY(1px); }
     background: var(--accent);
     color: #0b1220;
     font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 #add-place-btn:hover {
@@ -973,5 +996,161 @@ button:active { transform: translateY(1px); }
 .icon-btn.small {
     font-size: 1rem;
     padding: 2px 6px;
+}
+
+
+/* Mobile Adaptation */
+@media (min-width: 769px) {
+  .hidden-desktop {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    overflow: hidden; /* Prevent body scroll, handle in panels */
+    overflow-x: hidden;
+  }
+
+  .layout {
+    padding: 0;
+    gap: 0;
+    height: calc(100vh - 60px); /* Subtract topbar height approx */
+    position: relative;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  .top-row {
+    height: 100%;
+    gap: 0;
+    width: 100%;
+  }
+
+  /* Topbar adjustments for mobile */
+  .topbar {
+    padding: 10px 12px;
+    height: 60px; /* Fix height to match calc */
+    flex-wrap: nowrap;
+    overflow-x: auto; /* Allow scroll if really needed, or hidden */
+    overflow-y: hidden;
+  }
+
+  .brand {
+    font-size: 1.2rem;
+  }
+  
+  .brand-initial {
+    font-size: 2rem;
+  }
+
+  .theme-switcher {
+    display: none; /* Hide theme switcher on mobile to save space */
+  }
+
+  .auth-actions {
+    gap: 8px;
+  }
+
+  .auth-actions button {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+
+  /* Hide user info (email) on mobile */
+  .user-info {
+    display: none !important;
+  }
+
+
+  /* Map takes full screen background */
+  #map-panel {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: 0;
+    border: none;
+  }
+
+  #map {
+    border-radius: 0;
+  }
+
+  /* Profile Panel - Full Screen Overlay */
+  #profile-panel {
+    position: fixed;
+    top: 64px; /* Below topbar */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100% !important;
+    z-index: 40;
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid var(--border);
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto;
+  }
+
+  #profile-panel.panel-hidden {
+    transform: translateX(100%);
+    width: 100% !important;
+  }
+
+  /* Object Reviews Panel - Bottom Sheet */
+  #object-reviews-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 60vh;
+    z-index: 30;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+    transform: translateY(100%); /* Hidden by default */
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  #object-reviews-panel.open {
+    transform: translateY(0);
+  }
+
+  #object-reviews-content {
+    overflow-y: auto;
+    padding-bottom: 20px;
+  }
+
+  /* Adjust map controls to not be covered by bottom sheet */
+  .map-controls-container {
+    bottom: 80px; /* Increased to avoid being cut off by browser UI */
+    bottom: calc(80px + env(safe-area-inset-bottom));
+    top: auto;
+    right: 16px;
+  }
+  
+  /* If map controls are top-right, they are fine. If bottom-right, move them up when panel opens */
+  
+  /* Mobile FAB for Add Place */
+  #add-place-btn .btn-text {
+    display: none;
+  }
+
+  #add-place-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    padding: 0;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  }
+
+  #add-place-btn .btn-icon {
+    font-size: 24px;
+  }
 }
 

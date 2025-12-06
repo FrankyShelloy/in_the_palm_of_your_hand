@@ -34,6 +34,7 @@ const els = {
   objectReviewsPanel: document.getElementById("object-reviews-panel"),
   objectReviewsContent: document.getElementById("object-reviews-content"),
   objectReviewsTitle: document.getElementById("object-reviews-title"),
+  objectReviewsClose: document.getElementById("object-reviews-close"), // New close button
 
   // Collapsible sections
   toggleReviews: document.getElementById("toggle-reviews"),
@@ -426,6 +427,11 @@ function setupCollapsible(header, container) {
 setupCollapsible(els.toggleReviews, els.reviewsContainer);
 setupCollapsible(els.toggleAchievements, els.achievementsContainer);
 
+// Object Reviews Panel Close Handler
+els.objectReviewsClose?.addEventListener("click", () => {
+    els.objectReviewsPanel.classList.remove("open");
+});
+
 els.btnShowLogin?.addEventListener("click", () => showModal("login"));
 els.btnShowRegister?.addEventListener("click", () => showModal("register"));
 els.modalClose?.addEventListener("click", hideModal);
@@ -664,6 +670,9 @@ function renderPlaces(places) {
 async function showObjectReviews(placeId, placeName) {
     if (!els.objectReviewsPanel) return;
     
+    // Open the panel (for mobile bottom sheet)
+    els.objectReviewsPanel.classList.add("open");
+
     els.objectReviewsTitle.textContent = `Отзывы: ${placeName}`;
     els.objectReviewsContent.innerHTML = '<div class="muted">Загрузка...</div>';
     
@@ -864,6 +873,15 @@ function setupFilters() {
     document.querySelectorAll('#filters input').forEach(cb => {
         cb.addEventListener('change', applyFilters);
     });
+
+    const filtersToggle = document.getElementById('filters-toggle');
+    const filtersPanel = document.getElementById('filters');
+    
+    if (filtersToggle && filtersPanel) {
+        filtersToggle.addEventListener('click', () => {
+            filtersPanel.classList.toggle('collapsed');
+        });
+    }
 }
 
 // Режим добавления объекта
