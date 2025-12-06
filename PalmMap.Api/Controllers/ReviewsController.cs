@@ -55,6 +55,7 @@ public class ReviewsController : ControllerBase
             .Include(r => r.User)
             .Select(r => new PlaceReviewResponse(
                 r.User.DisplayName ?? "Аноним",
+                r.User.Level,
                 r.Rating,
                 r.Comment,
                 r.CreatedAt

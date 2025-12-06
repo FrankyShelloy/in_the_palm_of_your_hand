@@ -526,7 +526,10 @@ async function showObjectReviews(placeId, placeName) {
             
             div.innerHTML = `
                 <div class="review-header">
-                    <span class="review-author">👤 ${r.userName}</span>
+                    <span class="review-author">
+                        👤 ${r.userName}
+                        <span class="level-badge">Lvl ${r.userLevel || 1}</span>
+                    </span>
                     <span class="review-date">${date}</span>
                 </div>
                 <div style="color:#fbbf24;margin-bottom:6px;">${stars}</div>

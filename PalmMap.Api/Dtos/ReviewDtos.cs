@@ -20,8 +20,9 @@ public record ReviewResponse(
 
 // Для отображения отзывов на объекте карты (без привязки к пользователю)
 public record PlaceReviewResponse(
-    string UserName,
-    int Rating,
-    string? Comment,
-    DateTime CreatedAt
+    [property: JsonPropertyName("userName")] string UserName,
+    [property: JsonPropertyName("userLevel")] int UserLevel,
+    [property: JsonPropertyName("rating")] int Rating,
+    [property: JsonPropertyName("comment")] string? Comment,
+    [property: JsonPropertyName("createdAt")] DateTime CreatedAt
 );

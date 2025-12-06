@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,900&family=Montserrat:wght@500;700&display=swap');
+
 :root {
   --bg: #0f172a;
   --panel: #111827;
@@ -34,7 +36,27 @@ a { color: var(--accent); }
   z-index: 10;
 }
 
-.brand { font-weight: 700; letter-spacing: 0.5px; }
+.brand {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.brand-initial {
+  font-family: 'Exo 2', sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 2.8rem; /* Slightly larger */
+  line-height: 1;
+  color: var(--accent);
+  margin: 0 2px;
+  text-shadow: 0 0 15px rgba(34, 211, 238, 0.6); /* Stronger glow */
+  transform: translateY(3px) skewX(-5deg); /* Extra slant for sharpness */
+}
 
 .auth-actions { display: flex; align-items: center; gap: 12px; }
 .user-info { color: var(--muted); }
@@ -142,6 +164,17 @@ a { color: var(--accent); }
 }
 .review-date { color: var(--muted); font-size: 0.85rem; }
 .review-text { line-height: 1.5; }
+
+.level-badge {
+  font-size: 0.7rem;
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
 
 .icon-btn {
   background: none;
