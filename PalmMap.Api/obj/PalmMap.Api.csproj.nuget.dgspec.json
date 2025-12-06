@@ -1,25 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\PalmMap.Api.csproj": {}
+    "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/PalmMap.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\PalmMap.Api.csproj": {
+    "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/PalmMap.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\PalmMap.Api.csproj",
+        "projectUniqueName": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/PalmMap.Api.csproj",
         "projectName": "PalmMap.Api",
-        "projectPath": "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\PalmMap.Api.csproj",
-        "packagesPath": "C:\\Users\\nat00\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\obj\\",
+        "projectPath": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/PalmMap.Api.csproj",
+        "packagesPath": "/home/frankyshelloy/.nuget/packages/",
+        "outputPath": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\nat00\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/frankyshelloy/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "/usr/lib/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,7 +39,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -90,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.111/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

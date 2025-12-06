@@ -12,8 +12,13 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
+<<<<<<< HEAD
       <Fingerprint>ce8i3h2252</Fingerprint>
       <Integrity>/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=</Integrity>
+=======
+      <Fingerprint>99llz9b27e</Fingerprint>
+      <Integrity>I6oeJack8Y2S4+mKbYJS9WUBWs3hOIfepblHMV687C4=</Integrity>
+>>>>>>> 7bfeef98e7f1a338fb6fdfcf80af5020513f2956
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.js'))</OriginalItemSpec>
@@ -72,6 +77,27 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\emails\20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html'))</OriginalItemSpec>
     </StaticWebAsset>
+<<<<<<< HEAD
+=======
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\emails\20251205_165732_267_110f08348d8a4c19abba542aba672db0.html'))">
+      <SourceType>Package</SourceType>
+      <SourceId>PalmMap.Api</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/PalmMap.Api</BasePath>
+      <RelativePath>emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>5m15p667qy</Fingerprint>
+      <Integrity>bUhEnSeJ3iVMq8YNQ/0fPrDoMIYXZbUoDhqeOIbyuqI=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\emails\20251205_165732_267_110f08348d8a4c19abba542aba672db0.html'))</OriginalItemSpec>
+    </StaticWebAsset>
+>>>>>>> 7bfeef98e7f1a338fb6fdfcf80af5020513f2956
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))">
       <SourceType>Package</SourceType>
       <SourceId>PalmMap.Api</SourceId>
@@ -84,8 +110,13 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
+<<<<<<< HEAD
       <Fingerprint>0galkhuv6g</Fingerprint>
       <Integrity>IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=</Integrity>
+=======
+      <Fingerprint>o4b3rv63df</Fingerprint>
+      <Integrity>6K2xi94MI/rMMr/FC1eLwSLnLaaOdgxCm+D0wIm6iZ4=</Integrity>
+>>>>>>> 7bfeef98e7f1a338fb6fdfcf80af5020513f2956
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))</OriginalItemSpec>
@@ -120,8 +151,13 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
+<<<<<<< HEAD
       <Fingerprint>k1mt084xqs</Fingerprint>
       <Integrity>KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=</Integrity>
+=======
+      <Fingerprint>1xa21odr0x</Fingerprint>
+      <Integrity>O8tsSfDUURmFjDfLClakpvT6nITA2oxvtgLKs3k+7xk=</Integrity>
+>>>>>>> 7bfeef98e7f1a338fb6fdfcf80af5020513f2956
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\styles.css'))</OriginalItemSpec>

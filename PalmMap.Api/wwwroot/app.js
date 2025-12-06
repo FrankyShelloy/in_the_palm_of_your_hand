@@ -182,11 +182,21 @@ async function loadReviews() {
   try {
     const items = await api("/reviews");
     els.reviewsList.innerHTML = "";
+    if (items.length === 0) {
+      els.reviewsList.innerHTML = '<div class="review-card muted">Вы ещё не оставляли отзывов</div>';
+      return;
+    }
     items.forEach((r) => {
       const div = document.createElement("div");
       div.className = "review-card";
       const date = new Date(r.createdAt).toLocaleString();
-      div.innerHTML = `<div class="review-meta">${date}</div><div>${r.content}</div>`;
+      const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+      div.innerHTML = `
+        <div class="review-meta">${date}</div>
+        <div class="review-place"><strong>${r.placeName}</strong></div>
+        <div class="review-rating">${stars}</div>
+        ${r.comment ? `<div class="review-comment">${r.comment}</div>` : ''}
+      `;
       els.reviewsList.appendChild(div);
     });
   } catch (err) {
@@ -379,6 +389,8 @@ async function initMap() {
 
     myMap.events.add('click', onMapClick);
     await loadPlacesFromJson();
+    await loadPlaceReviewsForMap(); // Загрузить отзывы с сервера
+    renderPlaces([...basePlaces, ...userAddedPlaces]); // Перерисовать с рейтингами
     setupFilters();
     setupAddButton();
     setupReviewModal();
@@ -446,7 +458,7 @@ function renderPlaces(places) {
 
 // Создание метки
 function createPlacemark(place) {
-    const reviewsInfo = calculateRating(place.id);
+    const reviewsInfo = calculateRatingSync(place.id);
     const rating = reviewsInfo.count > 0
         ? `${reviewsInfo.avgRating.toFixed(1)} ⭐ (${reviewsInfo.count} оценок)`
         : 'Оценок пока нет';
@@ -565,19 +577,32 @@ function submitNewPlace() {
     document.getElementById('add-place-modal').style.display = 'none';
 }
 
-// === СИСТЕМА ОТЗЫВОВ ===
+// === СИСТЕМА ОТЗЫВОВ (через API) ===
 
-function getReviews(placeId) {
-    const stored = localStorage.getItem(`reviews_${placeId}`);
-    return stored ? JSON.parse(stored) : [];
+// Кэш отзывов для карты
+let placeReviewsCache = new Map();
+
+async function getPlaceReviews(placeId) {
+    // Проверяем кэш
+    if (placeReviewsCache.has(placeId)) {
+        return placeReviewsCache.get(placeId);
+    }
+    
+    try {
+        const res = await fetch(`${apiBase}/reviews/place/${placeId}`);
+        if (res.ok) {
+            const reviews = await res.json();
+            placeReviewsCache.set(placeId, reviews);
+            return reviews;
+        }
+    } catch (e) {
+        console.error('Ошибка загрузки отзывов:', e);
+    }
+    return [];
 }
 
-function saveReviews(placeId, reviews) {
-    localStorage.setItem(`reviews_${placeId}`, JSON.stringify(reviews));
-}
-
-function calculateRating(placeId) {
-    const reviews = getReviews(placeId);
+async function calculateRating(placeId) {
+    const reviews = await getPlaceReviews(placeId);
     if (reviews.length === 0) {
         return { avgRating: 0, count: 0 };
     }
@@ -588,29 +613,58 @@ function calculateRating(placeId) {
     };
 }
 
-function openReviewForm(placeId) {
+// Синхронная версия для начальной отрисовки (использует кэш)
+function calculateRatingSync(placeId) {
+    const reviews = placeReviewsCache.get(placeId) || [];
+    if (reviews.length === 0) {
+        return { avgRating: 0, count: 0 };
+    }
+    const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+    return {
+        avgRating: sum / reviews.length,
+        count: reviews.length
+    };
+}
+
+async function openReviewForm(placeId) {
     const idStr = String(placeId);
-    const place = allPlacesMap.get(idStr);
+    const place = allPlacesMap.get(idStr) || [...basePlaces, ...userAddedPlaces].find(p => String(p.id) === idStr);
     
-    if (place) {
-        window.currentReviewPlaceId = idStr;
-        document.getElementById('review-place-name').textContent = place.name;
-        document.getElementById('review-modal').style.display = 'flex';
+    if (!place) {
+        alert(`Объект не найден. ID: ${placeId}`);
         return;
     }
-    
-    // Fallback search
-    const allPlaces = [...basePlaces, ...userAddedPlaces];
-    const foundPlace = allPlaces.find(p => String(p.id) === idStr);
-    
-    if (foundPlace) {
-        window.currentReviewPlaceId = idStr;
-        document.getElementById('review-place-name').textContent = foundPlace.name;
-        document.getElementById('review-modal').style.display = 'flex';
+
+    // Проверяем авторизацию
+    if (!getToken()) {
+        alert('Для добавления отзыва необходимо войти в систему');
+        showModal('login');
         return;
     }
+
+    // Проверяем, не оставлял ли пользователь уже отзыв
+    try {
+        const res = await api(`/reviews/check/${idStr}`);
+        if (res.hasReview) {
+            alert('Вы уже оставили отзыв на этот объект');
+            return;
+        }
+    } catch (e) {
+        console.error('Ошибка проверки отзыва:', e);
+    }
+
+    window.currentReviewPlaceId = idStr;
+    window.currentReviewPlaceName = place.name;
+    document.getElementById('review-place-name').textContent = place.name;
+    document.getElementById('review-modal').style.display = 'flex';
     
-    alert(`Объект не найден. ID: ${placeId}`);
+    // Сбросить форму
+    window.selectedRating = 0;
+    document.querySelectorAll('#star-rating span').forEach(s => {
+        s.textContent = '☆';
+        s.classList.remove('star-active');
+    });
+    document.getElementById('review-comment').value = '';
 }
 
 function setupReviewModal() {
@@ -637,29 +691,56 @@ function setupReviewModal() {
 
     const submitBtn = document.getElementById('submit-review');
     if(submitBtn) {
-        submitBtn.addEventListener('click', () => {
+        submitBtn.addEventListener('click', async () => {
             const rating = window.selectedRating;
             const comment = document.getElementById('review-comment').value.trim();
             const placeId = window.currentReviewPlaceId;
+            const placeName = window.currentReviewPlaceName;
 
             if (!rating) {
                 alert('Пожалуйста, поставьте оценку');
                 return;
             }
 
-            const reviews = getReviews(placeId);
-            reviews.push({
-                rating: rating,
-                comment: comment,
-                timestamp: Date.now()
-            });
-            saveReviews(placeId, reviews);
+            try {
+                await api('/reviews', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        placeId: placeId,
+                        placeName: placeName,
+                        rating: rating,
+                        comment: comment || null
+                    })
+                });
 
-            document.getElementById('review-modal').style.display = 'none';
-            renderPlaces([...basePlaces, ...userAddedPlaces]); 
-            
-            alert('Спасибо за ваш отзыв!');
+                // Очистить кэш для этого места
+                placeReviewsCache.delete(placeId);
+                
+                document.getElementById('review-modal').style.display = 'none';
+                
+                // Обновить карту и профиль
+                await loadPlaceReviewsForMap();
+                renderPlaces([...basePlaces, ...userAddedPlaces]);
+                
+                // Обновить профиль если авторизован
+                if (getToken()) {
+                    await loadProfile();
+                }
+                
+                alert('Спасибо за ваш отзыв!');
+            } catch (err) {
+                const msg = formatError(err);
+                alert('Ошибка: ' + msg);
+            }
         });
+    }
+}
+
+// Загрузка всех отзывов для объектов на карте
+async function loadPlaceReviewsForMap() {
+    const placeIds = [...basePlaces, ...userAddedPlaces].map(p => p.id);
+    for (const placeId of placeIds) {
+        await getPlaceReviews(placeId);
     }
 }
 
