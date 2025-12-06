@@ -22,7 +22,24 @@ const els = {
   reviewForm: document.getElementById("review-form"),
   reviewText: document.getElementById("review-text"),
   reviewStatus: document.getElementById("review-status"),
-  reviewsList: document.getElementById("reviews-list"),
+  
+  // New elements
+  profileToggle: document.getElementById("profile-toggle"),
+  profilePanel: document.getElementById("profile-panel"),
+  userReviewsList: document.getElementById("user-reviews-list"),
+  objectReviewsPanel: document.getElementById("object-reviews-panel"),
+  objectReviewsContent: document.getElementById("object-reviews-content"),
+  objectReviewsTitle: document.getElementById("object-reviews-title"),
+
+  // Collapsible sections
+  toggleReviews: document.getElementById("toggle-reviews"),
+  reviewsContainer: document.getElementById("user-reviews-container"),
+  toggleAchievements: document.getElementById("toggle-achievements"),
+  achievementsContainer: document.getElementById("user-achievements-container"),
+  
+  // Profile visibility
+  profileClose: document.getElementById("profile-close"),
+  mapProfileToggle: document.getElementById("map-profile-toggle"),
 };
 
 function saveToken(token) {
@@ -60,11 +77,18 @@ async function api(path, options = {}) {
   if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(`${apiBase}${path}`, { ...options, headers });
   if (!res.ok) {
+    // Use a cloned response when attempting to read the body so we don't
+    // encounter "body stream already read" if something else accessed it.
     let errorData;
     try {
-      errorData = await res.json();
+      errorData = await res.clone().json();
     } catch {
-      errorData = await res.text();
+      try {
+        errorData = await res.clone().text();
+      } catch (e) {
+        // Fallback: return status text
+        errorData = res.statusText || `HTTP ${res.status}`;
+      }
     }
     throw errorData;
   }
@@ -181,23 +205,22 @@ async function loadAchievements() {
 async function loadReviews() {
   try {
     const items = await api("/reviews");
-    els.reviewsList.innerHTML = "";
+    els.userReviewsList.innerHTML = "";
     if (items.length === 0) {
-      els.reviewsList.innerHTML = '<div class="review-card muted">Вы ещё не оставляли отзывов</div>';
+      els.userReviewsList.innerHTML = '<div class="muted" style="padding:10px">Вы ещё не оставляли отзывов</div>';
       return;
     }
     items.forEach((r) => {
       const div = document.createElement("div");
-      div.className = "review-card";
-      const date = new Date(r.createdAt).toLocaleString();
+      div.className = "review-card-small";
+      const date = new Date(r.createdAt).toLocaleDateString();
       const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
       div.innerHTML = `
-        <div class="review-meta">${date}</div>
-        <div class="review-place"><strong>${r.placeName}</strong></div>
-        <div class="review-rating">${stars}</div>
-        ${r.comment ? `<div class="review-comment">${r.comment}</div>` : ''}
+        <div class="place-name">${r.placeName}</div>
+        <div class="rating">${stars} <span style="color:var(--muted);font-size:0.8em;margin-left:6px">${date}</span></div>
+        ${r.comment ? `<div style="margin-top:4px;font-size:0.85em;color:var(--text)">${r.comment}</div>` : ''}
       `;
-      els.reviewsList.appendChild(div);
+      els.userReviewsList.appendChild(div);
     });
   } catch (err) {
     console.error(err);
@@ -215,10 +238,31 @@ function logout() {
   els.profileLevel.textContent = "Уровень 1";
   els.profileReviews.textContent = "0";
   els.achievements.innerHTML = "";
-  els.reviewsList.innerHTML = "";
+  els.userReviewsList.innerHTML = "";
 }
 
 // Event wiring
+function toggleProfileVisibility() {
+    els.profilePanel.classList.toggle("hidden");
+    setTimeout(() => {
+        if (typeof myMap !== 'undefined' && myMap) myMap.container.fitToViewport();
+    }, 350);
+}
+
+els.profileClose?.addEventListener("click", toggleProfileVisibility);
+els.mapProfileToggle?.addEventListener("click", toggleProfileVisibility);
+
+function setupCollapsible(header, container) {
+    if (!header || !container) return;
+    header.addEventListener('click', () => {
+        container.classList.toggle('hidden');
+        header.classList.toggle('active');
+    });
+}
+
+setupCollapsible(els.toggleReviews, els.reviewsContainer);
+setupCollapsible(els.toggleAchievements, els.achievementsContainer);
+
 els.btnShowLogin?.addEventListener("click", () => showModal("login"));
 els.btnShowRegister?.addEventListener("click", () => showModal("register"));
 els.modalClose?.addEventListener("click", hideModal);
@@ -456,6 +500,42 @@ function renderPlaces(places) {
     applyFilters();
 }
 
+async function showObjectReviews(placeId, placeName) {
+    if (!els.objectReviewsPanel) return;
+    
+    els.objectReviewsTitle.textContent = `Отзывы: ${placeName}`;
+    els.objectReviewsContent.innerHTML = '<div class="muted">Загрузка...</div>';
+    
+    try {
+        const reviews = await getPlaceReviews(placeId);
+        els.objectReviewsContent.innerHTML = "";
+        
+        if (reviews.length === 0) {
+            els.objectReviewsContent.innerHTML = '<div class="muted" style="padding:10px">Отзывов пока нет. Будьте первым!</div>';
+            return;
+        }
+        
+        reviews.forEach(r => {
+            const div = document.createElement("div");
+            div.className = "object-review-card";
+            const date = new Date(r.createdAt).toLocaleDateString();
+            const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+            
+            div.innerHTML = `
+                <div class="review-header">
+                    <span class="review-author">👤 ${r.userName}</span>
+                    <span class="review-date">${date}</span>
+                </div>
+                <div style="color:#fbbf24;margin-bottom:6px;">${stars}</div>
+                ${r.comment ? `<div class="review-text">${r.comment}</div>` : ''}
+            `;
+            els.objectReviewsContent.appendChild(div);
+        });
+    } catch (e) {
+        els.objectReviewsContent.innerHTML = '<div class="error">Не удалось загрузить отзывы</div>';
+    }
+}
+
 // Создание метки
 function createPlacemark(place) {
     const reviewsInfo = calculateRatingSync(place.id);
@@ -491,6 +571,12 @@ function createPlacemark(place) {
         name: place.name,
         address: place.address
     };
+
+    // Load reviews when clicked
+    placemark.events.add('click', () => {
+        showObjectReviews(place.id, place.name);
+    });
+
     return placemark;
 }
 

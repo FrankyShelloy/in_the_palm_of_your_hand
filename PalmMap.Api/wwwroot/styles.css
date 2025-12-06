@@ -41,11 +41,11 @@ a { color: var(--accent); }
 .hidden { display: none !important; }
 
 .layout {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1400px; /* Increased max-width */
   margin: 0 auto;
 }
 
@@ -55,9 +55,107 @@ a { color: var(--accent); }
   border-radius: 14px;
   padding: 16px;
   box-shadow: var(--shadow);
+  flex: 1 1 300px;
+  transition: all 0.3s ease;
 }
 
-.panel.wide { grid-column: span 2; }
+.panel.wide { flex: 2 1 600px; }
+
+/* Profile Collapsed State */
+#profile-panel.collapsed {
+  flex: 0 0 60px;
+  min-width: 0;
+  padding: 10px;
+  overflow: hidden;
+}
+
+#profile-panel.collapsed .profile-body,
+#profile-panel.collapsed .profile-reviews-section,
+#profile-panel.collapsed .tag,
+#profile-panel.collapsed h2 {
+  display: none;
+}
+
+#profile-panel.collapsed .panel-header {
+  justify-content: center;
+  margin: 0;
+}
+
+#profile-panel.collapsed #profile-toggle {
+  transform: rotate(180deg);
+}
+
+/* Profile Reviews List */
+.profile-reviews-section {
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+.profile-reviews-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+.reviews-list-small {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.review-card-small {
+  background: rgba(0,0,0,0.2);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.review-card-small .place-name {
+  font-weight: bold;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.review-card-small .rating {
+  color: #fbbf24;
+  font-size: 0.8rem;
+}
+
+/* Object Reviews */
+.object-review-card {
+  background: var(--card);
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+}
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.review-author { 
+  font-weight: 600; 
+  color: var(--accent-strong); 
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.review-date { color: var(--muted); font-size: 0.85rem; }
+.review-text { line-height: 1.5; }
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 4px;
+  border-radius: 4px;
+}
+.icon-btn:hover { 
+  color: var(--text); 
+  background: rgba(255,255,255,0.1);
+}
 
 .panel-header {
   display: flex;
@@ -180,6 +278,32 @@ button:active { transform: translateY(1px); }
   animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Confirm email page tweaks */
+.confirm-card {
+  padding: 30px 28px;
+  max-width: 520px;
+  border-radius: 14px;
+}
+
+.confirm-card .reset-header h1 {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.confirm-card .muted { color: var(--muted); margin-top: -6px; }
+
+#status-message.status { font-size: 16px; margin-top: 8px; }
+
+#btn-home.primary { max-width: 260px; margin: 0 auto; border-radius: 12px; }
+
+.confirm-icon {
+  width: 68px; height: 68px; display: inline-grid; place-items: center; margin: 8px auto 4px auto; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(34,211,238,0.12), rgba(14,165,233,0.08));
+  border: 1px solid rgba(34,211,238,0.08);
+  color: var(--accent);
+  font-size: 28px;
+}
+
 /* Decorative top border/glow */
 .reset-card::before {
   content: '';
@@ -272,18 +396,20 @@ button:active { transform: translateY(1px); }
     min-height: 500px; /* Ensure map has height */
     border-radius: 12px;
 }
+#map { position: relative; z-index: 8; }
 
 #filters {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: white;
-    padding: 14px;
-    border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.2);
-    z-index: 1000;
-    max-width: 260px;
-    color: #000; /* Force black text for filters on white bg */
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: white;
+  padding: 14px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+  /* place filters behind the topbar/logo but above the map */
+  z-index: 9;
+  max-width: 260px;
+  color: #000; /* Force black text for filters on white bg */
 }
 
 #filters h4 {
@@ -411,3 +537,164 @@ button:active { transform: translateY(1px); }
     height: 100%;
     min-height: 500px;
 }
+
+/* Collapsible Profile Sections */
+.profile-section {
+  border-top: 1px solid var(--border);
+  margin-top: 10px;
+  padding-top: 5px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 5px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.section-header:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.section-header .arrow {
+  font-size: 0.8rem;
+  color: var(--muted);
+  transition: transform 0.3s ease;
+}
+
+.section-header.active .arrow {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.section-content {
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Compact Achievements List */
+.compact-list {
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.compact-list li {
+  padding: 10px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.compact-list .title {
+  font-size: 0.9rem;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.compact-list .desc {
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.compact-list .tag {
+  margin-top: 6px;
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+}
+
+
+/* Prevent wrapping on desktop to keep profile on the side */
+@media (min-width: 900px) {
+  .layout {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+  }
+  
+  /* Ensure map takes available space but respects profile */
+  #map-panel {
+    flex-grow: 1;
+    width: auto; /* Allow shrinking/growing */
+  }
+  
+  #profile-panel {
+    flex-shrink: 0; /* Prevent profile from shrinking below its basis unless collapsed */
+  }
+}
+
+/* Improve collapsed state styling */
+#profile-panel.collapsed {
+  width: 60px; /* Force width */
+  padding: 10px 0;
+}
+
+#profile-panel.collapsed .panel-header {
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+#profile-panel.collapsed #profile-toggle {
+  margin: 0 auto;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+
+/* New Layout Structure */
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.top-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  flex-wrap: wrap; /* Allow wrapping on mobile */
+}
+
+#map-panel {
+  flex: 1;
+  min-width: 300px;
+}
+
+#profile-panel {
+  width: 300px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+#profile-panel.hidden {
+  display: none;
+}
+
+#object-reviews-panel {
+  width: 100%;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Override previous media query if needed */
+@media (min-width: 900px) {
+  .top-row {
+    flex-wrap: nowrap;
+  }
+}
+

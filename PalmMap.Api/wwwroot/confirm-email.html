@@ -7,13 +7,20 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>НаЛадони</h1>
-        <div id="message-container" style="text-align: center; padding: 2rem;">
-            <p id="status-message">Подтверждение вашего email...</p>
-        </div>
-        <div style="text-align: center; margin-top: 2rem;">
-            <a href="/" class="btn">Вернуться на главную</a>
+    <div class="reset-page">
+        <div class="reset-card confirm-card">
+            <div class="reset-header">
+                <h1>НаЛадони</h1>
+                <p id="sub" class="muted">Подтверждение email</p>
+            </div>
+
+            <div id="message-container" style="text-align: center; padding: 1rem 0 0 0;">
+                <div id="status-message" class="status">Подтверждение вашего email...</div>
+            </div>
+
+            <div style="text-align: center; margin-top: 26px;">
+                <button id="btn-home" class="primary btn-block">Вернуться на главную</button>
+            </div>
         </div>
     </div>
 
@@ -49,6 +56,11 @@
         }
 
         confirmEmail();
+
+        // Button to return home
+        document.getElementById('btn-home')?.addEventListener('click', () => {
+            window.location.href = '/';
+        });
     </script>
 </body>
 </html>

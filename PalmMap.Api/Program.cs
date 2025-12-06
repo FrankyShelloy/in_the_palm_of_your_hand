@@ -95,4 +95,20 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Ensure database is migrated at startup (apply pending EF migrations)
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        db.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Database migration failed on startup.");
+        // swallow to allow app to start and return errors via endpoints
+    }
+}
+
 app.Run();

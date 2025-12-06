@@ -18,68 +18,92 @@
   </header>
 
   <main class="layout">
-    <section class="panel wide" id="map-panel">
+    <div class="top-row">
+        <section class="panel wide" id="map-panel">
+          <div class="panel-header">
+            <h2>Карта</h2>
+            <div class="header-controls">
+                <span class="tag">Тульская область</span>
+                <button id="map-profile-toggle" class="icon-btn" title="Показать/Скрыть профиль">👤</button>
+            </div>
+          </div>
+          <div class="map-container-wrapper">
+            <div id="map"></div>
+
+            <!-- Панель фильтров -->
+            <div id="filters">
+                <h4>Объекты инфраструктуры</h4>
+                <label><input type="checkbox" data-type="pharmacy" checked> Аптеки 💊</label>
+                <label><input type="checkbox" data-type="health_center" checked> Центры здоровья 🩺</label>
+                <label><input type="checkbox" data-type="hospital" checked> Больницы 🏥</label>
+                <label><input type="checkbox" data-type="dentist" checked> Стоматологии 🦷</label>
+                <label><input type="checkbox" data-type="lab" checked> Лаборатории 🔬</label>
+                <label><input type="checkbox" data-type="clinic" checked> Поликлиники 🏨</label>
+                <label><input type="checkbox" data-type="other_med" checked> Другие мед. учреждения ⚕️</label>
+                <label><input type="checkbox" data-type="healthy_food" checked> Здоровое питание 🍏</label>
+                <label><input type="checkbox" data-type="alcohol" checked> Алкоголь / табак 🍷</label>
+                <label><input type="checkbox" data-type="gym" checked> Спорт / активность 🏋️</label>
+            </div>
+
+            <!-- Кнопка добавления -->
+            <!-- <button id="add-place-btn">➕ Добавить объект</button> -->
+          </div>
+        </section>
+
+        <section class="panel" id="profile-panel">
+          <div class="panel-header">
+            <div class="header-content">
+              <h2>Профиль</h2>
+              <span class="tag" id="profile-level">Уровень 1</span>
+            </div>
+            <button id="profile-close" class="icon-btn" title="Скрыть профиль">✖</button>
+          </div>
+          <div class="profile-body">
+            <div class="stat">
+              <span class="label">Email</span>
+              <span id="profile-email" class="value">-</span>
+            </div>
+            <div class="stat">
+              <span class="label">Имя</span>
+              <span id="profile-name" class="value">-</span>
+            </div>
+            <div class="stat">
+              <span class="label">Отзывы</span>
+              <span id="profile-reviews" class="value">0</span>
+            </div>
+          </div>
+          
+          <!-- Collapsible Reviews -->
+          <div class="profile-section">
+            <div class="section-header" id="toggle-reviews">
+                <h3>Мои отзывы</h3>
+                <span class="arrow">▼</span>
+            </div>
+            <div id="user-reviews-container" class="section-content hidden">
+                <div id="user-reviews-list" class="reviews-list-small"></div>
+            </div>
+          </div>
+
+          <!-- Collapsible Achievements -->
+          <div class="profile-section">
+            <div class="section-header" id="toggle-achievements">
+                <h3>Достижения</h3>
+                <span class="arrow">▼</span>
+            </div>
+            <div id="user-achievements-container" class="section-content hidden">
+                <ul id="achievements-list" class="list compact-list"></ul>
+            </div>
+          </div>
+        </section>
+    </div>
+
+    <section class="panel wide" id="object-reviews-panel">
       <div class="panel-header">
-        <h2>Карта</h2>
-        <span class="tag">Тульская область</span>
+        <h2 id="object-reviews-title">Отзывы об объекте</h2>
       </div>
-      <div class="map-container-wrapper">
-        <div id="map"></div>
-
-        <!-- Панель фильтров -->
-        <div id="filters">
-            <h4>Объекты инфраструктуры</h4>
-            <label><input type="checkbox" data-type="pharmacy" checked> Аптеки 💊</label>
-            <label><input type="checkbox" data-type="health_center" checked> Центры здоровья 🩺</label>
-            <label><input type="checkbox" data-type="hospital" checked> Больницы 🏥</label>
-            <label><input type="checkbox" data-type="dentist" checked> Стоматологии 🦷</label>
-            <label><input type="checkbox" data-type="lab" checked> Лаборатории 🔬</label>
-            <label><input type="checkbox" data-type="clinic" checked> Поликлиники 🏨</label>
-            <label><input type="checkbox" data-type="other_med" checked> Другие мед. учреждения ⚕️</label>
-            <label><input type="checkbox" data-type="healthy_food" checked> Здоровое питание 🍏</label>
-            <label><input type="checkbox" data-type="alcohol" checked> Алкоголь / табак 🍷</label>
-            <label><input type="checkbox" data-type="gym" checked> Спорт / активность 🏋️</label>
-        </div>
-
-        <!-- Кнопка добавления -->
-        <!-- <button id="add-place-btn">➕ Добавить объект</button> -->
+      <div id="object-reviews-content">
+        <p class="hint">Выберите объект на карте, чтобы увидеть отзывы.</p>
       </div>
-    </section>
-
-    <section class="panel" id="profile-panel">
-      <div class="panel-header">
-        <h2>Профиль</h2>
-        <span class="tag" id="profile-level">Уровень 1</span>
-      </div>
-      <div class="profile-body">
-        <div class="stat">
-          <span class="label">Email</span>
-          <span id="profile-email" class="value">-</span>
-        </div>
-        <div class="stat">
-          <span class="label">Имя</span>
-          <span id="profile-name" class="value">-</span>
-        </div>
-        <div class="stat">
-          <span class="label">Отзывы</span>
-          <span id="profile-reviews" class="value">0</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="achievements-panel">
-      <div class="panel-header">
-        <h2>Достижения</h2>
-      </div>
-      <ul id="achievements-list" class="list"></ul>
-    </section>
-
-    <section class="panel wide" id="reviews-panel">
-      <div class="panel-header">
-        <h2>Мои отзывы</h2>
-      </div>
-      <p class="hint">Отзывы можно оставлять на карте, кликнув на объект</p>
-      <div id="reviews-list" class="reviews"></div>
     </section>
   </main>
 
