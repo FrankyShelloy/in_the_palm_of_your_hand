@@ -72,6 +72,17 @@ function switchTab(mode) {
   els.registerForm.classList.toggle("hidden", mode !== "register");
 }
 
+// VK login button handler: перенаправляет на серверную точку входа в VK OAuth
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('btn-vk-login');
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = '/api/auth/vk/login';
+    });
+  }
+});
+
 async function api(path, options = {}) {
   const token = getToken();
   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };

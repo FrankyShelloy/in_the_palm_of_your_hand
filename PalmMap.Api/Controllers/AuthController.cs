@@ -23,13 +23,116 @@ public class AuthController : ControllerBase
     private readonly IEmailSenderDev _emailSender;
 
     private readonly string _frontendUrl;
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration, IEmailSenderDev emailSender)
+    public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration, IEmailSenderDev emailSender, IHttpClientFactory httpClientFactory)
     {
         _userManager = userManager;
         _configuration = configuration;
         _emailSender = emailSender;
+        _httpClientFactory = httpClientFactory;
         _frontendUrl = configuration.GetValue<string>("FrontendUrl") ?? "http://localhost:5014";
+    }
+
+    // Начать VK OAuth: перенаправляет пользователя на страницу авторизации VK
+    [HttpGet("vk/login")]
+    public IActionResult VkLogin()
+    {
+        var vk = _configuration.GetSection("Vk");
+        var clientId = vk["ClientId"];
+        if (string.IsNullOrWhiteSpace(clientId)) return BadRequest(new { message = "VK ClientId not configured" });
+
+        var redirectUri = Url.ActionLink(nameof(VkCallback), "Auth", null, Request.Scheme);
+        var state = Guid.NewGuid().ToString("N");
+        // You may want to persist state to validate CSRF; omitted for brevity
+
+        var authorize = $"https://oauth.vk.com/authorize?client_id={WebUtility.UrlEncode(clientId)}&display=page&redirect_uri={WebUtility.UrlEncode(redirectUri)}&scope=email&response_type=code&v={vk["ApiVersion"]}&state={state}";
+        return Redirect(authorize);
+    }
+
+    // Callback endpoint VK redirects to with `code`
+    [HttpGet("vk/callback")]
+    public async Task<IActionResult> VkCallback([FromQuery] string code, [FromQuery] string state)
+    {
+        if (string.IsNullOrWhiteSpace(code)) return BadRequest(new { message = "Code is required" });
+
+        var vk = _configuration.GetSection("Vk");
+        var clientId = vk["ClientId"];
+        var clientSecret = vk["ClientSecret"];
+        var apiVersion = vk["ApiVersion"] ?? "5.131";
+        if (string.IsNullOrWhiteSpace(clientId) || string.IsNullOrWhiteSpace(clientSecret))
+            return BadRequest(new { message = "VK client credentials not configured" });
+
+        var redirectUri = Url.ActionLink(nameof(VkCallback), "Auth", null, Request.Scheme);
+
+        var http = _httpClientFactory.CreateClient();
+        // Exchange code for access token
+        var tokenUrl = $"https://oauth.vk.com/access_token?client_id={clientId}&client_secret={clientSecret}&redirect_uri={WebUtility.UrlEncode(redirectUri)}&code={WebUtility.UrlEncode(code)}";
+        var tokenRes = await http.GetAsync(tokenUrl);
+        if (!tokenRes.IsSuccessStatusCode) return BadRequest(new { message = "Failed to exchange code for VK token" });
+
+        var tokenJson = await tokenRes.Content.ReadAsStringAsync();
+        using var doc = System.Text.Json.JsonDocument.Parse(tokenJson);
+        var root = doc.RootElement;
+        var accessToken = root.GetProperty("access_token").GetString();
+        string? email = null;
+        if (root.TryGetProperty("email", out var emailEl)) email = emailEl.GetString();
+        var vkUserId = root.GetProperty("user_id").GetInt64();
+
+        // Fetch user info
+        var userInfoUrl = $"https://api.vk.com/method/users.get?user_ids={vkUserId}&fields=first_name,last_name,photo_200&access_token={accessToken}&v={apiVersion}";
+        var infoRes = await http.GetAsync(userInfoUrl);
+        if (!infoRes.IsSuccessStatusCode) return BadRequest(new { message = "Failed to get VK user info" });
+        var infoJson = await infoRes.Content.ReadAsStringAsync();
+        using var infoDoc = System.Text.Json.JsonDocument.Parse(infoJson);
+        var response = infoDoc.RootElement.GetProperty("response")[0];
+        var firstName = response.GetProperty("first_name").GetString();
+        var lastName = response.GetProperty("last_name").GetString();
+        var photo = response.TryGetProperty("photo_200", out var ph) ? ph.GetString() : null;
+
+        // Find or create user
+        ApplicationUser? user = null;
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            user = await _userManager.FindByEmailAsync(email);
+        }
+
+        if (user == null)
+        {
+            // Try by username vk_{id}
+            var userName = $"vk_{vkUserId}";
+            user = await _userManager.FindByNameAsync(userName);
+        }
+
+        if (user == null)
+        {
+            var newUser = new ApplicationUser
+            {
+                UserName = !string.IsNullOrWhiteSpace(email) ? email : $"vk_{vkUserId}@vk.local",
+                Email = !string.IsNullOrWhiteSpace(email) ? email : null,
+                DisplayName = string.Join(' ', new[] { firstName, lastName }.Where(s => !string.IsNullOrWhiteSpace(s))),
+                EmailConfirmed = true
+            };
+            var createRes = await _userManager.CreateAsync(newUser);
+            if (!createRes.Succeeded)
+            {
+                // fallback: return errors
+                return BadRequest(createRes.Errors);
+            }
+            user = newUser;
+        }
+
+        // Optionally update avatar
+        if (!string.IsNullOrWhiteSpace(photo))
+        {
+            user.AvatarUrl = photo;
+            await _userManager.UpdateAsync(user);
+        }
+
+        // Generate JWT and redirect to frontend with token
+        var jwt = GenerateJwt(user);
+        var redirect = _frontendUrl + $"/?vk_token={WebUtility.UrlEncode(jwt)}";
+        return Redirect(redirect);
     }
 
     [HttpPost("register")]
@@ -173,7 +276,9 @@ public class AuthController : ControllerBase
             user.Email,
             user.DisplayName,
             user.Level,
-            user.ReviewCount
+            user.ReviewCount,
+            user.Points,
+            user.AvatarUrl
         });
     }
 
