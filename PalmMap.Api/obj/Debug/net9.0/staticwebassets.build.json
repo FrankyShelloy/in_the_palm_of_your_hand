@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "24FjIUc77Hu+ltrhaib7nfNRyzP761v8aeSLi0fjv5c=",
+  "Hash": "1eyebvgVO7GlSar1x9yCooOgXT92qC/QsRah9jUJ3k8=",
   "Source": "PalmMap.Api",
   "BasePath": "_content/PalmMap.Api",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz",
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-1xa21odr0x.gz",
       "SourceId": "PalmMap.Api",
       "SourceType": "Discovered",
       "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
       "BasePath": "_content/PalmMap.Api",
-      "RelativePath": "styles#[.{fingerprint=k1mt084xqs}]?.css.gz",
+      "RelativePath": "styles#[.{fingerprint=1xa21odr0x}]?.css.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -31,19 +31,19 @@
       "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/styles.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "uwlbegro5u",
-      "Integrity": "rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ=",
+      "Fingerprint": "37w96her1p",
+      "Integrity": "wapBiswWqBGndkgBBXNovqDswBUYRbV0ZzYowazJ9JM=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/styles.css"
     },
     {
-      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz",
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-o4b3rv63df.gz",
       "SourceId": "PalmMap.Api",
       "SourceType": "Discovered",
       "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
       "BasePath": "_content/PalmMap.Api",
-      "RelativePath": "index#[.{fingerprint=0galkhuv6g}]?.html.gz",
+      "RelativePath": "index#[.{fingerprint=o4b3rv63df}]?.html.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -52,8 +52,8 @@
       "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "1muasem4cp",
-      "Integrity": "h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU=",
+      "Fingerprint": "kjm7nxkgox",
+      "Integrity": "4EjvtJoTb1E7ji2kiHBKchl1Q0r9nI97pBUkjybwJso=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html"
@@ -101,12 +101,33 @@
       "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/data/tula-objects.json"
     },
     {
-      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz",
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ounfpydwkn-5m15p667qy.gz",
       "SourceId": "PalmMap.Api",
       "SourceType": "Discovered",
       "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
       "BasePath": "_content/PalmMap.Api",
-      "RelativePath": "app#[.{fingerprint=ce8i3h2252}]?.js.gz",
+      "RelativePath": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0#[.{fingerprint=5m15p667qy}]?.html.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "zw9voyzk1r",
+      "Integrity": "81NwtRTX6gwD/B3u69GECHh0hggLBTp/Wih9uDPX1WM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html"
+    },
+    {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-99llz9b27e.gz",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "app#[.{fingerprint=99llz9b27e}]?.js.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -115,8 +136,8 @@
       "RelatedAsset": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/app.js",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "v2z1e8dv8x",
-      "Integrity": "KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8=",
+      "Fingerprint": "q1e9girx4f",
+      "Integrity": "osgiLJG4z22QZ0GSFdu9QGU+iCM3KI3qIW9qUmeHVQg=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/app.js"
@@ -178,8 +199,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "ce8i3h2252",
-      "Integrity": "/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=",
+      "Fingerprint": "99llz9b27e",
+      "Integrity": "I6oeJack8Y2S4+mKbYJS9WUBWs3hOIfepblHMV687C4=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/app.js"
@@ -248,6 +269,27 @@
       "OriginalItemSpec": "wwwroot/emails/20251205_165051_283_db523c3afd72430ca86768ecceb4ce72.html"
     },
     {
+      "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html",
+      "SourceId": "PalmMap.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/",
+      "BasePath": "_content/PalmMap.Api",
+      "RelativePath": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "5m15p667qy",
+      "Integrity": "bUhEnSeJ3iVMq8YNQ/0fPrDoMIYXZbUoDhqeOIbyuqI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html"
+    },
+    {
       "Identity": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html",
       "SourceId": "PalmMap.Api",
       "SourceType": "Discovered",
@@ -262,8 +304,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "0galkhuv6g",
-      "Integrity": "IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=",
+      "Fingerprint": "o4b3rv63df",
+      "Integrity": "6K2xi94MI/rMMr/FC1eLwSLnLaaOdgxCm+D0wIm6iZ4=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/index.html"
@@ -304,8 +346,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "k1mt084xqs",
-      "Integrity": "KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=",
+      "Fingerprint": "1xa21odr0x",
+      "Integrity": "O8tsSfDUURmFjDfLClakpvT6nITA2oxvtgLKs3k+7xk=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/styles.css"
@@ -313,13 +355,13 @@
   ],
   "Endpoints": [
     {
-      "Route": "app.ce8i3h2252.js",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz",
+      "Route": "app.99llz9b27e.js",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-99llz9b27e.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000146262981"
+          "Quality": "0.000133155792"
         }
       ],
       "ResponseHeaders": [
@@ -329,15 +371,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "6836"
+          "Value": "7509"
         },
         {
           "Name": "ETag",
-          "Value": "\"KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8=\""
+          "Value": "\"osgiLJG4z22QZ0GSFdu9QGU+iCM3KI3qIW9qUmeHVQg=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+          "Value": "Sat, 06 Dec 2025 09:55:24 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -357,13 +399,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=\""
+          "Value": "W/\"I6oeJack8Y2S4+mKbYJS9WUBWs3hOIfepblHMV687C4=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ce8i3h2252"
+          "Value": "99llz9b27e"
         },
         {
           "Name": "label",
@@ -371,12 +413,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8="
+          "Value": "sha256-I6oeJack8Y2S4+mKbYJS9WUBWs3hOIfepblHMV687C4="
         }
       ]
     },
     {
-      "Route": "app.ce8i3h2252.js",
+      "Route": "app.99llz9b27e.js",
       "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/app.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -386,7 +428,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "23216"
+          "Value": "26406"
         },
         {
           "Name": "Content-Type",
@@ -394,11 +436,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=\""
+          "Value": "\"I6oeJack8Y2S4+mKbYJS9WUBWs3hOIfepblHMV687C4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+          "Value": "Sat, 06 Dec 2025 09:55:24 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -408,7 +450,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ce8i3h2252"
+          "Value": "99llz9b27e"
         },
         {
           "Name": "label",
@@ -416,13 +458,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8="
+          "Value": "sha256-I6oeJack8Y2S4+mKbYJS9WUBWs3hOIfepblHMV687C4="
         }
       ]
     },
     {
-      "Route": "app.ce8i3h2252.js.gz",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz",
+      "Route": "app.99llz9b27e.js.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-99llz9b27e.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -431,7 +473,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "6836"
+          "Value": "7509"
         },
         {
           "Name": "Content-Type",
@@ -439,11 +481,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8=\""
+          "Value": "\"osgiLJG4z22QZ0GSFdu9QGU+iCM3KI3qIW9qUmeHVQg=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+          "Value": "Sat, 06 Dec 2025 09:55:24 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -461,7 +503,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ce8i3h2252"
+          "Value": "99llz9b27e"
         },
         {
           "Name": "label",
@@ -469,18 +511,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8="
+          "Value": "sha256-osgiLJG4z22QZ0GSFdu9QGU+iCM3KI3qIW9qUmeHVQg="
         }
       ]
     },
     {
       "Route": "app.js",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-99llz9b27e.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000146262981"
+          "Quality": "0.000133155792"
         }
       ],
       "ResponseHeaders": [
@@ -490,15 +532,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "6836"
+          "Value": "7509"
         },
         {
           "Name": "ETag",
-          "Value": "\"KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8=\""
+          "Value": "\"osgiLJG4z22QZ0GSFdu9QGU+iCM3KI3qIW9qUmeHVQg=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+          "Value": "Sat, 06 Dec 2025 09:55:24 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -518,13 +560,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=\""
+          "Value": "W/\"I6oeJack8Y2S4+mKbYJS9WUBWs3hOIfepblHMV687C4=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8="
+          "Value": "sha256-I6oeJack8Y2S4+mKbYJS9WUBWs3hOIfepblHMV687C4="
         }
       ]
     },
@@ -539,7 +581,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "23216"
+          "Value": "26406"
         },
         {
           "Name": "Content-Type",
@@ -547,11 +589,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8=\""
+          "Value": "\"I6oeJack8Y2S4+mKbYJS9WUBWs3hOIfepblHMV687C4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+          "Value": "Sat, 06 Dec 2025 09:55:24 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -561,13 +603,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-/J35PrFhhJHFROfNaUJK8tezX7iOVFpeT+Nio5/DGi8="
+          "Value": "sha256-I6oeJack8Y2S4+mKbYJS9WUBWs3hOIfepblHMV687C4="
         }
       ]
     },
     {
       "Route": "app.js.gz",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-99llz9b27e.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -576,7 +618,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "6836"
+          "Value": "7509"
         },
         {
           "Name": "Content-Type",
@@ -584,11 +626,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8=\""
+          "Value": "\"osgiLJG4z22QZ0GSFdu9QGU+iCM3KI3qIW9qUmeHVQg=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:55:11 GMT"
+          "Value": "Sat, 06 Dec 2025 09:55:24 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -606,7 +648,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-KRqJU1tK/y+AUKUlV1T0LB3fKltkmrHDWRnVYpJFbg8="
+          "Value": "sha256-osgiLJG4z22QZ0GSFdu9QGU+iCM3KI3qIW9qUmeHVQg="
         }
       ]
     },
@@ -1505,13 +1547,13 @@
       ]
     },
     {
-      "Route": "index.0galkhuv6g.html",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz",
+      "Route": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.5m15p667qy.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ounfpydwkn-5m15p667qy.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000420875421"
+          "Quality": "0.001647446458"
         }
       ],
       "ResponseHeaders": [
@@ -1521,15 +1563,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2375"
+          "Value": "606"
         },
         {
           "Name": "ETag",
-          "Value": "\"h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU=\""
+          "Value": "\"81NwtRTX6gwD/B3u69GECHh0hggLBTp/Wih9uDPX1WM=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
+          "Value": "Fri, 05 Dec 2025 16:57:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1549,26 +1591,316 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=\""
+          "Value": "W/\"bUhEnSeJ3iVMq8YNQ/0fPrDoMIYXZbUoDhqeOIbyuqI=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "0galkhuv6g"
+          "Value": "5m15p667qy"
         },
         {
           "Name": "label",
-          "Value": "index.html"
+          "Value": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado="
+          "Value": "sha256-bUhEnSeJ3iVMq8YNQ/0fPrDoMIYXZbUoDhqeOIbyuqI="
         }
       ]
     },
     {
-      "Route": "index.0galkhuv6g.html",
+      "Route": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.5m15p667qy.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "736"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bUhEnSeJ3iVMq8YNQ/0fPrDoMIYXZbUoDhqeOIbyuqI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:57:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5m15p667qy"
+        },
+        {
+          "Name": "label",
+          "Value": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-bUhEnSeJ3iVMq8YNQ/0fPrDoMIYXZbUoDhqeOIbyuqI="
+        }
+      ]
+    },
+    {
+      "Route": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.5m15p667qy.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ounfpydwkn-5m15p667qy.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "606"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"81NwtRTX6gwD/B3u69GECHh0hggLBTp/Wih9uDPX1WM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:57:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5m15p667qy"
+        },
+        {
+          "Name": "label",
+          "Value": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-81NwtRTX6gwD/B3u69GECHh0hggLBTp/Wih9uDPX1WM="
+        }
+      ]
+    },
+    {
+      "Route": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ounfpydwkn-5m15p667qy.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001647446458"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "606"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"81NwtRTX6gwD/B3u69GECHh0hggLBTp/Wih9uDPX1WM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:57:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"bUhEnSeJ3iVMq8YNQ/0fPrDoMIYXZbUoDhqeOIbyuqI=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-bUhEnSeJ3iVMq8YNQ/0fPrDoMIYXZbUoDhqeOIbyuqI="
+        }
+      ]
+    },
+    {
+      "Route": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "736"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bUhEnSeJ3iVMq8YNQ/0fPrDoMIYXZbUoDhqeOIbyuqI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:57:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-bUhEnSeJ3iVMq8YNQ/0fPrDoMIYXZbUoDhqeOIbyuqI="
+        }
+      ]
+    },
+    {
+      "Route": "emails/20251205_165732_267_110f08348d8a4c19abba542aba672db0.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ounfpydwkn-5m15p667qy.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "606"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"81NwtRTX6gwD/B3u69GECHh0hggLBTp/Wih9uDPX1WM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 16:57:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-81NwtRTX6gwD/B3u69GECHh0hggLBTp/Wih9uDPX1WM="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-o4b3rv63df.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000426803244"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2342"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4EjvtJoTb1E7ji2kiHBKchl1Q0r9nI97pBUkjybwJso=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 09:56:37 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"6K2xi94MI/rMMr/FC1eLwSLnLaaOdgxCm+D0wIm6iZ4=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-6K2xi94MI/rMMr/FC1eLwSLnLaaOdgxCm+D0wIm6iZ4="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
       "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html",
       "Selectors": [],
       "ResponseHeaders": [
@@ -1578,7 +1910,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "8721"
+          "Value": "8442"
         },
         {
           "Name": "Content-Type",
@@ -1586,11 +1918,156 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=\""
+          "Value": "\"6K2xi94MI/rMMr/FC1eLwSLnLaaOdgxCm+D0wIm6iZ4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
+          "Value": "Sat, 06 Dec 2025 09:56:37 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-6K2xi94MI/rMMr/FC1eLwSLnLaaOdgxCm+D0wIm6iZ4="
+        }
+      ]
+    },
+    {
+      "Route": "index.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-o4b3rv63df.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2342"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4EjvtJoTb1E7ji2kiHBKchl1Q0r9nI97pBUkjybwJso=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 09:56:37 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-4EjvtJoTb1E7ji2kiHBKchl1Q0r9nI97pBUkjybwJso="
+        }
+      ]
+    },
+    {
+      "Route": "index.o4b3rv63df.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-o4b3rv63df.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000426803244"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2342"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4EjvtJoTb1E7ji2kiHBKchl1Q0r9nI97pBUkjybwJso=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 09:56:37 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"6K2xi94MI/rMMr/FC1eLwSLnLaaOdgxCm+D0wIm6iZ4=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "o4b3rv63df"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-6K2xi94MI/rMMr/FC1eLwSLnLaaOdgxCm+D0wIm6iZ4="
+        }
+      ]
+    },
+    {
+      "Route": "index.o4b3rv63df.html",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8442"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6K2xi94MI/rMMr/FC1eLwSLnLaaOdgxCm+D0wIm6iZ4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 09:56:37 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1600,7 +2077,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "0galkhuv6g"
+          "Value": "o4b3rv63df"
         },
         {
           "Name": "label",
@@ -1608,13 +2085,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado="
+          "Value": "sha256-6K2xi94MI/rMMr/FC1eLwSLnLaaOdgxCm+D0wIm6iZ4="
         }
       ]
     },
     {
-      "Route": "index.0galkhuv6g.html.gz",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz",
+      "Route": "index.o4b3rv63df.html.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-o4b3rv63df.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1623,7 +2100,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2375"
+          "Value": "2342"
         },
         {
           "Name": "Content-Type",
@@ -1631,11 +2108,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU=\""
+          "Value": "\"4EjvtJoTb1E7ji2kiHBKchl1Q0r9nI97pBUkjybwJso=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
+          "Value": "Sat, 06 Dec 2025 09:56:37 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1653,7 +2130,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "0galkhuv6g"
+          "Value": "o4b3rv63df"
         },
         {
           "Name": "label",
@@ -1661,144 +2138,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU="
-        }
-      ]
-    },
-    {
-      "Route": "index.html",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip",
-          "Quality": "0.000420875421"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "2375"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/html"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=\""
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado="
-        }
-      ]
-    },
-    {
-      "Route": "index.html",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/index.html",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "8721"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/html"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-IEB4AAlq2dREGTUP8oX4B7dkFr0k5mJ+RG5GvdUjado="
-        }
-      ]
-    },
-    {
-      "Route": "index.html.gz",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "2375"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/html"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:53:58 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-h1JRTsjQZ931vkQBqcoUP/YPcLdg/GzP8gKug+z81GU="
+          "Value": "sha256-4EjvtJoTb1E7ji2kiHBKchl1Q0r9nI97pBUkjybwJso="
         }
       ]
     },
@@ -2101,13 +2441,13 @@
       ]
     },
     {
-      "Route": "styles.css",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz",
+      "Route": "styles.1xa21odr0x.css",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-1xa21odr0x.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000390472472"
+          "Quality": "0.000382701875"
         }
       ],
       "ResponseHeaders": [
@@ -2117,19 +2457,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2560"
+          "Value": "2612"
         },
         {
           "Name": "ETag",
-          "Value": "\"rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ=\""
+          "Value": "\"wapBiswWqBGndkgBBXNovqDswBUYRbV0ZzYowazJ9JM=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
+          "Value": "Sat, 06 Dec 2025 09:56:36 GMT"
         },
         {
           "Name": "Cache-Control",
-          "Value": "no-cache"
+          "Value": "max-age=31536000, immutable"
         },
         {
           "Name": "Content-Encoding",
@@ -2145,18 +2485,26 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=\""
+          "Value": "W/\"O8tsSfDUURmFjDfLClakpvT6nITA2oxvtgLKs3k+7xk=\""
         }
       ],
       "EndpointProperties": [
         {
+          "Name": "fingerprint",
+          "Value": "1xa21odr0x"
+        },
+        {
+          "Name": "label",
+          "Value": "styles.css"
+        },
+        {
           "Name": "integrity",
-          "Value": "sha256-KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY="
+          "Value": "sha256-O8tsSfDUURmFjDfLClakpvT6nITA2oxvtgLKs3k+7xk="
         }
       ]
     },
     {
-      "Route": "styles.css",
+      "Route": "styles.1xa21odr0x.css",
       "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/styles.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -2166,7 +2514,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "8926"
+          "Value": "9210"
         },
         {
           "Name": "Content-Type",
@@ -2174,121 +2522,21 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=\""
+          "Value": "\"O8tsSfDUURmFjDfLClakpvT6nITA2oxvtgLKs3k+7xk=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY="
-        }
-      ]
-    },
-    {
-      "Route": "styles.css.gz",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "2560"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ="
-        }
-      ]
-    },
-    {
-      "Route": "styles.k1mt084xqs.css",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip",
-          "Quality": "0.000390472472"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "2560"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
+          "Value": "Sat, 06 Dec 2025 09:56:36 GMT"
         },
         {
           "Name": "Cache-Control",
           "Value": "max-age=31536000, immutable"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "k1mt084xqs"
+          "Value": "1xa21odr0x"
         },
         {
           "Name": "label",
@@ -2296,13 +2544,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY="
+          "Value": "sha256-O8tsSfDUURmFjDfLClakpvT6nITA2oxvtgLKs3k+7xk="
         }
       ]
     },
     {
-      "Route": "styles.k1mt084xqs.css",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/styles.css",
+      "Route": "styles.1xa21odr0x.css.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-1xa21odr0x.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -2311,7 +2559,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "8926"
+          "Value": "2612"
         },
         {
           "Name": "Content-Type",
@@ -2319,56 +2567,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY=\""
+          "Value": "\"wapBiswWqBGndkgBBXNovqDswBUYRbV0ZzYowazJ9JM=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "k1mt084xqs"
-        },
-        {
-          "Name": "label",
-          "Value": "styles.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-KEsZZuemlVnE8jQ4P48B6Zou8BcqPrKTjxgYjS0ZpXY="
-        }
-      ]
-    },
-    {
-      "Route": "styles.k1mt084xqs.css.gz",
-      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "2560"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 05 Dec 2025 16:54:07 GMT"
+          "Value": "Sat, 06 Dec 2025 09:56:36 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2386,7 +2589,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "k1mt084xqs"
+          "Value": "1xa21odr0x"
         },
         {
           "Name": "label",
@@ -2394,7 +2597,144 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-rgFTYt350T4ZQ+Ll6cxWbIss1zwMZwEC0DjEb+bAFyQ="
+          "Value": "sha256-wapBiswWqBGndkgBBXNovqDswBUYRbV0ZzYowazJ9JM="
+        }
+      ]
+    },
+    {
+      "Route": "styles.css",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-1xa21odr0x.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000382701875"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2612"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wapBiswWqBGndkgBBXNovqDswBUYRbV0ZzYowazJ9JM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 09:56:36 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"O8tsSfDUURmFjDfLClakpvT6nITA2oxvtgLKs3k+7xk=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-O8tsSfDUURmFjDfLClakpvT6nITA2oxvtgLKs3k+7xk="
+        }
+      ]
+    },
+    {
+      "Route": "styles.css",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/wwwroot/styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9210"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"O8tsSfDUURmFjDfLClakpvT6nITA2oxvtgLKs3k+7xk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 09:56:36 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-O8tsSfDUURmFjDfLClakpvT6nITA2oxvtgLKs3k+7xk="
+        }
+      ]
+    },
+    {
+      "Route": "styles.css.gz",
+      "AssetFile": "/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-1xa21odr0x.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2612"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wapBiswWqBGndkgBBXNovqDswBUYRbV0ZzYowazJ9JM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 09:56:36 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-wapBiswWqBGndkgBBXNovqDswBUYRbV0ZzYowazJ9JM="
         }
       ]
     }

@@ -142,8 +142,9 @@
 /home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/PalmMap.Api.pdb
 /home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/PalmMap.Api.genruntimeconfig.cache
 /home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/ref/PalmMap.Api.dll
-/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-ce8i3h2252.gz
 /home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/o3xg8ddrzp-rc59pwh7fw.gz
 /home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ywkbb5opda-yglxrz46tf.gz
-/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-0galkhuv6g.gz
-/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-k1mt084xqs.gz
+/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/ounfpydwkn-5m15p667qy.gz
+/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/vgvdysh45z-99llz9b27e.gz
+/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/g576sy9ik1-o4b3rv63df.gz
+/home/frankyshelloy/in_the_palm_of_your_hand_clone/PalmMap.Api/obj/Debug/net9.0/compressed/229e32pn90-1xa21odr0x.gz

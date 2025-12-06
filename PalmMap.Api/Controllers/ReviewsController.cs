@@ -25,6 +25,7 @@ public class ReviewsController : ControllerBase
         _achievementService = achievementService;
     }
 
+    // Получить все отзывы текущего пользователя (для профиля)
     [HttpGet]
     public async Task<IActionResult> Get()
     {
@@ -37,18 +38,57 @@ public class ReviewsController : ControllerBase
         var reviews = await _db.Reviews
             .Where(r => r.UserId == user.Id)
             .OrderByDescending(r => r.CreatedAt)
-            .Select(r => new ReviewResponse(r.Id, r.Content, r.CreatedAt))
+            .Select(r => new ReviewResponse(r.Id, r.PlaceId, r.PlaceName, r.Rating, r.Comment, r.CreatedAt))
             .ToListAsync();
 
         return Ok(reviews);
     }
 
+    // Получить все отзывы для конкретного места (для карты, без авторизации)
+    [HttpGet("place/{placeId}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetByPlace(string placeId)
+    {
+        var reviews = await _db.Reviews
+            .Where(r => r.PlaceId == placeId)
+            .OrderByDescending(r => r.CreatedAt)
+            .Include(r => r.User)
+            .Select(r => new PlaceReviewResponse(
+                r.User.DisplayName ?? "Аноним",
+                r.Rating,
+                r.Comment,
+                r.CreatedAt
+            ))
+            .ToListAsync();
+
+        return Ok(reviews);
+    }
+
+    // Проверить, оставлял ли пользователь отзыв на это место
+    [HttpGet("check/{placeId}")]
+    public async Task<IActionResult> CheckReview(string placeId)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        var exists = await _db.Reviews.AnyAsync(r => r.UserId == user.Id && r.PlaceId == placeId);
+        return Ok(new { hasReview = exists });
+    }
+
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateReviewRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Content))
+        if (string.IsNullOrWhiteSpace(request.PlaceId))
         {
-            return BadRequest(new { message = "Content is required" });
+            return BadRequest(new { message = "PlaceId обязателен" });
+        }
+
+        if (request.Rating < 1 || request.Rating > 5)
+        {
+            return BadRequest(new { message = "Рейтинг должен быть от 1 до 5" });
         }
 
         var user = await _userManager.GetUserAsync(User);
@@ -57,10 +97,22 @@ public class ReviewsController : ControllerBase
             return Unauthorized();
         }
 
+        // Проверка: один отзыв на одно место от одного пользователя
+        var existingReview = await _db.Reviews
+            .FirstOrDefaultAsync(r => r.UserId == user.Id && r.PlaceId == request.PlaceId);
+
+        if (existingReview != null)
+        {
+            return Conflict(new { message = "Вы уже оставили отзыв на этот объект" });
+        }
+
         var review = new Review
         {
             UserId = user.Id,
-            Content = request.Content.Trim()
+            PlaceId = request.PlaceId,
+            PlaceName = request.PlaceName ?? "Объект",
+            Rating = request.Rating,
+            Comment = request.Comment?.Trim()
         };
 
         _db.Reviews.Add(review);
@@ -71,6 +123,7 @@ public class ReviewsController : ControllerBase
         await _db.SaveChangesAsync();
         await _achievementService.AwardAsync(user);
 
-        return CreatedAtAction(nameof(Get), new { id = review.Id }, new ReviewResponse(review.Id, review.Content, review.CreatedAt));
+        return CreatedAtAction(nameof(Get), new { id = review.Id }, 
+            new ReviewResponse(review.Id, review.PlaceId, review.PlaceName, review.Rating, review.Comment, review.CreatedAt));
     }
 }
