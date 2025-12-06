@@ -81,6 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = '/api/auth/vk/login';
     });
   }
+
+  // Check for VK token in URL (after VK OAuth callback redirect)
+  const urlParams = new URLSearchParams(window.location.search);
+  const vkToken = urlParams.get('vk_token');
+  if (vkToken) {
+    saveToken(vkToken);
+    // Clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+    // Refresh UI
+    updateUI();
+  }
 });
 
 async function api(path, options = {}) {
