@@ -27,7 +27,7 @@ public class PlacesController : ControllerBase
                 p.Id,
                 p.Name,
                 p.Type,
-                p.Latitude,
+                p.Latitude, 
                 p.Longitude,
                 p.Address,
                 p.CreatedByUserId

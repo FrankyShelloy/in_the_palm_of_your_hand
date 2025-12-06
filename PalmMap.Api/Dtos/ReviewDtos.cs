@@ -39,7 +39,9 @@ public record PlaceReviewResponse(
 
 public record UpdateReviewRequest(
     [property: JsonPropertyName("rating")] int Rating,
-    [property: JsonPropertyName("comment")] string? Comment
+    [property: JsonPropertyName("comment")] string? Comment,
+    // При обновлении можно пометить, что существующее фото следует удалить
+    [property: JsonPropertyName("deletePhoto")] bool DeletePhoto = false
 );
 
 public record VoteRequest(

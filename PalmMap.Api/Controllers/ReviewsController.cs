@@ -123,7 +123,27 @@ public class ReviewsController : ControllerBase
 
         review.Rating = request.Rating;
         review.Comment = request.Comment;
-        
+
+        // Если пришёл флаг на удаление фото — удаляем файл и очищаем путь
+        if (request.DeletePhoto && !string.IsNullOrEmpty(review.PhotoPath))
+        {
+            try
+            {
+                var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "reviews");
+                var oldPath = Path.Combine(uploadsDir, review.PhotoPath);
+                if (System.IO.File.Exists(oldPath))
+                {
+                    System.IO.File.Delete(oldPath);
+                }
+            }
+            catch
+            {
+                // Игнорируем ошибки удаления файла, но не мешаем обновлению отзыва
+            }
+
+            review.PhotoPath = null;
+        }
+
         await _db.SaveChangesAsync();
         // При обновлении голоса не меняются, но нам нужно вернуть полный объект
         // Загрузим голоса для корректного ответа или вернем 0/0 если лениво (но лучше загрузить)

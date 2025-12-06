@@ -588,12 +588,13 @@ async function showObjectReviews(placeId, placeName) {
             // Escape strings for onclick
             const safePlaceName = placeName.replace(/'/g, "\\'");
             const safeComment = (r.comment || '').replace(/'/g, "\\'");
+            const safePhotoUrl = (r.photoUrl || '').replace(/'/g, "\\'");
 
             let actionsHtml = '';
-            if (isAuthor) {
+                if (isAuthor) {
                 actionsHtml = `
                     <div class="review-actions">
-                        <button class="icon-btn small" onclick="editReview('${r.id}', ${r.rating}, '${safeComment}', '${placeId}')" title="Редактировать">✏️</button>
+                        <button class="icon-btn small" onclick="editReview('${r.id}', ${r.rating}, '${safeComment}', '${placeId}', '${safePhotoUrl}')" title="Редактировать">✏️</button>
                         <button class="icon-btn small" onclick="deleteReview('${r.id}', '${placeId}', '${safePlaceName}')" title="Удалить">🗑️</button>
                     </div>
                 `;
@@ -692,9 +693,9 @@ window.deleteReview = async function(reviewId, placeId, placeName) {
     }
 };
 
-window.editReview = function(reviewId, rating, comment, placeId) {
+window.editReview = function(reviewId, rating, comment, placeId, photoUrl) {
     // Reuse the review form but change its behavior
-    openReviewForm(placeId, reviewId, rating, comment);
+    openReviewForm(placeId, reviewId, rating, comment, photoUrl);
 };
 
 
@@ -894,7 +895,7 @@ function calculateRatingSync(placeId) {
     };
 }
 
-async function openReviewForm(placeId, reviewId = null, rating = 0, comment = '') {
+async function openReviewForm(placeId, reviewId = null, rating = 0, comment = '', photoUrl = null) {
     const idStr = String(placeId);
     const place = allPlacesMap.get(idStr) || basePlaces.find(p => String(p.id) === idStr);
     
@@ -927,6 +928,10 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
     window.currentReviewPlaceName = place.name;
     window.currentReviewId = reviewId;
 
+    // Флаги для удаления/наличия фото при редактировании
+    window.currentReviewHasPhoto = !!photoUrl;
+    window.currentReviewDeletePhoto = false;
+
     document.getElementById('review-place-name').textContent = reviewId ? `Редактирование: ${place.name}` : place.name;
     document.getElementById('review-modal').style.display = 'flex';
     
@@ -938,6 +943,29 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
         s.classList.toggle('star-active', isActive);
     });
     document.getElementById('review-comment').value = comment;
+
+    // Показать превью существующего фото если есть (для редактирования)
+    const photoPreview = document.getElementById('photo-preview');
+    const photoPreviewImg = document.getElementById('photo-preview-img');
+    const photoInput = document.getElementById('review-photo');
+    const removePhotoBtn = document.getElementById('remove-photo');
+
+    if (photoUrl) {
+        if (photoPreview && photoPreviewImg) {
+            photoPreviewImg.src = photoUrl;
+            photoPreview.style.display = 'flex';
+            photoPreview.style.alignItems = 'center';
+        }
+    } else {
+        if (photoPreview) photoPreview.style.display = 'none';
+        if (photoPreviewImg) photoPreviewImg.src = '';
+    }
+
+    // Сбросить input файла при открытии
+    if (photoInput) photoInput.value = '';
+    if (removePhotoBtn) {
+        removePhotoBtn.style.display = photoUrl ? 'inline-block' : 'none';
+    }
 }
 
 function setupReviewModal() {
@@ -964,6 +992,9 @@ function setupReviewModal() {
     if (photoInput) {
         photoInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
+            // Если пользователь выбрал новый файл при редактировании, отменяем пометку на удаление
+            window.currentReviewDeletePhoto = false;
+
             if (file) {
                 // Проверка размера
                 if (file.size > 5 * 1024 * 1024) {
@@ -985,9 +1016,16 @@ function setupReviewModal() {
 
     if (removePhotoBtn) {
         removePhotoBtn.addEventListener('click', () => {
+            // Если это редактирование существующего фото — помечаем на удаление
+            if (window.currentReviewHasPhoto) {
+                window.currentReviewDeletePhoto = true;
+            }
+
             photoInput.value = '';
             photoPreview.style.display = 'none';
             photoPreviewImg.src = '';
+            // Скрыть кнопку удаления после клика
+            removePhotoBtn.style.display = 'none';
         });
     }
 
@@ -1024,7 +1062,8 @@ function setupReviewModal() {
                         method: 'PUT',
                         body: JSON.stringify({
                             rating: rating,
-                            comment: comment || null
+                            comment: comment || null,
+                            deletePhoto: !!window.currentReviewDeletePhoto
                         })
                     });
                 } else {
