@@ -44,6 +44,16 @@ const els = {
   // Profile visibility
   profileClose: document.getElementById("profile-close"),
   topbarProfileToggle: document.getElementById("topbar-profile-toggle"),
+
+  // Ratings
+  ratingsBtn: document.getElementById("btn-show-ratings"),
+  ratingsModal: document.getElementById("ratings-modal"),
+  ratingsClose: document.getElementById("close-ratings"),
+  ratingsList: document.getElementById("ratings-list"),
+  currentUserRating: document.getElementById("current-user-rating"),
+  userRank: document.getElementById("user-rank"),
+  userName: document.getElementById("user-name"),
+  userPoints: document.getElementById("user-points"),
 };
 
 function saveToken(token) {
@@ -203,6 +213,7 @@ async function loadProfile() {
     els.userInfo.classList.remove("hidden");
     els.logout.classList.remove("hidden");
     els.topbarProfileToggle.classList.remove("hidden");
+    els.ratingsBtn.classList.remove("hidden");
     els.btnShowLogin.classList.add("hidden");
     els.btnShowRegister.classList.add("hidden");
 
@@ -290,6 +301,7 @@ function logout() {
   els.userInfo.classList.add("hidden");
   els.logout.classList.add("hidden");
   els.topbarProfileToggle.classList.add("hidden");
+  els.ratingsBtn.classList.add("hidden");
   els.btnShowLogin.classList.remove("hidden");
   els.btnShowRegister.classList.remove("hidden");
   els.profileEmail.textContent = "-";
@@ -298,6 +310,79 @@ function logout() {
   els.profileReviews.textContent = "0";
   els.achievements.innerHTML = "";
   els.userReviewsList.innerHTML = "";
+}
+
+// Загрузить рейтинг пользователей
+async function loadRatings() {
+    try {
+        const data = await api('/profile/ratings');
+        console.log('Ratings data:', data);
+
+        // Отобразить топ-10
+        els.ratingsList.innerHTML = '';
+        data.top10.forEach(user => {
+            const isCurrentUser = currentUser && user.id === currentUser.id;
+            const div = document.createElement('div');
+            div.style.padding = '10px 8px';
+            div.style.borderBottom = '1px solid var(--border)';
+            div.style.borderRadius = '4px';
+            div.style.marginBottom = '4px';
+            
+            // Свойства могут быть displayName, points, level (camelCase)
+            const name = user.displayName || user.DisplayName || 'Аноним';
+            const points = user.points || user.Points || 0;
+            const level = user.level || user.Level || 1;
+            
+            // Определить медаль и цвет для первых трёх мест
+            let medal = '';
+            let medalColor = '';
+            let bgColor = '';
+            let textColor = '';
+            
+            if (user.position === 1) {
+                medal = '🥇';
+                medalColor = '#D4A000'; // Тёмное золото для светлой темы
+                bgColor = 'rgba(255, 215, 0, 0.15)';
+                textColor = 'color:var(--text);'; // Используем цвет текста темы
+            } else if (user.position === 2) {
+                medal = '🥈';
+                medalColor = '#808080'; // Тёмное серебро
+                bgColor = 'rgba(192, 192, 192, 0.15)';
+                textColor = 'color:var(--text);';
+            } else if (user.position === 3) {
+                medal = '🥉';
+                medalColor = '#8B4513'; // Тёмная бронза
+                bgColor = 'rgba(205, 127, 50, 0.15)';
+                textColor = 'color:var(--text);';
+            } else {
+                textColor = 'color:var(--text);';
+            }
+            
+            // Если это текущий пользователь, добавить голубую подсветку
+            const currentUserBg = isCurrentUser ? 'border-left:3px solid #2196F3; padding-left:5px;' : '';
+            const combinedBg = bgColor ? `background:${bgColor}; ${currentUserBg}` : currentUserBg;
+            
+            const medalHtml = medal ? `<span style="margin-right:6px; font-size:16px;">${medal}</span>` : '';
+            const medalStyle = medalColor ? `style="color:${medalColor}; font-weight:bold; ${textColor}"` : `style="${textColor}"`;
+            
+            div.innerHTML = `<div ${medalStyle}><span style="font-weight:bold; margin-right:4px;">${medalHtml}${user.position}.</span> <span style="font-size:16px; font-weight:600;">${name}</span> — <span style="font-weight:600;">${points}</span> <span style="font-weight:600;">очков</span> (Lvl <span style="font-weight:600;">${level}</span>)</div>`;
+            div.style.cssText += combinedBg;
+            els.ratingsList.appendChild(div);
+        });
+
+        // Если пользователь не в топ-10, показать его отдельно
+        if (data.currentUserPosition > 10) {
+            els.currentUserRating.style.display = 'block';
+            els.userRank.textContent = data.currentUserPosition;
+            els.userName.textContent = data.currentUser.displayName || data.currentUser.DisplayName || 'Аноним';
+            els.userPoints.textContent = data.currentUser.points || data.currentUser.Points || 0;
+        } else {
+            els.currentUserRating.style.display = 'none';
+        }
+    } catch (err) {
+        console.error('Ошибка загрузки рейтинга:', err);
+        els.ratingsList.innerHTML = '<div style="color:var(--text-secondary);">Ошибка загрузки рейтинга</div>';
+    }
 }
 
 // Event wiring
@@ -310,6 +395,23 @@ function toggleProfileVisibility() {
 
 els.profileClose?.addEventListener("click", toggleProfileVisibility);
 els.topbarProfileToggle?.addEventListener("click", toggleProfileVisibility);
+
+// Ratings modal handlers
+els.ratingsBtn?.addEventListener("click", async () => {
+    els.ratingsModal.style.display = 'flex';
+    els.ratingsModal.style.justifyContent = 'center';
+    await loadRatings();
+});
+
+els.ratingsClose?.addEventListener("click", () => {
+    els.ratingsModal.style.display = 'none';
+});
+
+els.ratingsModal?.addEventListener("click", (e) => {
+    if (e.target === els.ratingsModal) {
+        els.ratingsModal.style.display = 'none';
+    }
+});
 
 function setupCollapsible(header, container) {
     if (!header || !container) return;

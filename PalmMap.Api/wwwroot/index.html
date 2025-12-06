@@ -21,6 +21,7 @@
       <button id="btn-show-login" class="ghost">Вход</button>
       <button id="btn-show-register" class="primary">Регистрация</button>
       <div id="user-info" class="user-info hidden"></div>
+      <button id="btn-show-ratings" class="icon-btn hidden" title="Показать рейтинг">🏆</button>
       <button id="topbar-profile-toggle" class="icon-btn hidden" title="Показать/Скрыть профиль">👤</button>
       <button id="btn-logout" class="ghost hidden">Выход</button>
     </div>
@@ -222,6 +223,25 @@
       </div>
   </div>
 
+  <!-- Модальное окно рейтинга -->
+  <div id="ratings-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:1000; overflow-y:auto;">
+      <div style="position:relative; background:var(--bg); margin:20px auto; padding:20px; padding-top:40px; max-width:500px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+          <button type="button" id="close-ratings" style="position:absolute; top:8px; right:8px; background:none; border:none; font-size:24px; cursor:pointer; padding:4px; width:32px; height:32px; display:flex; align-items:center; justify-content:center;">✕</button>
+          <h2 style="margin-top:0; margin-bottom:16px;">🏆 Рейтинг пользователей</h2>
+          
+          <div id="ratings-list" style="margin:20px 0;">
+              <div style="color:var(--text-secondary);">Загрузка...</div>
+          </div>
+
+          <div id="current-user-rating" style="margin-top:20px; padding:12px; background:var(--bg-secondary); border-radius:4px; border:2px solid var(--accent); display:none;">
+              <div style="font-size:14px; color:var(--text-secondary);">Ваша позиция</div>
+              <div style="font-size:18px; font-weight:bold; margin-top:4px;">
+                  <span id="user-rank"></span>. <span id="user-name"></span> — <span id="user-points"></span> очков
+              </div>
+          </div>
+      </div>
+  </div>
+
   <!-- Yandex Maps API -->
   <script src="https://api-maps.yandex.ru/2.1/?apikey=87e01821-8363-499b-a7d4-e5679708fc84&lang=ru_RU" type="text/javascript"></script>
 
@@ -229,3 +249,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+
