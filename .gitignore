@@ -19,3 +19,16 @@ wwwroot/emails/
 .idea/
 *.swp
 *.swo
+
+# Backup and temporary files
+Backup/
+UpgradeLog.htm
+*.htm
+
+# Node modules (if any)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Temporary data folders
+marky/

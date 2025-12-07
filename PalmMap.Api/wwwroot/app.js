@@ -463,6 +463,76 @@ els.objectReviewsClose?.addEventListener("click", () => {
     els.objectReviewsPanel.classList.remove("open");
 });
 
+// Touch/swipe support for mobile panels
+function setupMobileTouchHandlers() {
+    // Swipe down to close object reviews panel (mobile)
+    if (els.objectReviewsPanel) {
+        let touchStartY = 0;
+        let touchEndY = 0;
+        let isScrolling = false;
+
+        els.objectReviewsPanel.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+            isScrolling = false;
+        }, { passive: true });
+
+        els.objectReviewsPanel.addEventListener('touchmove', (e) => {
+            const touchY = e.touches[0].clientY;
+            const scrollTop = els.objectReviewsContent?.scrollTop || 0;
+            
+            // If content is scrolled, don't treat as swipe
+            if (scrollTop > 0) {
+                isScrolling = true;
+                return;
+            }
+            
+            // If swiping down from top
+            if (touchY > touchStartY && touchY - touchStartY > 10) {
+                isScrolling = false;
+            }
+        }, { passive: true });
+
+        els.objectReviewsPanel.addEventListener('touchend', (e) => {
+            if (isScrolling) return;
+            
+            touchEndY = e.changedTouches[0].clientY;
+            const swipeDistance = touchEndY - touchStartY;
+            
+            // Swipe down more than 50px to close
+            if (swipeDistance > 50 && !els.objectReviewsContent?.scrollTop) {
+                els.objectReviewsPanel.classList.remove("open");
+            }
+        }, { passive: true });
+    }
+
+    // Swipe right to close profile panel (mobile)
+    if (els.profilePanel) {
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        els.profilePanel.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+
+        els.profilePanel.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].clientX;
+            const swipeDistance = touchEndX - touchStartX;
+            
+            // Swipe right more than 100px to close
+            if (swipeDistance > 100) {
+                els.profilePanel.classList.add("panel-hidden");
+            }
+        }, { passive: true });
+    }
+}
+
+// Initialize mobile touch handlers when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMobileTouchHandlers);
+} else {
+    setupMobileTouchHandlers();
+}
+
 els.btnShowLogin?.addEventListener("click", () => showModal("login"));
 els.btnShowRegister?.addEventListener("click", () => showModal("register"));
 els.modalClose?.addEventListener("click", hideModal);
@@ -576,9 +646,13 @@ let userAddedPlaces = [];
 let basePlaces = [];
 let addMode = false;
 let pendingCoords = null;
+let clusterer;
 
 // Хранилище всех объектов для быстрого поиска
 let allPlacesMap = new Map();
+
+// Все метки (видимые и скрытые) для кластеризации
+let allPlacemarks = [];
 
 // Типы и стили меток
 const placeTypes = {
@@ -602,6 +676,17 @@ if (typeof ymaps !== 'undefined') {
 }
 
 async function initMap() {
+    // Создаем кастомный layout внутри init, когда ymaps уже загружен
+    const MyBalloonItemLayout = ymaps.templateLayoutFactory.createClass(
+        '<div class="cluster-balloon-item">' +
+            '<h4>$[properties.balloonContentHeader]</h4>' +
+            '<div>$[properties.balloonContentBody]</div>' +
+        '</div>'
+    );
+    
+    // Регистрируем кастомный layout
+    ymaps.layout.storage.add('my#balloonItemLayout', MyBalloonItemLayout);
+
     const center = [54.1934, 37.6179]; // Тула
     const zoom = 11;
     const bounds = [[53.2, 35.2], [54.8, 39.8]]; // Тульская область
@@ -609,28 +694,119 @@ async function initMap() {
     myMap = new ymaps.Map('map', {
         center: center,
         zoom: zoom,
-        controls: ['zoomControl']
+        controls: ['zoomControl', 'typeSelector', 'fullscreenControl']
     }, {
         restrictMapArea: bounds
     });
 
     myMap.events.add('click', onMapClick);
+    
+    // Инициализируем кластеризатор
+    initClusterer();
+    
     await loadPlacesFromJson();
     await loadPlaceReviewsForMap(); // Загрузить отзывы с сервера
-    renderPlaces([...basePlaces, ...userAddedPlaces]); // Перерисовать с рейтингами
+    createAllPlacemarks(); // Создаем все метки
+    applyFilters(); // Применяем фильтры с кластеризацией
     setupFilters();
     setupAddButton();
     setupReviewModal();
     
+    // Настройка поведения при зуме
+    setupZoomBehavior();
+    
     // Делаем функцию глобально доступной
     window.openReviewForm = openReviewForm;
+}
+
+// Инициализация кластеризатора
+function initClusterer() {
+    // Создаем кластеризатор с кастомными стилями
+    clusterer = new ymaps.Clusterer({
+        // Основные настройки
+        preset: 'islands#invertedBlueClusterIcons',
+        clusterDisableClickZoom: false,
+        clusterOpenBalloonOnClick: true,
+        
+        // Настройки балуна кластера
+        clusterBalloonContentLayout: 'cluster#balloonCarousel',
+        clusterBalloonItemContentLayout: 'my#balloonItemLayout',
+        clusterBalloonPanelMaxMapArea: 0,
+        clusterBalloonContentLayoutWidth: 300,
+        clusterBalloonContentLayoutHeight: 200,
+        clusterBalloonPagerSize: 5,
+        
+        // Настройка группировки
+        gridSize: 80,
+        groupByCoordinates: false,
+        minClusterSize: 2,
+        
+        // Стили кластеров
+        clusterIconLayout: 'default#pieChart',
+        clusterIconPieChartRadius: 25,
+        clusterIconPieChartCoreRadius: 15,
+        clusterIconPieChartStrokeWidth: 3,
+        
+        // Поведение
+        hasBalloon: true,
+        hasHint: false,
+        zoomMargin: 50,
+        
+        // Оптимизация
+        clusterHideIconsOnSingleObject: true
+    });
+    
+    // Добавляем кластеризатор на карту
+    myMap.geoObjects.add(clusterer);
+}
+
+// Настройка поведения при зуме
+function setupZoomBehavior() {
+    let lastZoom = myMap.getZoom();
+    
+    myMap.events.add('boundschange', function (e) {
+        const newZoom = e.get('newZoom');
+        
+        // Меняем параметры кластеризации в зависимости от масштаба
+        if (newZoom !== lastZoom) {
+            if (newZoom > 16) { // Максимальное приближение - показываем все
+                clusterer.options.set({
+                    gridSize: 32,
+                    minClusterSize: 3
+                });
+            } else if (newZoom > 14) { // Среднее приближение
+                clusterer.options.set({
+                    gridSize: 64,
+                    minClusterSize: 2
+                });
+            } else if (newZoom > 12) { // Нормальный вид
+                clusterer.options.set({
+                    gridSize: 80,
+                    minClusterSize: 2
+                });
+            } else { // Отдаление - агрессивная кластеризация
+                clusterer.options.set({
+                    gridSize: 120,
+                    minClusterSize: 2
+                });
+            }
+            
+            lastZoom = newZoom;
+        }
+    });
 }
 
 // Загрузка данных из JSON и API
 async function loadPlacesFromJson() {
     try {
         // 1. Загружаем статические данные
-        const res = await fetch('data/tula-objects.json');
+        // Используем абсолютный путь для работы на мобильных устройствах
+        const res = await fetch('/data/tula-objects.json');
+        
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
         let dbObjects = await res.json();
 
         // 2. Загружаем данные из БД
@@ -675,26 +851,49 @@ async function loadPlacesFromJson() {
             return place;
         });
 
-        renderPlaces(basePlaces);
+        // Не вызываем renderPlaces здесь, так как теперь используем createAllPlacemarks
+        console.log('Загружено объектов из JSON:', basePlaces.length);
     } catch (e) {
         console.error('Ошибка загрузки данных:', e);
+        console.error('Детали ошибки:', {
+            message: e.message,
+            stack: e.stack,
+            url: '/data/tula-objects.json'
+        });
+        
+        // Показываем более информативное сообщение об ошибке
+        const errorMsg = e.message || 'Неизвестная ошибка';
+        showNotification(`Ошибка загрузки данных: ${errorMsg}. Проверьте консоль браузера.`, 'error');
+        
         basePlaces = [];
-        renderPlaces(basePlaces);
+        // Создаем метки даже если данных нет (для пустого состояния)
+        createAllPlacemarks();
+        applyFilters();
     }
 }
 
-// Отображение объектов на карте
-function renderPlaces(places) {
-    placemarks.forEach(pm => myMap.geoObjects.remove(pm));
-    placemarks = [];
-
-    places.forEach(place => {
+// Создание всех меток
+function createAllPlacemarks() {
+    allPlacemarks = [];
+    
+    // Создаем метки для базовых объектов
+    basePlaces.forEach(place => {
         if (!place.lat || !place.lng) return;
         const pm = createPlacemark(place);
-        placemarks.push(pm);
-        myMap.geoObjects.add(pm);
+        allPlacemarks.push(pm);
     });
+    
+    // Создаем метки для пользовательских объектов
+    userAddedPlaces.forEach(place => {
+        if (!place.lat || !place.lng) return;
+        const pm = createPlacemark(place);
+        allPlacemarks.push(pm);
+    });
+}
 
+// Отображение объектов на карте (для обратной совместимости)
+function renderPlaces(places) {
+    createAllPlacemarks();
     applyFilters();
 }
 
@@ -792,7 +991,7 @@ async function showObjectReviews(placeId, placeName) {
 // Global functions for review actions
 window.voteReview = async function(reviewId, isLike, placeId, placeName) {
     if (!currentUser) {
-        alert('Войдите, чтобы голосовать');
+        showNotification('Войдите, чтобы голосовать', 'error');
         return;
     }
     try {
@@ -815,7 +1014,7 @@ window.voteReview = async function(reviewId, isLike, placeId, placeName) {
         }
     } catch (e) {
         console.error(e);
-        alert('Ошибка при голосовании: ' + formatError(e));
+        showNotification('Ошибка при голосовании: ' + formatError(e), 'error');
     }
 };
 
@@ -836,7 +1035,7 @@ window.deleteReview = async function(reviewId, placeId, placeName) {
         await loadPlacesFromJson();
     } catch (e) {
         console.error(e);
-        alert('Ошибка при удалении: ' + formatError(e));
+        showNotification('Ошибка при удалении: ' + formatError(e), 'error');
     }
 };
 
@@ -882,6 +1081,13 @@ function createPlacemark(place) {
         address: place.address
     };
 
+    // Добавляем метаданные для фильтрации и кластеризации
+    placemark.properties.set({
+        placeType: place.type,
+        placeId: place.id,
+        placeName: place.name
+    });
+
     // Load reviews when clicked
     placemark.events.add('click', () => {
         showObjectReviews(place.id, place.name);
@@ -890,26 +1096,120 @@ function createPlacemark(place) {
     return placemark;
 }
 
-// Применить фильтры
+// Применить фильтры с учетом кластеризации
 function applyFilters() {
+    if (!clusterer) return;
+    
     const activeTypes = Array.from(document.querySelectorAll('#filters input:checked'))
         .map(cb => cb.dataset.type);
 
-    placemarks.forEach(pm => {
-        myMap.geoObjects.remove(pm);
+    // Получаем только видимые метки по фильтру
+    const visiblePlacemarks = allPlacemarks.filter(pm => {
+        const type = pm.properties.get('placeType');
+        return activeTypes.includes(type);
     });
-
-    placemarks.forEach(pm => {
-        if (activeTypes.includes(pm.metaData.type)) {
-            myMap.geoObjects.add(pm);
-        }
+    
+    // Очищаем кластеризатор
+    clusterer.removeAll();
+    
+    // Добавляем только видимые метки
+    if (visiblePlacemarks.length > 0) {
+        clusterer.add(visiblePlacemarks);
+    }
+    
+    // Также обновляем видимость меток
+    allPlacemarks.forEach(pm => {
+        const type = pm.properties.get('placeType');
+        const shouldBeVisible = activeTypes.includes(type);
+        
+        // Устанавливаем видимость метки
+        pm.options.set('visible', shouldBeVisible);
     });
 }
 
-// Настройка фильтров
+// Настройка фильтров с поддержкой двойного клика
 function setupFilters() {
-    document.querySelectorAll('#filters input').forEach(cb => {
-        cb.addEventListener('change', applyFilters);
+    const checkboxes = document.querySelectorAll('#filters input');
+    
+    checkboxes.forEach(cb => {
+        const clickType = cb.dataset.type;
+        let originalState = null; // Сохраняем исходное состояние перед двойным кликом
+        let changeTimeout = null; // Таймаут для обработки одиночного клика
+        
+        // Сохраняем состояние перед кликом (для обработки двойного клика)
+        cb.addEventListener('mousedown', function() {
+            originalState = cb.checked;
+        });
+        
+        // Обработка одиночного клика через событие change
+        cb.addEventListener('change', function() {
+            // Отменяем предыдущий таймаут
+            if (changeTimeout) {
+                clearTimeout(changeTimeout);
+            }
+            
+            // Устанавливаем таймаут для обработки одиночного клика
+            // Если произойдет двойной клик, таймаут будет отменен
+            changeTimeout = setTimeout(() => {
+                applyFilters();
+                changeTimeout = null;
+            }, 300); // Небольшая задержка для проверки двойного клика
+        });
+        
+        // Обработка двойного клика на чекбокс
+        cb.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Отменяем таймаут одиночного клика
+            if (changeTimeout) {
+                clearTimeout(changeTimeout);
+                changeTimeout = null;
+            }
+            
+            // Восстанавливаем исходное состояние (отменяем изменение браузера)
+            if (originalState !== null) {
+                cb.checked = originalState;
+            }
+            
+            // Обрабатываем двойной клик
+            handleDoubleClick(clickType);
+            
+            // Сбрасываем состояние
+            originalState = null;
+        });
+        
+        // Обработка двойного клика на label
+        const label = cb.closest('label');
+        if (label) {
+            label.addEventListener('dblclick', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Отменяем таймаут одиночного клика
+                if (changeTimeout) {
+                    clearTimeout(changeTimeout);
+                    changeTimeout = null;
+                }
+                
+                // Сохраняем текущее состояние перед обработкой
+                const currentState = cb.checked;
+                
+                // Восстанавливаем исходное состояние (отменяем изменение браузера)
+                if (originalState !== null) {
+                    cb.checked = originalState;
+                } else {
+                    // Если originalState не был сохранен, отменяем текущее изменение
+                    cb.checked = !currentState;
+                }
+                
+                // Обрабатываем двойной клик
+                handleDoubleClick(clickType);
+                
+                // Сбрасываем состояние
+                originalState = null;
+            });
+        }
     });
 
     const filtersToggle = document.getElementById('filters-toggle');
@@ -922,6 +1222,34 @@ function setupFilters() {
     }
 }
 
+// Функция для обработки двойного клика
+function handleDoubleClick(typeToShow) {
+    const allCheckboxes = document.querySelectorAll('#filters input');
+    const allTypes = Array.from(allCheckboxes).map(cb => cb.dataset.type);
+    
+    // Проверяем текущее состояние
+    const checkedCheckboxes = Array.from(allCheckboxes).filter(cb => cb.checked);
+    const checkedTypes = checkedCheckboxes.map(cb => cb.dataset.type);
+    
+    // Если выбран только этот тип - включаем все обратно
+    if (checkedTypes.length === 1 && checkedTypes[0] === typeToShow) {
+        // Включаем все
+        allCheckboxes.forEach(cb => {
+            cb.checked = true;
+        });
+        showNotification('Показаны все типы объектов');
+    } else {
+        // Иначе показываем только этот тип
+        allCheckboxes.forEach(cb => {
+            cb.checked = (cb.dataset.type === typeToShow);
+        });
+        const friendlyName = getFriendlyTypeName(typeToShow);
+        showNotification(`Показаны только: ${friendlyName}`);
+    }
+    
+    applyFilters();
+}
+
 // Режим добавления объекта
 function setupAddButton() {
     const btn = document.getElementById('add-place-btn');
@@ -929,7 +1257,7 @@ function setupAddButton() {
     
     btn.addEventListener('click', () => {
         addMode = true;
-        alert('Кликните на карте, чтобы указать местоположение');
+        showNotification('Кликните на карте, чтобы указать местоположение нового объекта');
     });
 
     const cancelBtn = document.getElementById('cancel-place');
@@ -958,7 +1286,7 @@ async function submitNewPlace() {
     const type = document.getElementById('place-type').value;
 
     if (!name) {
-        alert('Введите название');
+        showNotification('Введите название объекта', 'error');
         return;
     }
 
@@ -988,17 +1316,23 @@ async function submitNewPlace() {
             count: 0
         };
 
-        // Добавляем в список и на карту
+        // Добавляем в список
         basePlaces.push(newPlace);
         allPlacesMap.set(newPlace.id, newPlace);
-        renderPlaces(basePlaces);
+        
+        // Создаем новую метку и добавляем в общий список
+        const newPlacemark = createPlacemark(newPlace);
+        allPlacemarks.push(newPlacemark);
+        
+        // Пересчитываем фильтры
+        applyFilters();
 
         document.getElementById('place-name').value = '';
         document.getElementById('add-place-modal').style.display = 'none';
-        alert('Объект успешно добавлен!');
+        showNotification(`Объект "${name}" успешно добавлен!`, 'success');
     } catch (e) {
         console.error(e);
-        alert('Ошибка при добавлении объекта: ' + (e.title || e));
+        showNotification('Ошибка при добавлении объекта: ' + (e.title || formatError(e)), 'error');
     }
 }
 
@@ -1056,13 +1390,13 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
     const place = allPlacesMap.get(idStr) || basePlaces.find(p => String(p.id) === idStr);
     
     if (!place) {
-        alert(`Объект не найден. ID: ${placeId}`);
+        showNotification(`Объект не найден. ID: ${placeId}`, 'error');
         return;
     }
 
     // Проверяем авторизацию
     if (!getToken()) {
-        alert('Для добавления отзыва необходимо войти в систему');
+        showNotification('Для добавления отзыва необходимо войти в систему', 'error');
         showModal('login');
         return;
     }
@@ -1072,7 +1406,7 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
         try {
             const res = await api(`/reviews/check/${idStr}`);
             if (res.hasReview) {
-                alert('Вы уже оставили отзыв на этот объект');
+                showNotification('Вы уже оставили отзыв на этот объект', 'error');
                 return;
             }
         } catch (e) {
@@ -1206,7 +1540,7 @@ function setupReviewModal() {
             const photoFile = photoInput?.files[0];
 
             if (!rating) {
-                alert('Пожалуйста, поставьте оценку');
+                showNotification('Пожалуйста, поставьте оценку', 'error');
                 return;
             }
 
@@ -1261,7 +1595,9 @@ function setupReviewModal() {
                 
                 // Обновить карту и профиль
                 await loadPlaceReviewsForMap();
-                renderPlaces(basePlaces);
+                // Обновляем все метки с новыми рейтингами
+                createAllPlacemarks();
+                applyFilters();
                 
                 // Обновить профиль если авторизован
                 if (getToken()) {
@@ -1273,10 +1609,10 @@ function setupReviewModal() {
                     showObjectReviews(placeId, placeName);
                 }
                 
-                alert(reviewId ? 'Отзыв обновлен!' : 'Спасибо за ваш отзыв! Он будет опубликован после модерации.');
+                showNotification(reviewId ? 'Отзыв обновлен!' : 'Спасибо за ваш отзыв! Он будет опубликован после модерации.', 'success');
             } catch (err) {
                 const msg = formatError(err);
-                alert('Ошибка: ' + msg);
+                showNotification('Ошибка: ' + msg, 'error');
             }
         });
     }
@@ -1304,4 +1640,54 @@ function getFriendlyTypeName(type) {
         gym: 'Спорт / активность'
     };
     return map[type] || type;
+}
+
+// Показать временное уведомление
+function showNotification(message, type = 'info') {
+    // Создаем элемент уведомления
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    
+    // Разные стили для разных типов уведомлений
+    if (type === 'error') {
+        notification.style.background = 'rgba(220, 53, 69, 0.9)';
+    } else if (type === 'success') {
+        notification.style.background = 'rgba(40, 167, 69, 0.9)';
+    } else {
+        notification.style.background = 'rgba(0, 0, 0, 0.85)';
+    }
+    
+    notification.textContent = message;
+    notification.style.cssText += `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        z-index: 3000;
+        font-size: 14px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Показываем с анимацией
+    setTimeout(() => {
+        notification.style.opacity = '1';
+    }, 10);
+    
+    // Автоматически скрываем через 3 секунды
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
 }

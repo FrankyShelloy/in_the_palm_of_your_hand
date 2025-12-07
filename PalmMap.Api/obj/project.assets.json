@@ -3525,24 +3525,31 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nat00\\.nuget\\packages\\": {}
+    "C:\\Users\\User\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\PalmMap.Api.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\GitHub\\health-map\\PalmMap.Api\\PalmMap.Api.csproj",
       "projectName": "PalmMap.Api",
-      "projectPath": "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\PalmMap.Api.csproj",
-      "packagesPath": "C:\\Users\\nat00\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nat00\\Downloads\\in_the_palm_of_your_hand-main\\in_the_palm_of_your_hand\\PalmMap.Api\\obj\\",
+      "projectPath": "C:\\Users\\User\\Desktop\\GitHub\\health-map\\PalmMap.Api\\PalmMap.Api.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\GitHub\\health-map\\PalmMap.Api\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\nat00\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3613,7 +3620,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
