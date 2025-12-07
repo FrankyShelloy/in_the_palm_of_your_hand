@@ -1036,6 +1036,17 @@ async function showObjectReviews(placeId, placeName) {
             return;
         }
         
+        // Получаем тип объекта для загрузки критериев
+        const place = allPlacesMap.get(String(placeId)) || basePlaces.find(p => String(p.id) === String(placeId));
+        let placeCriteria = {};
+        if (place && place.type) {
+            try {
+                placeCriteria = await api(`/reviews/criteria/${place.type}`);
+            } catch (e) {
+                console.error('Ошибка загрузки критериев:', e);
+            }
+        }
+        
         reviews.forEach(r => {
             const div = document.createElement("div");
             div.className = "object-review-card";
@@ -1053,10 +1064,11 @@ async function showObjectReviews(placeId, placeName) {
             const safePlaceId = escapeHtml(placeId);
 
             let actionsHtml = '';
-                if (isAuthor) {
+            if (isAuthor) {
+                const criteriaRatingsJson = r.criteriaRatings ? JSON.stringify(r.criteriaRatings).replace(/'/g, "\\'") : 'null';
                 actionsHtml = `
                     <div class="review-actions">
-                        <button class="icon-btn small" onclick="editReview('${safeReviewId}', ${rating}, '${safeComment}', '${safePlaceId}', '${safePhotoUrl}')" title="Редактировать">✏️</button>
+                        <button class="icon-btn small" onclick="editReview('${safeReviewId}', ${rating}, '${safeComment}', '${safePlaceId}', '${safePhotoUrl}', ${criteriaRatingsJson}, ${r.isDirectRating !== false})" title="Редактировать">✏️</button>
                         <button class="icon-btn small" onclick="deleteReview('${safeReviewId}', '${safePlaceId}', '${safePlaceName}')" title="Удалить">🗑️</button>
                     </div>
                 `;
@@ -1075,6 +1087,34 @@ async function showObjectReviews(placeId, placeName) {
             }
             
             const displayName = (currentUser && r.userId === currentUser.id) ? 'Вы' : escapeHtml(r.userName);
+            
+            // Формируем HTML для критериев
+            let criteriaHtml = '';
+            if (r.criteriaRatings && !r.isDirectRating && Object.keys(r.criteriaRatings).length > 0) {
+                const criteriaKeys = Object.keys(r.criteriaRatings);
+                const criteriaList = criteriaKeys.map(key => {
+                    const value = r.criteriaRatings[key];
+                    const criterionStars = '★'.repeat(value) + '☆'.repeat(5 - value);
+                    const criterionName = placeCriteria[key] || key; // Используем название из критериев или ключ
+                    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border);">
+                        <span style="font-size:0.9em;">${escapeHtml(criterionName)}</span>
+                        <span style="color:#fbbf24;font-size:0.9em;">${criterionStars}</span>
+                    </div>`;
+                }).join('');
+                
+                criteriaHtml = `
+                    <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+                        <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="const details = this.nextElementSibling; const arrow = this.querySelector('span:last-child'); details.style.display = details.style.display === 'none' ? 'block' : 'none'; arrow.textContent = details.style.display === 'none' ? '▼' : '▲';">
+                            <span style="font-weight:500;font-size:0.9em;">Критерии оценки</span>
+                            <span>▼</span>
+                        </div>
+                        <div style="display:none;margin-top:8px;">
+                            ${criteriaList}
+                        </div>
+                    </div>
+                `;
+            }
+            
             div.innerHTML = `
                 <div class="review-header">
                     <span class="review-author">
@@ -1087,6 +1127,7 @@ async function showObjectReviews(placeId, placeName) {
                     <div style="color:#fbbf24;">${stars}</div>
                     ${actionsHtml}
                 </div>
+                ${criteriaHtml}
                 ${r.comment ? `<div class="review-text">${escapeHtml(r.comment)}</div>` : ''}
                 ${photoHtml}
                 
@@ -1160,9 +1201,9 @@ window.deleteReview = async function(reviewId, placeId, placeName) {
     }
 };
 
-window.editReview = function(reviewId, rating, comment, placeId, photoUrl) {
+window.editReview = function(reviewId, rating, comment, placeId, photoUrl, criteriaRatings = null, isDirectRating = true) {
     // Reuse the review form but change its behavior
-    openReviewForm(placeId, reviewId, rating, comment, photoUrl);
+    openReviewForm(placeId, reviewId, rating, comment, photoUrl, criteriaRatings, isDirectRating);
 };
 
 
@@ -1511,7 +1552,7 @@ function calculateRatingSync(placeId) {
     };
 }
 
-async function openReviewForm(placeId, reviewId = null, rating = 0, comment = '', photoUrl = null) {
+async function openReviewForm(placeId, reviewId = null, rating = 0, comment = '', photoUrl = null, criteriaRatings = null, isDirectRating = true) {
     const idStr = String(placeId);
     const place = allPlacesMap.get(idStr) || basePlaces.find(p => String(p.id) === idStr);
     
@@ -1543,6 +1584,7 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
     window.currentReviewPlaceId = idStr;
     window.currentReviewPlaceName = place.name;
     window.currentReviewId = reviewId;
+    window.currentReviewPlaceType = place.type;
 
     // Флаги для удаления/наличия фото при редактировании
     window.currentReviewHasPhoto = !!photoUrl;
@@ -1551,13 +1593,93 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
     document.getElementById('review-place-name').textContent = reviewId ? `Редактирование: ${place.name}` : place.name;
     document.getElementById('review-modal').style.display = 'flex';
     
-    // Сбросить форму
+    // Загружаем критерии для типа объекта
+    let criteria = {};
+    try {
+        const criteriaRes = await api(`/reviews/criteria/${place.type}`);
+        criteria = criteriaRes || {};
+    } catch (e) {
+        console.error('Ошибка загрузки критериев:', e);
+    }
+
+    window.currentReviewCriteria = criteria;
+
+    // Определяем режим оценки
+    const useCriteria = !isDirectRating && criteriaRatings && Object.keys(criteriaRatings).length > 0;
+    document.getElementById('rating-type-general').checked = !useCriteria;
+    document.getElementById('rating-type-criteria').checked = useCriteria;
+    
+    // Показываем/скрываем соответствующие элементы
+    document.getElementById('star-rating').style.display = useCriteria ? 'none' : 'flex';
+    document.getElementById('criteria-rating').style.display = useCriteria ? 'block' : 'none';
+
+    // Сбросить форму общего рейтинга
     window.selectedRating = rating;
     document.querySelectorAll('#star-rating span').forEach((s, i) => {
         const isActive = i + 1 <= rating;
         s.textContent = isActive ? '★' : '☆';
         s.classList.toggle('star-active', isActive);
     });
+
+    // Настроить критерии
+    const criteriaContainer = document.getElementById('criteria-rating');
+    criteriaContainer.innerHTML = '';
+    
+    if (Object.keys(criteria).length > 0) {
+        Object.entries(criteria).forEach(([key, name]) => {
+            const div = document.createElement('div');
+            div.style.marginBottom = '12px';
+            div.innerHTML = `
+                <label style="display:block; margin-bottom:4px; font-weight:500;">${escapeHtml(name)}</label>
+                <div class="criteria-star-rating" data-criterion="${escapeHtml(key)}" style="display:flex; gap:4px;">
+                    <span data-value="1" style="font-size:24px; cursor:pointer; color:#ddd;">☆</span>
+                    <span data-value="2" style="font-size:24px; cursor:pointer; color:#ddd;">☆</span>
+                    <span data-value="3" style="font-size:24px; cursor:pointer; color:#ddd;">☆</span>
+                    <span data-value="4" style="font-size:24px; cursor:pointer; color:#ddd;">☆</span>
+                    <span data-value="5" style="font-size:24px; cursor:pointer; color:#ddd;">☆</span>
+                </div>
+            `;
+            criteriaContainer.appendChild(div);
+
+            // Устанавливаем значение если есть
+            if (criteriaRatings && criteriaRatings[key]) {
+                const value = criteriaRatings[key];
+                div.querySelectorAll('.criteria-star-rating span').forEach((s, i) => {
+                    const isActive = i + 1 <= value;
+                    s.textContent = isActive ? '★' : '☆';
+                    s.style.color = isActive ? '#fbbf24' : '#ddd';
+                });
+            }
+
+            // Обработчик клика на звезды критерия
+            div.querySelectorAll('.criteria-star-rating span').forEach(star => {
+                star.addEventListener('click', function() {
+                    const criterionKey = this.closest('.criteria-star-rating').dataset.criterion;
+                    const value = parseInt(this.dataset.value);
+                    
+                    if (!window.selectedCriteriaRatings) {
+                        window.selectedCriteriaRatings = {};
+                    }
+                    window.selectedCriteriaRatings[criterionKey] = value;
+
+                    // Обновляем отображение звезд для этого критерия
+                    this.closest('.criteria-star-rating').querySelectorAll('span').forEach((s, i) => {
+                        const isActive = i + 1 <= value;
+                        s.textContent = isActive ? '★' : '☆';
+                        s.style.color = isActive ? '#fbbf24' : '#ddd';
+                    });
+                });
+            });
+        });
+    }
+
+    // Инициализируем выбранные критерии
+    if (criteriaRatings) {
+        window.selectedCriteriaRatings = { ...criteriaRatings };
+    } else {
+        window.selectedCriteriaRatings = {};
+    }
+
     document.getElementById('review-comment').value = comment;
 
     // Показать превью существующего фото если есть (для редактирования)
@@ -1585,6 +1707,23 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
 }
 
 function setupReviewModal() {
+    // Переключение между общим рейтингом и критериями
+    document.getElementById('rating-type-general')?.addEventListener('change', function() {
+        if (this.checked) {
+            document.getElementById('star-rating').style.display = 'flex';
+            document.getElementById('criteria-rating').style.display = 'none';
+            window.selectedCriteriaRatings = {};
+        }
+    });
+
+    document.getElementById('rating-type-criteria')?.addEventListener('change', function() {
+        if (this.checked) {
+            document.getElementById('star-rating').style.display = 'none';
+            document.getElementById('criteria-rating').style.display = 'block';
+            window.selectedRating = 0;
+        }
+    });
+
     // Звезды рейтинга
     document.querySelectorAll('#star-rating span').forEach(star => {
         star.addEventListener('click', function () {
@@ -1658,16 +1797,32 @@ function setupReviewModal() {
     const submitBtn = document.getElementById('submit-review');
     if(submitBtn) {
         submitBtn.addEventListener('click', async () => {
+            const useCriteria = document.getElementById('rating-type-criteria')?.checked;
             const rating = window.selectedRating;
+            const criteriaRatings = window.selectedCriteriaRatings || {};
             const comment = document.getElementById('review-comment').value.trim();
             const placeId = window.currentReviewPlaceId;
             const placeName = window.currentReviewPlaceName;
             const reviewId = window.currentReviewId;
             const photoFile = photoInput?.files[0];
 
-            if (!rating) {
-                showNotification('Пожалуйста, поставьте оценку', 'error');
-                return;
+            // Валидация
+            if (useCriteria) {
+                const criteriaKeys = Object.keys(window.currentReviewCriteria || {});
+                if (criteriaKeys.length === 0) {
+                    showNotification('Критерии для этого типа объекта не найдены', 'error');
+                    return;
+                }
+                const allCriteriaFilled = criteriaKeys.every(key => criteriaRatings[key] && criteriaRatings[key] >= 1 && criteriaRatings[key] <= 5);
+                if (!allCriteriaFilled) {
+                    showNotification('Пожалуйста, оцените все критерии', 'error');
+                    return;
+                }
+            } else {
+                if (!rating || rating < 1 || rating > 5) {
+                    showNotification('Пожалуйста, поставьте оценку', 'error');
+                    return;
+                }
             }
 
             try {
@@ -1677,7 +1832,8 @@ function setupReviewModal() {
                     reviewResponse = await api(`/reviews/${reviewId}`, {
                         method: 'PUT',
                         body: JSON.stringify({
-                            rating: rating,
+                            rating: useCriteria ? null : rating,
+                            criteriaRatings: useCriteria ? criteriaRatings : null,
                             comment: comment || null,
                             deletePhoto: !!window.currentReviewDeletePhoto
                         })
@@ -1689,7 +1845,8 @@ function setupReviewModal() {
                         body: JSON.stringify({
                             placeId: placeId,
                             placeName: placeName,
-                            rating: rating,
+                            rating: useCriteria ? null : rating,
+                            criteriaRatings: useCriteria ? criteriaRatings : null,
                             comment: comment || null
                         })
                     });

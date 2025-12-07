@@ -5,7 +5,8 @@ namespace PalmMap.Api.Dtos;
 public record CreateReviewRequest(
     [property: JsonPropertyName("placeId")] string PlaceId,
     [property: JsonPropertyName("placeName")] string PlaceName,
-    [property: JsonPropertyName("rating")] int Rating,
+    [property: JsonPropertyName("rating")] int? Rating, // Общий рейтинг (если указан напрямую)
+    [property: JsonPropertyName("criteriaRatings")] Dictionary<string, int>? CriteriaRatings, // Оценки по критериям
     [property: JsonPropertyName("comment")] string? Comment
 );
 
@@ -13,7 +14,9 @@ public record ReviewResponse(
     Guid Id, 
     string PlaceId, 
     string PlaceName, 
-    int Rating, 
+    int Rating,
+    [property: JsonPropertyName("criteriaRatings")] Dictionary<string, int>? CriteriaRatings,
+    [property: JsonPropertyName("isDirectRating")] bool IsDirectRating,
     string? Comment, 
     string? PhotoUrl,
     DateTime CreatedAt,
@@ -31,6 +34,8 @@ public record PlaceReviewResponse(
     [property: JsonPropertyName("userName")] string UserName,
     [property: JsonPropertyName("userLevel")] int UserLevel,
     [property: JsonPropertyName("rating")] int Rating,
+    [property: JsonPropertyName("criteriaRatings")] Dictionary<string, int>? CriteriaRatings,
+    [property: JsonPropertyName("isDirectRating")] bool IsDirectRating,
     [property: JsonPropertyName("comment")] string? Comment,
     [property: JsonPropertyName("photoUrl")] string? PhotoUrl,
     [property: JsonPropertyName("createdAt")] DateTime CreatedAt,
@@ -41,7 +46,8 @@ public record PlaceReviewResponse(
 );
 
 public record UpdateReviewRequest(
-    [property: JsonPropertyName("rating")] int Rating,
+    [property: JsonPropertyName("rating")] int? Rating, // Общий рейтинг (если указан напрямую)
+    [property: JsonPropertyName("criteriaRatings")] Dictionary<string, int>? CriteriaRatings, // Оценки по критериям
     [property: JsonPropertyName("comment")] string? Comment,
     // При обновлении можно пометить, что существующее фото следует удалить
     [property: JsonPropertyName("deletePhoto")] bool DeletePhoto = false

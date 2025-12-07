@@ -45,11 +45,23 @@ public class ReviewsController : ControllerBase
             var userVoteObj = r.Votes.FirstOrDefault(v => v.UserId == user.Id);
             int userVote = userVoteObj != null ? (userVoteObj.IsLike ? 1 : -1) : 0;
 
+            Dictionary<string, int>? criteriaRatings = null;
+            if (!string.IsNullOrEmpty(r.CriteriaRatings))
+            {
+                try
+                {
+                    criteriaRatings = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, int>>(r.CriteriaRatings);
+                }
+                catch { }
+            }
+
             return new ReviewResponse(
                 r.Id, 
                 r.PlaceId, 
                 r.PlaceName, 
-                r.Rating, 
+                r.Rating,
+                criteriaRatings,
+                r.IsDirectRating,
                 r.Comment, 
                 r.PhotoPath != null ? $"/uploads/reviews/{r.PhotoPath}" : null,
                 r.CreatedAt,
@@ -87,12 +99,24 @@ public class ReviewsController : ControllerBase
                 userVote = userVoteObj.IsLike ? 1 : -1;
             }
 
+            Dictionary<string, int>? criteriaRatings = null;
+            if (!string.IsNullOrEmpty(r.CriteriaRatings))
+            {
+                try
+                {
+                    criteriaRatings = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, int>>(r.CriteriaRatings);
+                }
+                catch { }
+            }
+
             return new PlaceReviewResponse(
                 r.Id,
                 r.UserId,
                 r.User.DisplayName ?? "Аноним",
                 r.User.Level,
                 r.Rating,
+                criteriaRatings,
+                r.IsDirectRating,
                 r.Comment,
                 r.PhotoPath != null ? $"/uploads/reviews/{r.PhotoPath}" : null,
                 r.CreatedAt,
@@ -120,9 +144,44 @@ public class ReviewsController : ControllerBase
             return Forbid();
         }
 
-        if (request.Rating < 1 || request.Rating > 5)
+        // Валидация рейтинга или критериев
+        int finalRating;
+        bool isDirectRating;
+        string? criteriaRatingsJson = null;
+
+        if (request.CriteriaRatings != null && request.CriteriaRatings.Any())
         {
-            return BadRequest(new { message = "Рейтинг должен быть от 1 до 5" });
+            // Проверяем критерии
+            if (request.CriteriaRatings.Count != 4)
+            {
+                return BadRequest(new { message = "Должно быть указано 4 критерия" });
+            }
+
+            foreach (var kvp in request.CriteriaRatings)
+            {
+                if (kvp.Value < 1 || kvp.Value > 5)
+                {
+                    return BadRequest(new { message = $"Оценка критерия '{kvp.Key}' должна быть от 1 до 5" });
+                }
+            }
+
+            // Вычисляем среднее из критериев
+            finalRating = (int)Math.Round(request.CriteriaRatings.Values.Average());
+            isDirectRating = false;
+            criteriaRatingsJson = System.Text.Json.JsonSerializer.Serialize(request.CriteriaRatings);
+        }
+        else if (request.Rating.HasValue)
+        {
+            if (request.Rating.Value < 1 || request.Rating.Value > 5)
+            {
+                return BadRequest(new { message = "Рейтинг должен быть от 1 до 5" });
+            }
+            finalRating = request.Rating.Value;
+            isDirectRating = true;
+        }
+        else
+        {
+            return BadRequest(new { message = "Необходимо указать либо общий рейтинг, либо оценки по критериям" });
         }
 
         // Валидация длины комментария
@@ -131,7 +190,9 @@ public class ReviewsController : ControllerBase
             return BadRequest(new { message = "Комментарий не должен превышать 2000 символов" });
         }
 
-        review.Rating = request.Rating;
+        review.Rating = finalRating;
+        review.CriteriaRatings = criteriaRatingsJson;
+        review.IsDirectRating = isDirectRating;
         review.Comment = request.Comment;
 
         // Если пришёл флаг на удаление фото — удаляем файл и очищаем путь
@@ -166,7 +227,17 @@ public class ReviewsController : ControllerBase
         var userVoteObj = await _db.ReviewVotes.FirstOrDefaultAsync(v => v.ReviewId == review.Id && v.UserId == user.Id);
         int userVote = userVoteObj != null ? (userVoteObj.IsLike ? 1 : -1) : 0;
 
-        return Ok(new ReviewResponse(review.Id, review.PlaceId, review.PlaceName, review.Rating, review.Comment, 
+        Dictionary<string, int>? criteriaRatingsDict = null;
+        if (!string.IsNullOrEmpty(review.CriteriaRatings))
+        {
+            try
+            {
+                criteriaRatingsDict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, int>>(review.CriteriaRatings);
+            }
+            catch { }
+        }
+
+        return Ok(new ReviewResponse(review.Id, review.PlaceId, review.PlaceName, review.Rating, criteriaRatingsDict, review.IsDirectRating, review.Comment, 
             review.PhotoPath != null ? $"/uploads/reviews/{review.PhotoPath}" : null, 
             review.CreatedAt, likes, dislikes, userVote,
             review.ModerationStatus.ToString().ToLower(),
@@ -265,6 +336,15 @@ public class ReviewsController : ControllerBase
         return Ok(new { hasReview = exists });
     }
 
+    // Получить критерии оценки для типа объекта
+    [HttpGet("criteria/{placeType}")]
+    [AllowAnonymous]
+    public IActionResult GetCriteria(string placeType)
+    {
+        var criteria = ReviewCriteria.GetCriteriaForType(placeType);
+        return Ok(criteria);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateReviewRequest request)
     {
@@ -273,9 +353,46 @@ public class ReviewsController : ControllerBase
             return BadRequest(new { message = "PlaceId обязателен" });
         }
 
-        if (request.Rating < 1 || request.Rating > 5)
+        // Валидация рейтинга или критериев
+        int finalRating;
+        bool isDirectRating;
+        string? criteriaRatingsJson = null;
+        Dictionary<string, int>? criteriaRatingsDict = null;
+
+        if (request.CriteriaRatings != null && request.CriteriaRatings.Any())
         {
-            return BadRequest(new { message = "Рейтинг должен быть от 1 до 5" });
+            // Проверяем критерии
+            if (request.CriteriaRatings.Count != 4)
+            {
+                return BadRequest(new { message = "Должно быть указано 4 критерия" });
+            }
+
+            foreach (var kvp in request.CriteriaRatings)
+            {
+                if (kvp.Value < 1 || kvp.Value > 5)
+                {
+                    return BadRequest(new { message = $"Оценка критерия '{kvp.Key}' должна быть от 1 до 5" });
+                }
+            }
+
+            // Вычисляем среднее из критериев
+            finalRating = (int)Math.Round(request.CriteriaRatings.Values.Average());
+            isDirectRating = false;
+            criteriaRatingsJson = System.Text.Json.JsonSerializer.Serialize(request.CriteriaRatings);
+            criteriaRatingsDict = request.CriteriaRatings;
+        }
+        else if (request.Rating.HasValue)
+        {
+            if (request.Rating.Value < 1 || request.Rating.Value > 5)
+            {
+                return BadRequest(new { message = "Рейтинг должен быть от 1 до 5" });
+            }
+            finalRating = request.Rating.Value;
+            isDirectRating = true;
+        }
+        else
+        {
+            return BadRequest(new { message = "Необходимо указать либо общий рейтинг, либо оценки по критериям" });
         }
 
         // Валидация длины комментария
@@ -317,7 +434,9 @@ public class ReviewsController : ControllerBase
             UserId = dbUser.Id,
             PlaceId = request.PlaceId,
             PlaceName = request.PlaceName ?? "Объект",
-            Rating = request.Rating,
+            Rating = finalRating,
+            CriteriaRatings = criteriaRatingsJson,
+            IsDirectRating = isDirectRating,
             Comment = request.Comment?.Trim(),
             ModerationStatus = ModerationStatus.Pending // Новые отзывы отправляются на модерацию
         };
@@ -336,7 +455,7 @@ public class ReviewsController : ControllerBase
         await _achievementService.CheckAndAwardAsync(dbUser);
 
         return CreatedAtAction(nameof(Get), new { id = review.Id }, 
-            new ReviewResponse(review.Id, review.PlaceId, review.PlaceName, review.Rating, review.Comment, null, review.CreatedAt, 0, 0, 0, "pending"));
+            new ReviewResponse(review.Id, review.PlaceId, review.PlaceName, review.Rating, criteriaRatingsDict, isDirectRating, review.Comment, null, review.CreatedAt, 0, 0, 0, "pending"));
     }
 
     // Загрузить фото к отзыву

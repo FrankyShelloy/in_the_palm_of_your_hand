@@ -17,8 +17,16 @@ public class Review
     public string PlaceId { get; set; } = string.Empty;
     public string PlaceName { get; set; } = string.Empty;
     
-    // Рейтинг от 1 до 5
+    // Рейтинг от 1 до 5 (общий рейтинг, если указан напрямую)
     public int Rating { get; set; }
+    
+    // Оценки по критериям (JSON строка с ключами критериев и значениями 1-5)
+    // Формат: {"criterion1": 5, "criterion2": 4, ...}
+    // Если заполнено, то Rating вычисляется как среднее из этих значений
+    public string? CriteriaRatings { get; set; }
+    
+    // Флаг: true если рейтинг указан напрямую, false если вычислен из критериев
+    public bool IsDirectRating { get; set; } = true;
     
     // Комментарий (необязательный)
     public string? Comment { get; set; }

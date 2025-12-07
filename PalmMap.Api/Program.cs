@@ -58,7 +58,29 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins(frontendUrl)
+        // Разрешаем доступ с localhost и с любого IP в локальной сети (для мобильного тестирования)
+        policy.SetIsOriginAllowed(origin =>
+        {
+            if (string.IsNullOrEmpty(origin)) return false;
+            var uri = new Uri(origin);
+            // Разрешаем localhost
+            if (uri.Host == "localhost" || uri.Host == "127.0.0.1") return true;
+            // Разрешаем локальные IP-адреса (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
+            var hostParts = uri.Host.Split('.');
+            if (hostParts.Length == 4)
+            {
+                var firstOctet = int.Parse(hostParts[0]);
+                var secondOctet = int.Parse(hostParts[1]);
+                if ((firstOctet == 192 && secondOctet == 168) ||
+                    (firstOctet == 10) ||
+                    (firstOctet == 172 && secondOctet >= 16 && secondOctet <= 31))
+                {
+                    return true;
+                }
+            }
+            // Также разрешаем указанный в конфиге URL
+            return origin.StartsWith(frontendUrl);
+        })
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
