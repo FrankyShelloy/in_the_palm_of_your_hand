@@ -296,9 +296,16 @@ public class ReviewsController : ControllerBase
             return Unauthorized();
         }
 
+        // Получаем пользователя через контекст БД, чтобы он отслеживался
+        var dbUser = await _db.Users.FindAsync(user.Id);
+        if (dbUser == null)
+        {
+            return Unauthorized();
+        }
+
         // Проверка: один отзыв на одно место от одного пользователя
         var existingReview = await _db.Reviews
-            .FirstOrDefaultAsync(r => r.UserId == user.Id && r.PlaceId == request.PlaceId);
+            .FirstOrDefaultAsync(r => r.UserId == dbUser.Id && r.PlaceId == request.PlaceId);
 
         if (existingReview != null)
         {
@@ -307,7 +314,7 @@ public class ReviewsController : ControllerBase
 
         var review = new Review
         {
-            UserId = user.Id,
+            UserId = dbUser.Id,
             PlaceId = request.PlaceId,
             PlaceName = request.PlaceName ?? "Объект",
             Rating = request.Rating,
@@ -317,13 +324,16 @@ public class ReviewsController : ControllerBase
 
         _db.Reviews.Add(review);
 
+        // Обновляем статистику пользователя
+        dbUser.ReviewCount += 1;
+        dbUser.Points += 10; // +10 очков за каждый отзыв
+        dbUser.Level = Math.Max(1, 1 + (dbUser.ReviewCount / 5));
 
-        user.ReviewCount += 1;
-        user.Points += 10; // +10 очков за каждый отзыв
-        user.Level = Math.Max(1, 1 + (user.ReviewCount / 5));
-
+        // Сохраняем изменения пользователя и отзыва
         await _db.SaveChangesAsync();
-        await _achievementService.AwardAsync(user);
+        
+        // Проверяем и награждаем достижениями
+        await _achievementService.CheckAndAwardAsync(dbUser);
 
         return CreatedAtAction(nameof(Get), new { id = review.Id }, 
             new ReviewResponse(review.Id, review.PlaceId, review.PlaceName, review.Rating, review.Comment, null, review.CreatedAt, 0, 0, 0, "pending"));
@@ -412,6 +422,9 @@ public class ReviewsController : ControllerBase
 
         review.PhotoPath = fileName;
         await _db.SaveChangesAsync();
+
+        // Проверяем достижения после загрузки фото
+        await _achievementService.CheckAndAwardAsync(user);
 
         return Ok(new { photoUrl = $"/uploads/reviews/{fileName}" });
     }

@@ -183,6 +183,223 @@ using (var scope = app.Services.CreateScope())
             }
             return; // Exit after setting admin
         }
+
+        // Update achievements to new version (if needed)
+        var achievement1 = await db.Achievements.FindAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"));
+        if (achievement1 != null && achievement1.Code != "first-steps")
+        {
+            achievement1.Code = "first-steps";
+            achievement1.Title = "Первые шаги";
+            achievement1.Description = "Начало пути картографа здоровья";
+            achievement1.Icon = "👣";
+            achievement1.ProgressType = AchievementProgressType.FirstPlaceAdded;
+            achievement1.TargetValue = 1;
+            achievement1.RequiredReviews = 0;
+        }
+
+        var achievement2 = await db.Achievements.FindAsync(Guid.Parse("22222222-2222-2222-2222-222222222222"));
+        if (achievement2 != null && achievement2.Code != "attentive-citizen")
+        {
+            achievement2.Code = "attentive-citizen";
+            achievement2.Title = "Внимательный горожанин";
+            achievement2.Description = "Проявил внимание к городской среде";
+            achievement2.Icon = "👁️";
+            achievement2.ProgressType = AchievementProgressType.ReviewsCount;
+            achievement2.TargetValue = 10;
+            achievement2.RequiredReviews = 10;
+        }
+
+        var achievement3 = await db.Achievements.FindAsync(Guid.Parse("33333333-3333-3333-3333-333333333333"));
+        if (achievement3 != null && achievement3.Code != "health-photographer")
+        {
+            achievement3.Code = "health-photographer";
+            achievement3.Title = "Фотограф здоровья";
+            achievement3.Description = "Визуально документируешь городскую среду";
+            achievement3.Icon = "📸";
+            achievement3.ProgressType = AchievementProgressType.PhotosCount;
+            achievement3.TargetValue = 15;
+            achievement3.RequiredReviews = 0;
+        }
+
+        // Создаём новые достижения, если их нет
+        var achievement4 = await db.Achievements.FindAsync(Guid.Parse("44444444-4444-4444-4444-444444444444"));
+        if (achievement4 == null)
+        {
+            achievement4 = new Achievement
+            {
+                Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
+                Code = "objective-critic",
+                Title = "Объективный критик",
+                Description = "Помогаешь другим сделать осознанный выбор",
+                Icon = "✍️",
+                ProgressType = AchievementProgressType.DetailedReviewsCount,
+                TargetValue = 5,
+                RequiredReviews = 0
+            };
+            db.Achievements.Add(achievement4);
+        }
+
+        var achievement5 = await db.Achievements.FindAsync(Guid.Parse("55555555-5555-5555-5555-555555555555"));
+        if (achievement5 == null)
+        {
+            achievement5 = new Achievement
+            {
+                Id = Guid.Parse("55555555-5555-5555-5555-555555555555"),
+                Code = "balanced-opinions",
+                Title = "Баланс мнений",
+                Description = "Сбалансированный взгляд на городскую инфраструктуру",
+                Icon = "⚖️",
+                ProgressType = AchievementProgressType.BalancedReviews,
+                TargetValue = 2,
+                RequiredReviews = 0
+            };
+            db.Achievements.Add(achievement5);
+        }
+
+        var achievement6 = await db.Achievements.FindAsync(Guid.Parse("66666666-6666-6666-6666-666666666666"));
+        if (achievement6 == null)
+        {
+            achievement6 = new Achievement
+            {
+                Id = Guid.Parse("66666666-6666-6666-6666-666666666666"),
+                Code = "infrastructure-detective",
+                Title = "Детектив инфраструктуры",
+                Description = "Помогаешь расширять картографию города",
+                Icon = "🔍",
+                ProgressType = AchievementProgressType.NewPlacesAdded,
+                TargetValue = 3,
+                RequiredReviews = 0
+            };
+            db.Achievements.Add(achievement6);
+        }
+
+        var achievement7 = await db.Achievements.FindAsync(Guid.Parse("77777777-7777-7777-7777-777777777777"));
+        if (achievement7 == null)
+        {
+            achievement7 = new Achievement
+            {
+                Id = Guid.Parse("77777777-7777-7777-7777-777777777777"),
+                Code = "health-expert",
+                Title = "Эксперт здоровья",
+                Description = "Стал настоящим гидом по здоровому образу жизни в городе",
+                Icon = "🏆",
+                ProgressType = AchievementProgressType.HighRatedHealthyPlaces,
+                TargetValue = 10,
+                RequiredReviews = 0
+            };
+            db.Achievements.Add(achievement7);
+        }
+
+        var achievement8 = await db.Achievements.FindAsync(Guid.Parse("88888888-8888-8888-8888-888888888888"));
+        if (achievement8 == null)
+        {
+            achievement8 = new Achievement
+            {
+                Id = Guid.Parse("88888888-8888-8888-8888-888888888888"),
+                Code = "platform-legend",
+                Title = "Легенда платформы",
+                Description = "Признанное сообществом лицо проекта",
+                Icon = "👑",
+                ProgressType = AchievementProgressType.TopThreeRating,
+                TargetValue = 1,
+                RequiredReviews = 0
+            };
+            db.Achievements.Add(achievement8);
+        }
+
+        var achievement9 = await db.Achievements.FindAsync(Guid.Parse("99999999-9999-9999-9999-999999999999"));
+        if (achievement9 == null)
+        {
+            achievement9 = new Achievement
+            {
+                Id = Guid.Parse("99999999-9999-9999-9999-999999999999"),
+                Code = "team-player",
+                Title = "Командный игрок",
+                Description = "Твои находки полезны сообществу",
+                Icon = "🤝",
+                ProgressType = AchievementProgressType.PlacesReviewedByOthers,
+                TargetValue = 5,
+                RequiredReviews = 0
+            };
+            db.Achievements.Add(achievement9);
+        }
+
+        var achievement10 = await db.Achievements.FindAsync(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+        if (achievement10 == null)
+        {
+            achievement10 = new Achievement
+            {
+                Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                Code = "emotional-analyst",
+                Title = "Эмоциональный аналитик",
+                Description = "Умеешь различать нюансы качества",
+                Icon = "💭",
+                ProgressType = AchievementProgressType.AllRatingsUsed,
+                TargetValue = 5,
+                RequiredReviews = 0
+            };
+            db.Achievements.Add(achievement10);
+        }
+
+        var achievement11 = await db.Achievements.FindAsync(Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"));
+        if (achievement11 == null)
+        {
+            achievement11 = new Achievement
+            {
+                Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                Code = "fast-fingers",
+                Title = "Быстрые пальцы",
+                Description = "Активный день исследователя",
+                Icon = "⚡",
+                ProgressType = AchievementProgressType.PlacesInOneDay,
+                TargetValue = 3,
+                RequiredReviews = 0
+            };
+            db.Achievements.Add(achievement11);
+        }
+
+        // Удаляем тестовое достижение "Проверка" и все связанные записи
+        var testAchievementId = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc");
+        var testAchievement = await db.Achievements.FindAsync(testAchievementId);
+        if (testAchievement != null)
+        {
+            // Удаляем все записи UserAchievements для тестового достижения
+            var testAchievementUserRecords = await db.UserAchievements
+                .Where(ua => ua.AchievementId == testAchievementId)
+                .ToListAsync();
+            if (testAchievementUserRecords.Any())
+            {
+                db.UserAchievements.RemoveRange(testAchievementUserRecords);
+            }
+            
+            // Удаляем само достижение
+            db.Achievements.Remove(testAchievement);
+            await db.SaveChangesAsync();
+        }
+
+        // Удаляем тестового пользователя
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        const string testEmail = "test@healthmap.local";
+        var testUser = await userManager.FindByEmailAsync(testEmail);
+        if (testUser != null)
+        {
+            // Удаляем все отзывы тестового пользователя
+            var testUserReviews = await db.Reviews
+                .Where(r => r.UserId == testUser.Id)
+                .ToListAsync();
+            db.Reviews.RemoveRange(testUserReviews);
+            
+            // Удаляем все достижения тестового пользователя
+            var testUserAchievements = await db.UserAchievements
+                .Where(ua => ua.UserId == testUser.Id)
+                .ToListAsync();
+            db.UserAchievements.RemoveRange(testUserAchievements);
+            
+            await db.SaveChangesAsync();
+            
+            // Удаляем самого пользователя
+            await userManager.DeleteAsync(testUser);
+        }
     }
     catch (Exception ex)
     {

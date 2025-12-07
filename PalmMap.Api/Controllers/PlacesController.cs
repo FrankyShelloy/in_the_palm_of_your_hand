@@ -1,10 +1,12 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PalmMap.Api.Data;
 using PalmMap.Api.Dtos;
 using PalmMap.Api.Models;
+using PalmMap.Api.Services;
 
 namespace PalmMap.Api.Controllers;
 
@@ -13,10 +15,14 @@ namespace PalmMap.Api.Controllers;
 public class PlacesController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly AchievementService _achievementService;
 
-    public PlacesController(ApplicationDbContext context)
+    public PlacesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, AchievementService achievementService)
     {
         _context = context;
+        _userManager = userManager;
+        _achievementService = achievementService;
     }
 
     [HttpGet]
@@ -59,6 +65,16 @@ public class PlacesController : ControllerBase
 
         _context.Places.Add(place);
         await _context.SaveChangesAsync();
+
+        // Проверяем достижения, если пользователь авторизован
+        if (userId != null)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                await _achievementService.CheckAndAwardAsync(user);
+            }
+        }
 
         return CreatedAtAction(nameof(GetAll), new { id = place.Id }, new PlaceDto(
             place.Id,

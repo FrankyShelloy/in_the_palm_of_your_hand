@@ -256,6 +256,49 @@ async function loadProfile() {
   }
 }
 
+// Функция для генерации условия выполнения достижения
+function getAchievementCondition(progressType, targetValue) {
+  // AchievementProgressType enum values:
+  // FirstPlaceAdded = 1
+  // ReviewsCount = 2
+  // PhotosCount = 3
+  // DetailedReviewsCount = 4
+  // BalancedReviews = 5
+  // NewPlacesAdded = 6
+  // HighRatedHealthyPlaces = 7
+  // TopThreeRating = 8
+  // PlacesReviewedByOthers = 9
+  // AllRatingsUsed = 10
+  // PlacesInOneDay = 11
+
+  switch (progressType) {
+    case 1: // FirstPlaceAdded
+      return "Добавить 1 объект на карту";
+    case 2: // ReviewsCount
+      return `Оценить ${targetValue} уникальных объектов`;
+    case 3: // PhotosCount
+      return `Добавить ${targetValue} фотографий в отзывы`;
+    case 4: // DetailedReviewsCount
+      return `Написать ${targetValue} развёрнутых отзывов (более 100 символов)`;
+    case 5: // BalancedReviews
+      return "Оценить по 2 объекта каждого типа (здоровое питание, спорт, аптеки/алкоголь)";
+    case 6: // NewPlacesAdded
+      return `Добавить ${targetValue} новых объектов на карту`;
+    case 7: // HighRatedHealthyPlaces
+      return `Оценить ${targetValue} объектов здорового питания со средним рейтингом 4.5+`;
+    case 8: // TopThreeRating
+      return "Занять место в топ-3 рейтинга пользователей";
+    case 9: // PlacesReviewedByOthers
+      return `Добавить ${targetValue} объектов, которые оценят другие пользователи`;
+    case 10: // AllRatingsUsed
+      return "Использовать все оценки от 1 до 5 в отзывах";
+    case 11: // PlacesInOneDay
+      return `Добавить ${targetValue} объекта за один день`;
+    default:
+      return `Выполнить условие (${targetValue})`;
+  }
+}
+
 async function loadAchievements() {
   try {
     const profile = await api("/profile");
@@ -265,13 +308,91 @@ async function loadAchievements() {
       els.achievements.innerHTML = '<li class="muted">Достижений пока нет</li>';
       return;
     }
+    
+    // Проверяем, есть ли новые достижения для показа поздравления
+    if (profile.newlyEarnedAchievements && profile.newlyEarnedAchievements.length > 0) {
+      profile.newlyEarnedAchievements.forEach(achievement => {
+        showAchievementNotification(achievement);
+      });
+    }
+    
     list.forEach((a) => {
       const li = document.createElement("li");
-      li.innerHTML = `<div class="title">${escapeHtml(a.title)}</div><div class="desc">${escapeHtml(a.description)}</div><div class="tag">${escapeHtml(a.requiredReviews)} отзывов</div>`;
+      li.className = `achievement-item ${a.earned ? 'achievement-earned' : 'achievement-locked'}`;
+      
+      const progressHtml = a.earned 
+        ? '' 
+        : `<div class="achievement-progress">
+             <div class="progress-bar">
+               <div class="progress-fill" style="width: ${a.progress}%"></div>
+             </div>
+             <span class="progress-text">${a.progress}%</span>
+           </div>`;
+      
+      // Генерируем условие выполнения вместо описания
+      const condition = getAchievementCondition(a.progressType, a.targetValue);
+      
+      li.innerHTML = `
+        <div class="achievement-icon">${escapeHtml(a.icon)}</div>
+        <div class="achievement-content">
+          <div class="achievement-title">${escapeHtml(a.title)}</div>
+          <div class="achievement-desc">${escapeHtml(condition)}</div>
+          ${progressHtml}
+        </div>
+      `;
       els.achievements.appendChild(li);
     });
   } catch (err) {
     console.error(err);
+  }
+}
+
+function showAchievementNotification(achievement) {
+  const modal = document.createElement('div');
+  modal.className = 'achievement-notification-modal';
+  modal.innerHTML = `
+    <div class="achievement-notification-content">
+      <div class="achievement-notification-icon">${escapeHtml(achievement.icon)}</div>
+      <h3>🎉 Поздравляем!</h3>
+      <p class="achievement-notification-subtitle">Достижение выполнено!</p>
+      <p class="achievement-notification-title">${escapeHtml(achievement.title)}</p>
+      <p class="achievement-notification-desc">${escapeHtml(achievement.description)}</p>
+      <button class="achievement-notification-close primary">Отлично!</button>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  // Анимация появления
+  setTimeout(() => modal.classList.add('show'), 10);
+  
+  // Закрытие по клику
+  const closeBtn = modal.querySelector('.achievement-notification-close');
+  closeBtn.addEventListener('click', () => {
+    modal.classList.remove('show');
+    setTimeout(() => modal.remove(), 300);
+  });
+  
+  // Закрытие по клику вне модального окна
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('show');
+      setTimeout(() => modal.remove(), 300);
+    }
+  });
+}
+
+// Функция для проверки достижений после действий
+async function checkAchievementsAfterAction() {
+  try {
+    const profile = await api("/profile");
+    if (profile.newlyEarnedAchievements && profile.newlyEarnedAchievements.length > 0) {
+      profile.newlyEarnedAchievements.forEach(achievement => {
+        showAchievementNotification(achievement);
+      });
+    }
+  } catch (err) {
+    console.error('Ошибка проверки достижений:', err);
   }
 }
 
@@ -1330,6 +1451,11 @@ async function submitNewPlace() {
         document.getElementById('place-name').value = '';
         document.getElementById('add-place-modal').style.display = 'none';
         showNotification(`Объект "${name}" успешно добавлен!`, 'success');
+        
+        // Проверяем достижения после добавления места
+        if (getToken()) {
+            await checkAchievementsAfterAction();
+        }
     } catch (e) {
         console.error(e);
         showNotification('Ошибка при добавлении объекта: ' + (e.title || formatError(e)), 'error');
@@ -1599,9 +1725,11 @@ function setupReviewModal() {
                 createAllPlacemarks();
                 applyFilters();
                 
-                // Обновить профиль если авторизован
+                // Обновить профиль если авторизован (обновит очки и проверит достижения)
                 if (getToken()) {
                     await loadProfile();
+                    // Дополнительно проверяем достижения после создания отзыва
+                    await checkAchievementsAfterAction();
                 }
                 
                 // Refresh reviews panel if open
