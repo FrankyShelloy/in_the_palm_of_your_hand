@@ -48,8 +48,6 @@ public class PlacesController : ControllerBase
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         
-        // Optional: Require authentication?
-        // if (userId == null) return Unauthorized();
 
         var place = new Place
         {
@@ -66,7 +64,6 @@ public class PlacesController : ControllerBase
         _context.Places.Add(place);
         await _context.SaveChangesAsync();
 
-        // Проверяем достижения, если пользователь авторизован
         if (userId != null)
         {
             var user = await _userManager.FindByIdAsync(userId);

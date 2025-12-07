@@ -27,7 +27,6 @@ public record ReviewResponse(
     [property: JsonPropertyName("rejectionReason")] string? RejectionReason = null
 );
 
-// Для отображения отзывов на объекте карты (без привязки к пользователю)
 public record PlaceReviewResponse(
     [property: JsonPropertyName("id")] Guid Id,
     [property: JsonPropertyName("userId")] string UserId,
@@ -49,7 +48,6 @@ public record UpdateReviewRequest(
     [property: JsonPropertyName("rating")] int? Rating, // Общий рейтинг (если указан напрямую)
     [property: JsonPropertyName("criteriaRatings")] Dictionary<string, int>? CriteriaRatings, // Оценки по критериям
     [property: JsonPropertyName("comment")] string? Comment,
-    // При обновлении можно пометить, что существующее фото следует удалить
     [property: JsonPropertyName("deletePhoto")] bool DeletePhoto = false
 );
 
@@ -57,7 +55,6 @@ public record VoteRequest(
     [property: JsonPropertyName("isLike")] bool IsLike
 );
 
-// DTO для рейтинга пользователей
 public record UserRatingEntry(
     [property: JsonPropertyName("position")] int Position,
     [property: JsonPropertyName("id")] string Id,
@@ -72,7 +69,6 @@ public record UserRatingsResponse(
     [property: JsonPropertyName("currentUser")] UserRatingEntry CurrentUser
 );
 
-// DTO для модерации
 public record ModerationReviewResponse(
     [property: JsonPropertyName("id")] Guid Id,
     [property: JsonPropertyName("userId")] string UserId,

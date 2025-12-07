@@ -22,12 +22,10 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Rate limiting для защиты от брутфорса
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
     
-    // Лимит для авторизации: 5 попыток в минуту
     options.AddFixedWindowLimiter("auth", limiterOptions =>
     {
         limiterOptions.PermitLimit = 5;
@@ -36,7 +34,6 @@ builder.Services.AddRateLimiter(options =>
         limiterOptions.QueueLimit = 0;
     });
     
-    // Общий лимит API: 100 запросов в минуту
     options.AddFixedWindowLimiter("api", limiterOptions =>
     {
         limiterOptions.PermitLimit = 100;
@@ -52,20 +49,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 
-// CORS политика
 var frontendUrl = builder.Configuration.GetValue<string>("FrontendUrl") ?? "http://localhost";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        // Разрешаем доступ с localhost и с любого IP в локальной сети (для мобильного тестирования)
         policy.SetIsOriginAllowed(origin =>
         {
             if (string.IsNullOrEmpty(origin)) return false;
             var uri = new Uri(origin);
-            // Разрешаем localhost
             if (uri.Host == "localhost" || uri.Host == "127.0.0.1") return true;
-            // Разрешаем локальные IP-адреса (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
             var hostParts = uri.Host.Split('.');
             if (hostParts.Length == 4)
             {
@@ -78,7 +71,6 @@ builder.Services.AddCors(options =>
                     return true;
                 }
             }
-            // Также разрешаем указанный в конфиге URL
             return origin.StartsWith(frontendUrl);
         })
               .AllowAnyHeader()
@@ -108,7 +100,6 @@ if (jwtKey.Length < 32)
     throw new InvalidOperationException("JWT key must be at least 32 characters long");
 }
 
-// Security: Warn if using default development key in production
 if (!builder.Environment.IsDevelopment() && jwtKey.Contains("dev_secret_key"))
 {
     throw new InvalidOperationException("SECURITY ERROR: Cannot use development JWT key in production. Set JWT_SECRET_KEY environment variable with a secure random key.");
@@ -135,7 +126,6 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddAuthorization();
-// HttpClient used to talk to external providers (VK)
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<AchievementService>();
 builder.Services.AddSingleton<IEmailSenderDev, EmailSender>();
@@ -152,16 +142,13 @@ else
     app.UseHttpsRedirection();
 }
 
-// CORS middleware
 app.UseCors("AllowFrontend");
 
-// Rate limiting middleware
 app.UseRateLimiter();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Route HTML files to their physical locations
 app.MapGet("/confirm-email", async context =>
 {
     context.Response.ContentType = "text/html; charset=utf-8";
@@ -179,7 +166,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Ensure database is migrated at startup (apply pending EF migrations)
 using (var scope = app.Services.CreateScope())
 {
     try
@@ -187,7 +173,6 @@ using (var scope = app.Services.CreateScope())
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         db.Database.Migrate();
         
-        // Check for --set-admin argument
         var setAdminIndex = Array.IndexOf(args, "--set-admin");
         if (setAdminIndex >= 0 && setAdminIndex + 1 < args.Length)
         {
@@ -206,7 +191,6 @@ using (var scope = app.Services.CreateScope())
             return; // Exit after setting admin
         }
 
-        // Update achievements to new version (if needed)
         var achievement1 = await db.Achievements.FindAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"));
         if (achievement1 != null && achievement1.Code != "first-steps")
         {
@@ -243,7 +227,6 @@ using (var scope = app.Services.CreateScope())
             achievement3.RequiredReviews = 0;
         }
 
-        // Создаём новые достижения, если их нет
         var achievement4 = await db.Achievements.FindAsync(Guid.Parse("44444444-4444-4444-4444-444444444444"));
         if (achievement4 == null)
         {
@@ -380,12 +363,10 @@ using (var scope = app.Services.CreateScope())
             db.Achievements.Add(achievement11);
         }
 
-        // Удаляем тестовое достижение "Проверка" и все связанные записи
         var testAchievementId = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc");
         var testAchievement = await db.Achievements.FindAsync(testAchievementId);
         if (testAchievement != null)
         {
-            // Удаляем все записи UserAchievements для тестового достижения
             var testAchievementUserRecords = await db.UserAchievements
                 .Where(ua => ua.AchievementId == testAchievementId)
                 .ToListAsync();
@@ -394,24 +375,20 @@ using (var scope = app.Services.CreateScope())
                 db.UserAchievements.RemoveRange(testAchievementUserRecords);
             }
             
-            // Удаляем само достижение
             db.Achievements.Remove(testAchievement);
             await db.SaveChangesAsync();
         }
 
-        // Удаляем тестового пользователя
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         const string testEmail = "test@healthmap.local";
         var testUser = await userManager.FindByEmailAsync(testEmail);
         if (testUser != null)
         {
-            // Удаляем все отзывы тестового пользователя
             var testUserReviews = await db.Reviews
                 .Where(r => r.UserId == testUser.Id)
                 .ToListAsync();
             db.Reviews.RemoveRange(testUserReviews);
             
-            // Удаляем все достижения тестового пользователя
             var testUserAchievements = await db.UserAchievements
                 .Where(ua => ua.UserId == testUser.Id)
                 .ToListAsync();
@@ -419,7 +396,6 @@ using (var scope = app.Services.CreateScope())
             
             await db.SaveChangesAsync();
             
-            // Удаляем самого пользователя
             await userManager.DeleteAsync(testUser);
         }
     }
@@ -427,7 +403,6 @@ using (var scope = app.Services.CreateScope())
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "Database migration failed on startup.");
-        // swallow to allow app to start and return errors via endpoints
     }
 }
 

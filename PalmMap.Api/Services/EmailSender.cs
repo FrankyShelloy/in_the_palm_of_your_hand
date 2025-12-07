@@ -4,10 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace PalmMap.Api.Services;
 
-/// <summary>
-/// Simple development email sender that writes emails to wwwroot/emails as .eml files.
-/// For production replace with SMTP sender.
-/// </summary>
 public class EmailSender : IEmailSenderDev
 {
     private readonly IWebHostEnvironment _env;

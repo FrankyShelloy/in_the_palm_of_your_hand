@@ -37,7 +37,6 @@ public class AuthController : ControllerBase
         _frontendUrl = configuration.GetValue<string>("FrontendUrl") ?? "http://localhost";
     }
 
-    // Начать VK OAuth с PKCE: перенаправляет пользователя на страницу авторизации VK ID
     [HttpGet("vk/login")]
     public IActionResult VkLogin()
     {
@@ -48,12 +47,10 @@ public class AuthController : ControllerBase
 
         var redirectUri = $"{_frontendUrl}/api/auth/vk/callback";
         
-        // Генерация PKCE параметров
         var codeVerifier = GenerateCodeVerifier();
         var codeChallenge = GenerateCodeChallenge(codeVerifier);
         var state = Guid.NewGuid().ToString("N");
         
-        // Сохраняем code_verifier в cookie для использования в callback
         Response.Cookies.Append("vk_code_verifier", codeVerifier, new CookieOptions
         {
             HttpOnly = true,
@@ -69,7 +66,6 @@ public class AuthController : ControllerBase
             MaxAge = TimeSpan.FromMinutes(10)
         });
 
-        // VK ID OAuth 2.1 URL
         var authorize = $"https://id.vk.com/authorize?" +
             $"response_type=code" +
             $"&client_id={WebUtility.UrlEncode(clientId)}" +
@@ -82,13 +78,11 @@ public class AuthController : ControllerBase
         return Redirect(authorize);
     }
 
-    // Callback endpoint VK redirects to with `code`
     [HttpGet("vk/callback")]
     public async Task<IActionResult> VkCallback([FromQuery] string code, [FromQuery] string state, [FromQuery] string? device_id)
     {
         if (string.IsNullOrWhiteSpace(code)) return BadRequest(new { message = "Code is required" });
 
-        // Проверка state
         var savedState = Request.Cookies["vk_state"];
         if (string.IsNullOrWhiteSpace(savedState) || savedState != state)
         {
@@ -101,7 +95,6 @@ public class AuthController : ControllerBase
             return BadRequest(new { message = "Code verifier not found" });
         }
 
-        // Удаляем cookies
         Response.Cookies.Delete("vk_code_verifier");
         Response.Cookies.Delete("vk_state");
 
@@ -115,7 +108,6 @@ public class AuthController : ControllerBase
 
         var http = _httpClientFactory.CreateClient();
         
-        // Exchange code for access token через VK ID API
         var tokenRequestContent = new FormUrlEncodedContent(new Dictionary<string, string>
         {
             ["grant_type"] = "authorization_code",
@@ -132,7 +124,6 @@ public class AuthController : ControllerBase
         
         if (!tokenRes.IsSuccessStatusCode) 
         {
-            // Log details for debugging but don't expose to user
             Console.WriteLine($"VK token exchange failed: {tokenJson}");
             return BadRequest(new { message = "Ошибка авторизации через VK. Попробуйте позже." });
         }
@@ -149,13 +140,11 @@ public class AuthController : ControllerBase
         var accessToken = accessTokenEl.GetString();
         var vkUserId = root.TryGetProperty("user_id", out var userIdEl) ? userIdEl.GetInt64() : 0;
 
-        // Получаем данные пользователя из id_token или через API
         string? email = null;
         string? firstName = null;
         string? lastName = null;
         string? photo = null;
 
-        // Попробуем получить данные из id_token (JWT)
         if (root.TryGetProperty("id_token", out var idTokenEl))
         {
             var idToken = idTokenEl.GetString();
@@ -177,7 +166,6 @@ public class AuthController : ControllerBase
             }
         }
 
-        // Если не получили данные из id_token, попробуем через VK API
         if (string.IsNullOrEmpty(firstName) && vkUserId > 0)
         {
             var userInfoUrl = $"https://api.vk.com/method/users.get?user_ids={vkUserId}&fields=first_name,last_name,photo_200&access_token={accessToken}&v=5.131";
@@ -196,7 +184,6 @@ public class AuthController : ControllerBase
             }
         }
 
-        // Find or create user
         ApplicationUser? user = null;
         if (!string.IsNullOrWhiteSpace(email))
         {
@@ -205,7 +192,6 @@ public class AuthController : ControllerBase
 
         if (user == null && vkUserId > 0)
         {
-            // Try by username vk_{id}@vk.local (full username format)
             var userName = $"vk_{vkUserId}@vk.local";
             user = await _userManager.FindByNameAsync(userName);
         }
@@ -230,20 +216,17 @@ public class AuthController : ControllerBase
             user = newUser;
         }
 
-        // Update avatar if available
         if (!string.IsNullOrWhiteSpace(photo))
         {
             user.AvatarUrl = photo;
             await _userManager.UpdateAsync(user);
         }
 
-        // Generate JWT and redirect to frontend with token
         var jwt = GenerateJwt(user);
         var redirect = _frontendUrl + $"/?vk_token={WebUtility.UrlEncode(jwt)}";
         return Redirect(redirect);
     }
 
-    // PKCE helpers
     private static string GenerateCodeVerifier()
     {
         var bytes = new byte[32];
@@ -274,7 +257,6 @@ public class AuthController : ControllerBase
             var parts = jwt.Split('.');
             if (parts.Length != 3) return null;
             var payload = parts[1];
-            // Add padding
             payload = payload.Replace('-', '+').Replace('_', '/');
             switch (payload.Length % 4)
             {
@@ -327,7 +309,6 @@ public class AuthController : ControllerBase
             return BadRequest(result.Errors);
         }
 
-        // generate email confirmation token and send confirmation link
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         var encodedToken = WebUtility.UrlEncode(token);
         var encodedUserId = WebUtility.UrlEncode(user.Id);
@@ -373,7 +354,6 @@ public class AuthController : ControllerBase
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null) return NotFound();
 
-        // ASP.NET Core автоматически декодирует query-параметры
         var res = await _userManager.ConfirmEmailAsync(user, token);
         if (!res.Succeeded) return BadRequest(res.Errors);
 
@@ -405,11 +385,9 @@ public class AuthController : ControllerBase
         var user = await _userManager.FindByIdAsync(req.UserId);
         if (user == null) return NotFound();
 
-        // Токен приходит уже декодированным из JSON body
         var res = await _userManager.ResetPasswordAsync(user, req.Token, req.NewPassword);
         if (!res.Succeeded) return BadRequest(res.Errors);
 
-        // Auto-confirm email after password reset
         if (!user.EmailConfirmed)
         {
             user.EmailConfirmed = true;

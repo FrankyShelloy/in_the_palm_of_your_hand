@@ -1,9 +1,7 @@
 namespace PalmMap.Api.Models;
 
-// Критерии оценки для каждого типа объекта
 public static class ReviewCriteria
 {
-    // Критерии для аптеки
     public static readonly Dictionary<string, string> Pharmacy = new()
     {
         { "assortment", "Ассортимент" },
@@ -12,7 +10,6 @@ public static class ReviewCriteria
         { "accessibility", "Доступность" }
     };
 
-    // Критерии для центра здоровья
     public static readonly Dictionary<string, string> HealthCenter = new()
     {
         { "quality", "Качество услуг" },
@@ -21,7 +18,6 @@ public static class ReviewCriteria
         { "convenience", "Удобство" }
     };
 
-    // Критерии для больницы
     public static readonly Dictionary<string, string> Hospital = new()
     {
         { "treatment", "Качество лечения" },
@@ -30,7 +26,6 @@ public static class ReviewCriteria
         { "conditions", "Условия пребывания" }
     };
 
-    // Критерии для стоматологии
     public static readonly Dictionary<string, string> Dentist = new()
     {
         { "treatment", "Качество лечения" },
@@ -39,7 +34,6 @@ public static class ReviewCriteria
         { "painless", "Безболезненность" }
     };
 
-    // Критерии для лаборатории
     public static readonly Dictionary<string, string> Lab = new()
     {
         { "accuracy", "Точность анализов" },
@@ -48,7 +42,6 @@ public static class ReviewCriteria
         { "staff", "Персонал" }
     };
 
-    // Критерии для поликлиники
     public static readonly Dictionary<string, string> Clinic = new()
     {
         { "quality", "Качество услуг" },
@@ -57,7 +50,6 @@ public static class ReviewCriteria
         { "convenience", "Удобство" }
     };
 
-    // Критерии для мед. учреждения
     public static readonly Dictionary<string, string> OtherMed = new()
     {
         { "quality", "Качество услуг" },
@@ -66,7 +58,6 @@ public static class ReviewCriteria
         { "convenience", "Удобство" }
     };
 
-    // Критерии для здорового питания
     public static readonly Dictionary<string, string> HealthyFood = new()
     {
         { "food_quality", "Качество еды" },
@@ -75,7 +66,6 @@ public static class ReviewCriteria
         { "service", "Обслуживание" }
     };
 
-    // Критерии для алкоголя/табака
     public static readonly Dictionary<string, string> Alcohol = new()
     {
         { "assortment", "Ассортимент" },
@@ -84,7 +74,6 @@ public static class ReviewCriteria
         { "accessibility", "Доступность" }
     };
 
-    // Критерии для спорт/активность
     public static readonly Dictionary<string, string> Gym = new()
     {
         { "equipment", "Оборудование" },
@@ -93,7 +82,6 @@ public static class ReviewCriteria
         { "convenience", "Удобство" }
     };
 
-    // Получить критерии для типа объекта
     public static Dictionary<string, string> GetCriteriaForType(string placeType)
     {
         return placeType switch

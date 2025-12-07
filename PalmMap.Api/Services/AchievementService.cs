@@ -23,21 +23,17 @@ public class AchievementService
     {
         var result = new AchievementProgressResult();
         
-        // Получаем все достижения
         var allAchievements = await _db.Achievements.ToListAsync(ct);
         
-        // Получаем уже заработанные достижения
         var earnedIds = await _db.UserAchievements
             .Where(ua => ua.UserId == user.Id)
             .Select(ua => ua.AchievementId)
             .ToListAsync(ct);
 
-        // Для каждого достижения проверяем прогресс
         foreach (var achievement in allAchievements)
         {
             if (earnedIds.Contains(achievement.Id))
             {
-                // Уже получено - прогресс 100%
                 result.Progress[achievement.Id] = 100;
                 continue;
             }
@@ -48,7 +44,6 @@ public class AchievementService
             switch (achievement.ProgressType)
             {
                 case AchievementProgressType.FirstPlaceAdded:
-                    // Проверяем, есть ли хотя бы одно место, созданное пользователем
                     var placesCount = await _db.Places
                         .CountAsync(p => p.CreatedByUserId == user.Id, ct);
                     currentValue = placesCount > 0 ? 1 : 0;
@@ -56,7 +51,6 @@ public class AchievementService
                     break;
 
                 case AchievementProgressType.ReviewsCount:
-                    // Количество уникальных объектов, которые пользователь оценил
                     var uniquePlacesReviewed = await _db.Reviews
                         .Where(r => r.UserId == user.Id && r.ModerationStatus == ModerationStatus.Approved)
                         .Select(r => r.PlaceId)
@@ -67,7 +61,6 @@ public class AchievementService
                     break;
 
                 case AchievementProgressType.PhotosCount:
-                    // Количество отзывов с фотографиями
                     var photosCount = await _db.Reviews
                         .CountAsync(r => r.UserId == user.Id && r.PhotoPath != null && r.ModerationStatus == ModerationStatus.Approved, ct);
                     currentValue = photosCount;
@@ -75,7 +68,6 @@ public class AchievementService
                     break;
 
                 case AchievementProgressType.DetailedReviewsCount:
-                    // Количество развёрнутых отзывов (более 100 символов)
                     var detailedReviews = await _db.Reviews
                         .CountAsync(r => r.UserId == user.Id && 
                                        r.Comment != null && 
@@ -86,7 +78,6 @@ public class AchievementService
                     break;
 
                 case AchievementProgressType.BalancedReviews:
-                    // Оценить по 2 объекта каждого типа (healthy_food, gym, alcohol/pharmacy)
                     var userReviews = await _db.Reviews
                         .Where(r => r.UserId == user.Id && r.ModerationStatus == ModerationStatus.Approved)
                         .Select(r => r.PlaceId)
@@ -117,7 +108,6 @@ public class AchievementService
                     break;
 
                 case AchievementProgressType.NewPlacesAdded:
-                    // Добавить 3 объекта, которых ещё нет на карте (новые объекты пользователя)
                     var newPlacesCount = await _db.Places
                         .CountAsync(p => p.CreatedByUserId == user.Id, ct);
                     currentValue = newPlacesCount;
@@ -125,7 +115,6 @@ public class AchievementService
                     break;
 
                 case AchievementProgressType.HighRatedHealthyPlaces:
-                    // 10 объектов здорового питания с средним рейтингом 4.5+
                     var healthyFoodPlaceIds = await _db.Places
                         .Where(p => p.Type == "healthy_food")
                         .Select(p => p.Id.ToString())
@@ -146,7 +135,6 @@ public class AchievementService
                     break;
 
                 case AchievementProgressType.TopThreeRating:
-                    // Топ-3 в рейтинге пользователей
                     var allUsers = await _db.Users
                         .OrderByDescending(u => u.Points)
                         .ThenByDescending(u => u.Level)
@@ -158,7 +146,6 @@ public class AchievementService
                     break;
 
                 case AchievementProgressType.PlacesReviewedByOthers:
-                    // 5 объектов пользователя, которые оценили другие
                     var userPlaces = await _db.Places
                         .Where(p => p.CreatedByUserId == user.Id)
                         .Select(p => p.Id.ToString())
@@ -176,7 +163,6 @@ public class AchievementService
                     break;
 
                 case AchievementProgressType.AllRatingsUsed:
-                    // Использовать все оценки от 1 до 5
                     var usedRatings = await _db.Reviews
                         .Where(r => r.UserId == user.Id && r.ModerationStatus == ModerationStatus.Approved)
                         .Select(r => r.Rating)
@@ -189,7 +175,6 @@ public class AchievementService
                     break;
 
                 case AchievementProgressType.PlacesInOneDay:
-                    // 3 объекта за один день
                     var today = DateTime.UtcNow.Date;
                     var placesToday = await _db.Places
                         .CountAsync(p => p.CreatedByUserId == user.Id && 
@@ -199,14 +184,12 @@ public class AchievementService
                     break;
             }
 
-            // Вычисляем процент прогресса
             int progressPercent = achievement.TargetValue > 0 
                 ? Math.Min(100, (int)((double)currentValue / achievement.TargetValue * 100))
                 : 0;
             
             result.Progress[achievement.Id] = progressPercent;
 
-            // Если достижение выполнено, награждаем
             if (isCompleted)
             {
                 _db.UserAchievements.Add(new UserAchievement
@@ -227,7 +210,6 @@ public class AchievementService
         return result;
     }
 
-    // Старый метод для обратной совместимости
     public async Task AwardAsync(ApplicationUser user, CancellationToken ct = default)
     {
         await CheckAndAwardAsync(user, ct);

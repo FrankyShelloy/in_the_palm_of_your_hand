@@ -37,7 +37,7 @@
               var(--bg);
 }
 
-/* Theme Switcher */
+
 .theme-switcher {
   display: flex;
   background: var(--card);
@@ -74,7 +74,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Adjustments for light mode specific elements */
+
 [data-theme="light"] .brand-initial {
     text-shadow: 0 0 15px rgba(8, 145, 178, 0.4);
 }
@@ -99,15 +99,15 @@
 }
 
 [data-theme="light"] .level-badge {
-    background: rgba(217, 119, 6, 0.15); /* Amber-600 with opacity */
-    color: #b45309; /* Amber-700 */
+    background: rgba(217, 119, 6, 0.15); 
+    color: #b45309; 
     border-color: rgba(180, 83, 9, 0.3);
 }
 
-/* Light Theme Enhancements */
+
 [data-theme="light"] .tag {
     background: rgba(8, 145, 178, 0.15);
-    color: #0e7490; /* Cyan-700 */
+    color: #0e7490; 
     border: 1px solid rgba(8, 145, 178, 0.3);
     font-weight: 600;
 }
@@ -127,12 +127,12 @@
 }
 
 [data-theme="light"] .compact-list .title {
-    color: #0369a1; /* Sky-700 */
+    color: #0369a1; 
     font-weight: 700;
 }
 
 [data-theme="light"] .compact-list .desc {
-    color: #334155; /* Slate-700 */
+    color: #334155; 
 }
 
 [data-theme="light"] .section-header:hover {
@@ -145,7 +145,7 @@
 }
 
 [data-theme="light"] .user-info {
-    color: #334155; /* Slate-700 */
+    color: #334155; 
     font-weight: 500;
 }
 
@@ -163,6 +163,84 @@ body { margin: 0; min-height: 100vh; }
 
 a { color: var(--accent); }
 
+.site-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(34, 211, 238, 0.3);
+  padding: 10px 20px;
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-team {
+  font-weight: 600;
+  background: linear-gradient(90deg, #22d3ee, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer-divider {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.footer-event {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.footer-event .highlight {
+  color: #22d3ee;
+  font-weight: 700;
+}
+
+.map-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #22d3ee, #a78bfa, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.region-tag {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(167, 139, 250, 0.2));
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+}
+
+@media (max-width: 768px) {
+  .site-footer {
+    padding: 8px 15px;
+  }
+  
+  .footer-content {
+    font-size: 11px;
+    gap: 8px;
+  }
+}
+
 .topbar {
   display: flex;
   align-items: center;
@@ -173,7 +251,7 @@ a { color: var(--accent); }
   border-bottom: 1px solid #1f2937;
   position: sticky;
   top: 0;
-  z-index: 50; /* Increased z-index to stay above profile panel */
+  z-index: 50; 
 }
 
 .brand {
@@ -190,12 +268,12 @@ a { color: var(--accent); }
   font-family: 'Exo 2', sans-serif;
   font-style: italic;
   font-weight: 900;
-  font-size: 2.8rem; /* Slightly larger */
+  font-size: 2.8rem; 
   line-height: 1;
   color: var(--accent);
   margin: 0 2px;
-  text-shadow: 0 0 15px rgba(34, 211, 238, 0.6); /* Stronger glow */
-  transform: translateY(3px) skewX(-5deg); /* Extra slant for sharpness */
+  text-shadow: 0 0 15px rgba(34, 211, 238, 0.6); 
+  transform: translateY(3px) skewX(-5deg); 
 }
 
 .auth-actions { display: flex; align-items: center; gap: 12px; }
@@ -207,7 +285,7 @@ a { color: var(--accent); }
   flex-wrap: wrap;
   gap: 16px;
   padding: 20px;
-  max-width: 1400px; /* Increased max-width */
+  max-width: 1400px; 
   margin: 0 auto;
 }
 
@@ -223,12 +301,12 @@ a { color: var(--accent); }
 
 .panel.wide { flex: 2 1 600px; }
 
-/* Remove shadow for the main map panel so profile menu doesn't cast a shadow over the map */
+
 #map-panel {
   box-shadow: none;
 }
 
-/* Profile Collapsed State */
+
 #profile-panel.collapsed {
   flex: 0 0 60px;
   min-width: 0;
@@ -236,7 +314,7 @@ a { color: var(--accent); }
   overflow: hidden;
 }
 
-/* When profile panel is hidden, remove its box shadow */
+
 #profile-panel.panel-hidden {
   box-shadow: none !important;
 }
@@ -256,7 +334,7 @@ a { color: var(--accent); }
   transform: rotate(180deg);
 }
 
-/* Profile Reviews List */
+
 .profile-reviews-section {
   margin-top: 20px;
   border-top: 1px solid var(--border);
@@ -290,7 +368,7 @@ a { color: var(--accent); }
   font-size: 0.8rem;
 }
 
-/* Moderation Status Badges */
+
 .status-badge {
   display: inline-block;
   padding: 2px 8px;
@@ -325,7 +403,7 @@ a { color: var(--accent); }
   color: #c0392b;
 }
 
-/* Object Reviews */
+
 .object-review-card {
   background: var(--card);
   padding: 14px;
@@ -453,7 +531,7 @@ button:active { transform: translateY(1px); }
   background: rgba(0,0,0,0.6);
   display: grid;
   place-items: center;
-  z-index: 3000; /* Ensure modal is above map filters and controls */
+  z-index: 3000; 
 }
 .modal-content {
   width: min(360px, 90vw);
@@ -473,7 +551,7 @@ button:active { transform: translateY(1px); }
   .topbar { position: sticky; }
 }
 
-/* Reset Password Page Styles */
+
 .reset-page {
   display: flex;
   align-items: center;
@@ -495,7 +573,7 @@ button:active { transform: translateY(1px); }
   animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Confirm email page tweaks */
+
 .confirm-card {
   padding: 30px 28px;
   max-width: 520px;
@@ -521,7 +599,7 @@ button:active { transform: translateY(1px); }
   font-size: 28px;
 }
 
-/* Decorative top border/glow */
+
 .reset-card::before {
   content: '';
   position: absolute;
@@ -606,11 +684,11 @@ button:active { transform: translateY(1px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Styles from marky/index.html */
+
 #map {
     width: 100%;
     height: 100%;
-    min-height: 500px; /* Ensure map has height */
+    min-height: 500px; 
     border-radius: 12px;
 }
 #map { position: relative; z-index: 8; }
@@ -634,7 +712,7 @@ button:active { transform: translateY(1px); }
   border-radius: 12px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.2);
   max-width: 260px;
-  color: #000; /* Force black text for filters on white bg */
+  color: #000; 
 }
 
 .filters-header {
@@ -675,7 +753,7 @@ button:active { transform: translateY(1px); }
     margin-right: 8px;
 }
 
-/* Кнопка добавления */
+
 #add-place-btn {
     pointer-events: auto;
     position: static;
@@ -700,7 +778,7 @@ button:active { transform: translateY(1px); }
     background: var(--accent-strong);
 }
 
-/* Модальное окно добавления */
+
 #add-place-modal {
     display: none;
     position: fixed;
@@ -744,7 +822,7 @@ button:active { transform: translateY(1px); }
     color: #000;
 }
 
-/* Модальное окно отзыва */
+
 #review-modal {
     display: none;
     position: fixed;
@@ -784,15 +862,38 @@ button:active { transform: translateY(1px); }
     color: #000;
 }
 
-/* Map container relative positioning for absolute children */
+
 .map-container-wrapper {
     position: relative;
     width: 100%;
     height: 100%;
     min-height: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--accent, #22d3ee);
+    box-shadow: 
+        0 0 10px var(--accent, #22d3ee),
+        0 0 20px rgba(34, 211, 238, 0.5),
+        0 0 30px rgba(34, 211, 238, 0.3);
+    animation: neonPulse 3s ease-in-out infinite alternate;
 }
 
-/* Collapsible Profile Sections */
+@keyframes neonPulse {
+    from {
+        box-shadow: 
+            0 0 10px var(--accent, #22d3ee),
+            0 0 20px rgba(34, 211, 238, 0.5),
+            0 0 30px rgba(34, 211, 238, 0.3);
+    }
+    to {
+        box-shadow: 
+            0 0 15px var(--accent, #22d3ee),
+            0 0 30px rgba(34, 211, 238, 0.6),
+            0 0 45px rgba(34, 211, 238, 0.4);
+    }
+}
+
+
 .profile-section {
   border-top: 1px solid var(--border);
   margin-top: 10px;
@@ -839,11 +940,11 @@ button:active { transform: translateY(1px); }
 }
 
 .section-content.open {
-  max-height: 500px; /* Arbitrary large height */
+  max-height: 500px; 
   opacity: 1;
 }
 
-/* Profile Panel Transitions */
+
 #profile-panel {
   width: 300px;
   flex-shrink: 0;
@@ -885,27 +986,27 @@ button:active { transform: translateY(1px); }
 }
 
 
-/* Prevent wrapping on desktop to keep profile on the side */
+
 @media (min-width: 900px) {
   .layout {
     flex-wrap: nowrap;
     align-items: flex-start;
   }
   
-  /* Ensure map takes available space but respects profile */
+  
   #map-panel {
     flex-grow: 1;
-    width: auto; /* Allow shrinking/growing */
+    width: auto; 
   }
   
   #profile-panel {
-    flex-shrink: 0; /* Prevent profile from shrinking below its basis unless collapsed */
+    flex-shrink: 0; 
   }
 }
 
-/* Improve collapsed state styling */
+
 #profile-panel.collapsed {
-  width: 60px; /* Force width */
+  width: 60px; 
   padding: 10px 0;
 }
 
@@ -923,7 +1024,7 @@ button:active { transform: translateY(1px); }
 }
 
 
-/* New Layout Structure */
+
 .layout {
   display: flex;
   flex-direction: column;
@@ -934,15 +1035,15 @@ button:active { transform: translateY(1px); }
   display: flex;
   gap: 16px;
   width: 100%;
-  flex-wrap: wrap; /* Allow wrapping on mobile */
-  position: relative; /* For absolute positioning of profile */
-  overflow: hidden; /* Clip the sliding profile */
+  flex-wrap: wrap; 
+  position: relative; 
+  overflow: hidden; 
 }
 
 #map-panel {
   flex: 1;
   min-width: 0;
-  width: 100%; /* Always full width */
+  width: 100%; 
 }
 
 #profile-panel {
@@ -952,8 +1053,8 @@ button:active { transform: translateY(1px); }
   bottom: 0;
   width: 300px;
   z-index: 20;
-  background: var(--panel); /* Ensure background is opaque */
-  box-shadow: -5px 0 15px rgba(0,0,0,0.3); /* Shadow on the left */
+  background: var(--panel); 
+  box-shadow: -5px 0 15px rgba(0,0,0,0.3); 
   
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateX(0);
@@ -961,7 +1062,7 @@ button:active { transform: translateY(1px); }
 
 #profile-panel.panel-hidden {
   transform: translateX(100%);
-  /* Reset other properties that might have been set before */
+  
   width: 300px !important;
   padding: 16px !important;
   margin: 0 !important;
@@ -979,7 +1080,7 @@ button:active { transform: translateY(1px); }
   gap: 10px;
 }
 
-/* Override previous media query if needed */
+
 @media (min-width: 900px) {
   .top-row {
     flex-wrap: nowrap;
@@ -987,7 +1088,7 @@ button:active { transform: translateY(1px); }
 }
 
 
-/* Review Voting & Actions */
+
 .vote-btn {
     background: transparent;
     border: 1px solid var(--border);
@@ -1034,7 +1135,7 @@ button:active { transform: translateY(1px); }
 }
 
 
-/* Mobile Adaptation */
+
 @media (min-width: 769px) {
   .hidden-desktop {
     display: none !important;
@@ -1043,14 +1144,14 @@ button:active { transform: translateY(1px); }
 
 @media (max-width: 768px) {
   body {
-    overflow: hidden; /* Prevent body scroll, handle in panels */
+    overflow: hidden; 
     overflow-x: hidden;
   }
 
   .layout {
     padding: 0;
     gap: 0;
-    height: calc(100vh - 60px); /* Subtract topbar height approx */
+    height: calc(100vh - 60px); 
     position: relative;
     width: 100%;
     max-width: none;
@@ -1063,12 +1164,12 @@ button:active { transform: translateY(1px); }
     width: 100%;
   }
 
-  /* Topbar adjustments for mobile */
+  
   .topbar {
     padding: 10px 12px;
-    height: 60px; /* Fix height to match calc */
+    height: 60px; 
     flex-wrap: nowrap;
-    overflow-x: auto; /* Allow scroll if really needed, or hidden */
+    overflow-x: auto; 
     overflow-y: hidden;
   }
 
@@ -1081,7 +1182,7 @@ button:active { transform: translateY(1px); }
   }
 
   .theme-switcher {
-    display: none; /* Hide theme switcher on mobile to save space */
+    display: none; 
   }
 
   .auth-actions {
@@ -1093,13 +1194,13 @@ button:active { transform: translateY(1px); }
     font-size: 0.9rem;
   }
 
-  /* Hide user info (email) on mobile */
+  
   .user-info {
     display: none !important;
   }
 
 
-  /* Map takes full screen background */
+  
   #map-panel {
     position: absolute;
     inset: 0;
@@ -1112,10 +1213,10 @@ button:active { transform: translateY(1px); }
     border-radius: 0;
   }
 
-  /* Profile Panel - Full Screen Overlay */
+  
   #profile-panel {
     position: fixed;
-    top: 64px; /* Below topbar */
+    top: 64px; 
     left: 0;
     right: 0;
     bottom: 0;
@@ -1134,7 +1235,7 @@ button:active { transform: translateY(1px); }
     width: 100% !important;
   }
 
-  /* Object Reviews Panel - Bottom Sheet */
+  
   #object-reviews-panel {
     position: fixed;
     bottom: 0;
@@ -1145,7 +1246,7 @@ button:active { transform: translateY(1px); }
     z-index: 30;
     border-radius: 20px 20px 0 0;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
-    transform: translateY(100%); /* Hidden by default */
+    transform: translateY(100%); 
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
@@ -1160,17 +1261,17 @@ button:active { transform: translateY(1px); }
     padding-bottom: 20px;
   }
 
-  /* Adjust map controls to not be covered by bottom sheet */
+  
   .map-controls-container {
-    bottom: 80px; /* Increased to avoid being cut off by browser UI */
+    bottom: 80px; 
     bottom: calc(80px + env(safe-area-inset-bottom));
     top: auto;
     right: 16px;
   }
   
-  /* If map controls are top-right, they are fine. If bottom-right, move them up when panel opens */
   
-  /* Mobile FAB for Add Place */
+  
+  
   #add-place-btn .btn-text {
     display: none;
   }
@@ -1189,7 +1290,7 @@ button:active { transform: translateY(1px); }
   }
 }
 
-/* Achievement Styles */
+
 .achievement-item {
   display: flex;
   gap: 12px;
@@ -1274,7 +1375,7 @@ button:active { transform: translateY(1px); }
   color: var(--accent);
 }
 
-/* Achievement Notification Modal */
+
 .achievement-notification-modal {
   position: fixed;
   top: 0;

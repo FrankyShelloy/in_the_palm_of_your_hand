@@ -22,9 +22,6 @@ public class AdminController : ControllerBase
         _userManager = userManager;
     }
 
-    /// <summary>
-    /// Проверка, является ли текущий пользователь администратором
-    /// </summary>
     private async Task<ApplicationUser?> GetAdminUser()
     {
         var user = await _userManager.GetUserAsync(User);
@@ -33,10 +30,6 @@ public class AdminController : ControllerBase
         return user;
     }
 
-    /// <summary>
-    /// Проверить, является ли текущий пользователь админом
-    /// GET /api/admin/check
-    /// </summary>
     [HttpGet("check")]
     public async Task<IActionResult> CheckAdmin()
     {
@@ -47,10 +40,6 @@ public class AdminController : ControllerBase
         return Ok(new { isAdmin = user.IsAdmin });
     }
 
-    /// <summary>
-    /// Получить статистику модерации
-    /// GET /api/admin/stats
-    /// </summary>
     [HttpGet("stats")]
     public async Task<IActionResult> GetStats()
     {
@@ -65,10 +54,6 @@ public class AdminController : ControllerBase
         return Ok(new ModerationStatsResponse(pending, approved, rejected, pending + approved + rejected));
     }
 
-    /// <summary>
-    /// Получить отзывы на модерации
-    /// GET /api/admin/reviews?status=pending&page=1&pageSize=20
-    /// </summary>
     [HttpGet("reviews")]
     public async Task<IActionResult> GetReviews(
         [FromQuery] string status = "pending",
@@ -81,7 +66,6 @@ public class AdminController : ControllerBase
 
         var query = _db.Reviews.Include(r => r.User).AsQueryable();
 
-        // Фильтрация по статусу
         query = status.ToLower() switch
         {
             "pending" => query.Where(r => r.ModerationStatus == ModerationStatus.Pending),
@@ -121,10 +105,6 @@ public class AdminController : ControllerBase
         });
     }
 
-    /// <summary>
-    /// Модерировать отзыв (одобрить/отклонить)
-    /// POST /api/admin/reviews/{id}/moderate
-    /// </summary>
     [HttpPost("reviews/{id}/moderate")]
     public async Task<IActionResult> ModerateReview(Guid id, [FromBody] ModerateRequest request)
     {
@@ -163,10 +143,6 @@ public class AdminController : ControllerBase
         });
     }
 
-    /// <summary>
-    /// Массовое одобрение отзывов
-    /// POST /api/admin/reviews/approve-all
-    /// </summary>
     [HttpPost("reviews/approve-all")]
     public async Task<IActionResult> ApproveAll([FromBody] List<Guid> ids)
     {
@@ -190,10 +166,6 @@ public class AdminController : ControllerBase
         return Ok(new { message = $"Одобрено {reviews.Count} отзывов" });
     }
 
-    /// <summary>
-    /// Удалить отзыв (только для админа)
-    /// DELETE /api/admin/reviews/{id}
-    /// </summary>
     [HttpDelete("reviews/{id}")]
     public async Task<IActionResult> DeleteReview(Guid id)
     {
@@ -205,13 +177,11 @@ public class AdminController : ControllerBase
         if (review == null)
             return NotFound(new { message = "Отзыв не найден" });
 
-        // Уменьшаем счётчик отзывов у пользователя
         if (review.User != null)
         {
             review.User.ReviewCount = Math.Max(0, review.User.ReviewCount - 1);
         }
 
-        // Удаляем фото если есть
         if (!string.IsNullOrEmpty(review.PhotoPath))
         {
             try
@@ -232,10 +202,6 @@ public class AdminController : ControllerBase
         return Ok(new { message = "Отзыв удалён" });
     }
 
-    /// <summary>
-    /// Назначить пользователя администратором
-    /// POST /api/admin/users/{userId}/make-admin
-    /// </summary>
     [HttpPost("users/{userId}/make-admin")]
     public async Task<IActionResult> MakeAdmin(string userId)
     {
@@ -253,10 +219,6 @@ public class AdminController : ControllerBase
         return Ok(new { message = $"Пользователь {user.DisplayName ?? user.UserName} назначен администратором" });
     }
 
-    /// <summary>
-    /// Снять права администратора
-    /// POST /api/admin/users/{userId}/remove-admin
-    /// </summary>
     [HttpPost("users/{userId}/remove-admin")]
     public async Task<IActionResult> RemoveAdmin(string userId)
     {
@@ -264,7 +226,6 @@ public class AdminController : ControllerBase
         if (admin == null)
             return Forbid();
 
-        // Нельзя снять права с себя
         if (admin.Id == userId)
             return BadRequest(new { message = "Нельзя снять права администратора с себя" });
 
@@ -278,10 +239,6 @@ public class AdminController : ControllerBase
         return Ok(new { message = $"Права администратора сняты с {user.DisplayName ?? user.UserName}" });
     }
 
-    /// <summary>
-    /// Получить список всех пользователей
-    /// GET /api/admin/users?page=1&pageSize=20
-    /// </summary>
     [HttpGet("users")]
     public async Task<IActionResult> GetUsers([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {

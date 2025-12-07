@@ -2,7 +2,6 @@ const apiBase = "/api";
 const tokenKey = "palmmap_token";
 let currentUser = null;
 
-// XSS Protection: Escape HTML entities
 function escapeHtml(text) {
   if (text == null) return '';
   const div = document.createElement('div');
@@ -10,7 +9,6 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// DOM Elements
 const els = {
 
   authActions: document.getElementById("auth-actions"),
@@ -35,7 +33,6 @@ const els = {
   reviewText: document.getElementById("review-text"),
   reviewStatus: document.getElementById("review-status"),
   
-  // New elements
   profileToggle: document.getElementById("profile-toggle"),
   profilePanel: document.getElementById("profile-panel"),
   userReviewsList: document.getElementById("user-reviews-list"),
@@ -44,17 +41,14 @@ const els = {
   objectReviewsTitle: document.getElementById("object-reviews-title"),
   objectReviewsClose: document.getElementById("object-reviews-close"), // New close button
 
-  // Collapsible sections
   toggleReviews: document.getElementById("toggle-reviews"),
   reviewsContainer: document.getElementById("user-reviews-container"),
   toggleAchievements: document.getElementById("toggle-achievements"),
   achievementsContainer: document.getElementById("user-achievements-container"),
   
-  // Profile visibility
   profileClose: document.getElementById("profile-close"),
   topbarProfileToggle: document.getElementById("topbar-profile-toggle"),
 
-  // Ratings
   ratingsBtn: document.getElementById("btn-show-ratings"),
   ratingsModal: document.getElementById("ratings-modal"),
   ratingsClose: document.getElementById("close-ratings"),
@@ -64,7 +58,6 @@ const els = {
   userName: document.getElementById("user-name"),
   userPoints: document.getElementById("user-points"),
   
-  // Admin
   adminPanelBtn: document.getElementById("btn-admin-panel"),
 };
 
@@ -97,7 +90,6 @@ function switchTab(mode) {
   els.registerForm.classList.toggle("hidden", mode !== "register");
 }
 
-// VK login button handler: перенаправляет на серверную точку входа в VK OAuth
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('btn-vk-login');
   if (btn) {
@@ -107,14 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Check for VK token in URL (after VK OAuth callback redirect)
   const urlParams = new URLSearchParams(window.location.search);
   const vkToken = urlParams.get('vk_token');
   if (vkToken) {
     saveToken(vkToken);
-    // Clean URL
     window.history.replaceState({}, document.title, window.location.pathname);
-    // Refresh UI
     updateUI();
   }
 });
@@ -154,7 +143,6 @@ async function api(path, options = {}) {
 function formatError(err) {
   if (!err) return "Неизвестная ошибка";
   
-  // Если это строка (например, JSON), пробуем распарсить
   if (typeof err === 'string') {
     try {
       const parsed = JSON.parse(err);
@@ -164,19 +152,15 @@ function formatError(err) {
     }
   }
 
-  // Обработка 401 Unauthorized (стандартный ответ ASP.NET Core)
   if (err.status === 401 || err.title === "Unauthorized") {
     return "Неверный email или пароль.";
   }
 
-  // Массив ошибок Identity
   if (Array.isArray(err)) {
     return err.map(e => translateIdentityError(e)).join('<br>');
   }
 
-  // Объект с сообщением (наш кастомный формат { message: "..." })
   if (err.message) {
-    // Если message это JSON строка, пробуем распарсить
     if (typeof err.message === 'string' && err.message.trim().startsWith('{')) {
         try {
             const parsed = JSON.parse(err.message);
@@ -186,13 +170,10 @@ function formatError(err) {
     return err.message;
   }
   
-  // ValidationProblemDetails (errors: { Field: ["Error"] })
   if (err.errors) {
-    // Собираем все ошибки валидации в один список
     return Object.values(err.errors).flat().join('<br>');
   }
 
-  // Если есть заголовок ошибки, но нет деталей (например, 400 Bad Request без body)
   if (err.title) {
       return err.title;
   }
@@ -234,13 +215,11 @@ async function loadProfile() {
     els.profileLevel.textContent = `Уровень ${data.level}`;
     els.profileReviews.textContent = data.reviewCount ?? 0;
     
-    // Загрузим полные данные профиля включая очки и isAdmin
     const profile = await api("/profile");
     if (els.profilePoints) {
       els.profilePoints.textContent = profile.points ?? 0;
     }
     
-    // Показать кнопку админ-панели только для админов
     if (els.adminPanelBtn) {
       if (profile.isAdmin) {
         els.adminPanelBtn.classList.remove("hidden");
@@ -256,20 +235,7 @@ async function loadProfile() {
   }
 }
 
-// Функция для генерации условия выполнения достижения
 function getAchievementCondition(progressType, targetValue) {
-  // AchievementProgressType enum values:
-  // FirstPlaceAdded = 1
-  // ReviewsCount = 2
-  // PhotosCount = 3
-  // DetailedReviewsCount = 4
-  // BalancedReviews = 5
-  // NewPlacesAdded = 6
-  // HighRatedHealthyPlaces = 7
-  // TopThreeRating = 8
-  // PlacesReviewedByOthers = 9
-  // AllRatingsUsed = 10
-  // PlacesInOneDay = 11
 
   switch (progressType) {
     case 1: // FirstPlaceAdded
@@ -309,7 +275,6 @@ async function loadAchievements() {
       return;
     }
     
-    // Проверяем, есть ли новые достижения для показа поздравления
     if (profile.newlyEarnedAchievements && profile.newlyEarnedAchievements.length > 0) {
       profile.newlyEarnedAchievements.forEach(achievement => {
         showAchievementNotification(achievement);
@@ -329,7 +294,6 @@ async function loadAchievements() {
              <span class="progress-text">${a.progress}%</span>
            </div>`;
       
-      // Генерируем условие выполнения вместо описания
       const condition = getAchievementCondition(a.progressType, a.targetValue);
       
       li.innerHTML = `
@@ -363,17 +327,14 @@ function showAchievementNotification(achievement) {
   
   document.body.appendChild(modal);
   
-  // Анимация появления
   setTimeout(() => modal.classList.add('show'), 10);
   
-  // Закрытие по клику
   const closeBtn = modal.querySelector('.achievement-notification-close');
   closeBtn.addEventListener('click', () => {
     modal.classList.remove('show');
     setTimeout(() => modal.remove(), 300);
   });
   
-  // Закрытие по клику вне модального окна
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
       modal.classList.remove('show');
@@ -382,7 +343,6 @@ function showAchievementNotification(achievement) {
   });
 }
 
-// Функция для проверки достижений после действий
 async function checkAchievementsAfterAction() {
   try {
     const profile = await api("/profile");
@@ -417,7 +377,6 @@ async function loadReviews() {
       const safeComment = escapeHtml(r.comment);
       const safeRejectionReason = escapeHtml(r.rejectionReason);
 
-      // Статус модерации
       let statusBadge = '';
       if (r.moderationStatus === 'pending') {
         statusBadge = '<span class="status-badge status-pending">⏳ На модерации</span>';
@@ -465,13 +424,11 @@ function logout() {
   els.userReviewsList.innerHTML = "";
 }
 
-// Загрузить рейтинг пользователей
 async function loadRatings() {
     try {
         const data = await api('/profile/ratings');
         console.log('Ratings data:', data);
 
-        // Отобразить топ-10
         els.ratingsList.innerHTML = '';
         data.top10.forEach(user => {
             const isCurrentUser = currentUser && user.id === currentUser.id;
@@ -481,13 +438,11 @@ async function loadRatings() {
             div.style.borderRadius = '4px';
             div.style.marginBottom = '4px';
             
-            // Свойства могут быть displayName, points, level (camelCase)
             const rawName = user.displayName || user.DisplayName || 'Аноним';
             const name = isCurrentUser ? 'Вы' : escapeHtml(rawName);
             const points = parseInt(user.points || user.Points) || 0;
             const level = parseInt(user.level || user.Level) || 1;
             
-            // Определить медаль и цвет для первых трёх мест
             let medal = '';
             let medalColor = '';
             let bgColor = '';
@@ -512,7 +467,6 @@ async function loadRatings() {
                 textColor = 'color:var(--text);';
             }
             
-            // Если это текущий пользователь, добавить голубую подсветку
             const currentUserBg = isCurrentUser ? 'border-left:3px solid #2196F3; padding-left:5px;' : '';
             const combinedBg = bgColor ? `background:${bgColor}; ${currentUserBg}` : currentUserBg;
             
@@ -524,7 +478,6 @@ async function loadRatings() {
             els.ratingsList.appendChild(div);
         });
 
-        // Если пользователь не в топ-10, показать его отдельно
         if (data.currentUserPosition > 10) {
             els.currentUserRating.style.display = 'block';
             els.userRank.textContent = data.currentUserPosition;
@@ -539,18 +492,14 @@ async function loadRatings() {
     }
 }
 
-// Event wiring
 function toggleProfileVisibility() {
     const panel = els.profilePanel;
-    // Just toggle the class. CSS handles the sliding.
-    // No need to resize map or mess with display:none since it's an overlay.
     panel.classList.toggle("panel-hidden");
 }
 
 els.profileClose?.addEventListener("click", toggleProfileVisibility);
 els.topbarProfileToggle?.addEventListener("click", toggleProfileVisibility);
 
-// Ratings modal handlers
 els.ratingsBtn?.addEventListener("click", async () => {
     els.ratingsModal.style.display = 'flex';
     els.ratingsModal.style.justifyContent = 'center';
@@ -571,7 +520,6 @@ function setupCollapsible(header, container) {
     if (!header || !container) return;
     header.addEventListener('click', () => {
         container.classList.toggle('open');
-        // container.classList.toggle('hidden'); // Removed to prevent conflict with CSS transitions
         header.classList.toggle('active');
     });
 }
@@ -579,14 +527,11 @@ function setupCollapsible(header, container) {
 setupCollapsible(els.toggleReviews, els.reviewsContainer);
 setupCollapsible(els.toggleAchievements, els.achievementsContainer);
 
-// Object Reviews Panel Close Handler
 els.objectReviewsClose?.addEventListener("click", () => {
     els.objectReviewsPanel.classList.remove("open");
 });
 
-// Touch/swipe support for mobile panels
 function setupMobileTouchHandlers() {
-    // Swipe down to close object reviews panel (mobile)
     if (els.objectReviewsPanel) {
         let touchStartY = 0;
         let touchEndY = 0;
@@ -601,13 +546,11 @@ function setupMobileTouchHandlers() {
             const touchY = e.touches[0].clientY;
             const scrollTop = els.objectReviewsContent?.scrollTop || 0;
             
-            // If content is scrolled, don't treat as swipe
             if (scrollTop > 0) {
                 isScrolling = true;
                 return;
             }
             
-            // If swiping down from top
             if (touchY > touchStartY && touchY - touchStartY > 10) {
                 isScrolling = false;
             }
@@ -619,14 +562,12 @@ function setupMobileTouchHandlers() {
             touchEndY = e.changedTouches[0].clientY;
             const swipeDistance = touchEndY - touchStartY;
             
-            // Swipe down more than 50px to close
             if (swipeDistance > 50 && !els.objectReviewsContent?.scrollTop) {
                 els.objectReviewsPanel.classList.remove("open");
             }
         }, { passive: true });
     }
 
-    // Swipe right to close profile panel (mobile)
     if (els.profilePanel) {
         let touchStartX = 0;
         let touchEndX = 0;
@@ -639,7 +580,6 @@ function setupMobileTouchHandlers() {
             touchEndX = e.changedTouches[0].clientX;
             const swipeDistance = touchEndX - touchStartX;
             
-            // Swipe right more than 100px to close
             if (swipeDistance > 100) {
                 els.profilePanel.classList.add("panel-hidden");
             }
@@ -647,7 +587,6 @@ function setupMobileTouchHandlers() {
     }
 }
 
-// Initialize mobile touch handlers when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupMobileTouchHandlers);
 } else {
@@ -680,7 +619,6 @@ els.loginForm?.addEventListener("submit", async (e) => {
   }
 });
 
-// Forgot password button handler - must be inside a deferred function
 document.addEventListener("DOMContentLoaded", () => {
   const btnForgotPassword = document.getElementById("btn-forgot-password");
   if (btnForgotPassword) {
@@ -750,16 +688,11 @@ els.registerForm?.addEventListener("submit", async (e) => {
   }
 });
 
-// Старая форма отзывов удалена - используется setupReviewModal()
 
-// Init
 if (getToken()) {
   loadProfile();
 }
 
-// ==========================================
-// INTEGRATION: Map Logic from marky/app.js
-// ==========================================
 
 let myMap;
 let placemarks = [];
@@ -769,13 +702,10 @@ let addMode = false;
 let pendingCoords = null;
 let clusterer;
 
-// Хранилище всех объектов для быстрого поиска
 let allPlacesMap = new Map();
 
-// Все метки (видимые и скрытые) для кластеризации
 let allPlacemarks = [];
 
-// Типы и стили меток
 const placeTypes = {
     pharmacy: { color: '#2196F3', icon: '💊' },
     health_center: { color: '#4CAF50', icon: '🩺' },
@@ -789,7 +719,6 @@ const placeTypes = {
     gym: { color: '#FF5722', icon: '🏋️' }
 };
 
-// Инициализация карты
 if (typeof ymaps !== 'undefined') {
     ymaps.ready(initMap);
 } else {
@@ -797,7 +726,6 @@ if (typeof ymaps !== 'undefined') {
 }
 
 async function initMap() {
-    // Создаем кастомный layout внутри init, когда ymaps уже загружен
     const MyBalloonItemLayout = ymaps.templateLayoutFactory.createClass(
         '<div class="cluster-balloon-item">' +
             '<h4>$[properties.balloonContentHeader]</h4>' +
@@ -805,11 +733,10 @@ async function initMap() {
         '</div>'
     );
     
-    // Регистрируем кастомный layout
     ymaps.layout.storage.add('my#balloonItemLayout', MyBalloonItemLayout);
 
     const center = [54.1934, 37.6179]; // Тула
-    const zoom = 11;
+    const zoom = 10;
     const bounds = [[53.2, 35.2], [54.8, 39.8]]; // Тульская область
 
     myMap = new ymaps.Map('map', {
@@ -822,7 +749,6 @@ async function initMap() {
 
     myMap.events.add('click', onMapClick);
     
-    // Инициализируем кластеризатор
     initClusterer();
     
     await loadPlacesFromJson();
@@ -833,23 +759,17 @@ async function initMap() {
     setupAddButton();
     setupReviewModal();
     
-    // Настройка поведения при зуме
     setupZoomBehavior();
     
-    // Делаем функцию глобально доступной
     window.openReviewForm = openReviewForm;
 }
 
-// Инициализация кластеризатора
 function initClusterer() {
-    // Создаем кластеризатор с кастомными стилями
     clusterer = new ymaps.Clusterer({
-        // Основные настройки
         preset: 'islands#invertedBlueClusterIcons',
         clusterDisableClickZoom: false,
         clusterOpenBalloonOnClick: true,
         
-        // Настройки балуна кластера
         clusterBalloonContentLayout: 'cluster#balloonCarousel',
         clusterBalloonItemContentLayout: 'my#balloonItemLayout',
         clusterBalloonPanelMaxMapArea: 0,
@@ -857,38 +777,31 @@ function initClusterer() {
         clusterBalloonContentLayoutHeight: 200,
         clusterBalloonPagerSize: 5,
         
-        // Настройка группировки
         gridSize: 80,
         groupByCoordinates: false,
         minClusterSize: 2,
         
-        // Стили кластеров
         clusterIconLayout: 'default#pieChart',
         clusterIconPieChartRadius: 25,
         clusterIconPieChartCoreRadius: 15,
         clusterIconPieChartStrokeWidth: 3,
         
-        // Поведение
         hasBalloon: true,
         hasHint: false,
         zoomMargin: 50,
         
-        // Оптимизация
         clusterHideIconsOnSingleObject: true
     });
     
-    // Добавляем кластеризатор на карту
     myMap.geoObjects.add(clusterer);
 }
 
-// Настройка поведения при зуме
 function setupZoomBehavior() {
     let lastZoom = myMap.getZoom();
     
     myMap.events.add('boundschange', function (e) {
         const newZoom = e.get('newZoom');
         
-        // Меняем параметры кластеризации в зависимости от масштаба
         if (newZoom !== lastZoom) {
             if (newZoom > 16) { // Максимальное приближение - показываем все
                 clusterer.options.set({
@@ -917,11 +830,8 @@ function setupZoomBehavior() {
     });
 }
 
-// Загрузка данных из JSON и API
 async function loadPlacesFromJson() {
     try {
-        // 1. Загружаем статические данные
-        // Используем абсолютный путь для работы на мобильных устройствах
         const res = await fetch('/data/tula-objects.json');
         
         if (!res.ok) {
@@ -930,13 +840,10 @@ async function loadPlacesFromJson() {
         
         let dbObjects = await res.json();
 
-        // 2. Загружаем данные из БД
         try {
             const resApi = await fetch(`${apiBase}/places`);
             if (resApi.ok) {
                 const apiPlaces = await resApi.json();
-                // Мапим API объекты в формат приложения, если нужно, или просто добавляем
-                // API возвращает: { id, name, type, latitude, longitude, address }
                 const mappedApiPlaces = apiPlaces.map(p => ({
                     id: p.id,
                     name: p.name,
@@ -952,7 +859,6 @@ async function loadPlacesFromJson() {
         }
 
         basePlaces = dbObjects.map((obj, index) => {
-            // ОСНОВНОЕ ИСПРАВЛЕНИЕ: Преобразуем id в строку для единообразия
             const id = String(obj.id); // Преобразуем число в строку
             
             const place = {
@@ -966,13 +872,11 @@ async function loadPlacesFromJson() {
                 count: 0
             };
             
-            // Сохраняем в карту для быстрого поиска
             allPlacesMap.set(id, place);
             
             return place;
         });
 
-        // Не вызываем renderPlaces здесь, так как теперь используем createAllPlacemarks
         console.log('Загружено объектов из JSON:', basePlaces.length);
     } catch (e) {
         console.error('Ошибка загрузки данных:', e);
@@ -982,29 +886,24 @@ async function loadPlacesFromJson() {
             url: '/data/tula-objects.json'
         });
         
-        // Показываем более информативное сообщение об ошибке
         const errorMsg = e.message || 'Неизвестная ошибка';
         showNotification(`Ошибка загрузки данных: ${errorMsg}. Проверьте консоль браузера.`, 'error');
         
         basePlaces = [];
-        // Создаем метки даже если данных нет (для пустого состояния)
         createAllPlacemarks();
         applyFilters();
     }
 }
 
-// Создание всех меток
 function createAllPlacemarks() {
     allPlacemarks = [];
     
-    // Создаем метки для базовых объектов
     basePlaces.forEach(place => {
         if (!place.lat || !place.lng) return;
         const pm = createPlacemark(place);
         allPlacemarks.push(pm);
     });
     
-    // Создаем метки для пользовательских объектов
     userAddedPlaces.forEach(place => {
         if (!place.lat || !place.lng) return;
         const pm = createPlacemark(place);
@@ -1012,7 +911,6 @@ function createAllPlacemarks() {
     });
 }
 
-// Отображение объектов на карте (для обратной совместимости)
 function renderPlaces(places) {
     createAllPlacemarks();
     applyFilters();
@@ -1021,7 +919,6 @@ function renderPlaces(places) {
 async function showObjectReviews(placeId, placeName) {
     if (!els.objectReviewsPanel) return;
     
-    // Open the panel (for mobile bottom sheet)
     els.objectReviewsPanel.classList.add("open");
 
     els.objectReviewsTitle.textContent = `Отзывы: ${placeName}`;
@@ -1036,7 +933,6 @@ async function showObjectReviews(placeId, placeName) {
             return;
         }
         
-        // Получаем тип объекта для загрузки критериев
         const place = allPlacesMap.get(String(placeId)) || basePlaces.find(p => String(p.id) === String(placeId));
         let placeCriteria = {};
         if (place && place.type) {
@@ -1056,7 +952,6 @@ async function showObjectReviews(placeId, placeName) {
             
             const isAuthor = currentUser && currentUser.id === r.userId;
             
-            // Escape strings for onclick - prevent XSS
             const safePlaceName = escapeHtml(placeName).replace(/'/g, "\\'");
             const safeComment = escapeHtml(r.comment || '').replace(/'/g, "\\'");
             const safePhotoUrl = escapeHtml(r.photoUrl || '').replace(/'/g, "\\'");
@@ -1079,7 +974,6 @@ async function showObjectReviews(placeId, placeName) {
 
             let photoHtml = '';
             if (r.photoUrl) {
-                // Validate photoUrl starts with expected path
                 const photoUrl = r.photoUrl.startsWith('/uploads/') ? escapeHtml(r.photoUrl) : '';
                 if (photoUrl) {
                     photoHtml = `<div class="review-photo"><img src="${photoUrl}" alt="Фото отзыва" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px; cursor:pointer;" onclick="window.open('${photoUrl}', '_blank')"></div>`;
@@ -1088,7 +982,6 @@ async function showObjectReviews(placeId, placeName) {
             
             const displayName = (currentUser && r.userId === currentUser.id) ? 'Вы' : escapeHtml(r.userName);
             
-            // Формируем HTML для критериев
             let criteriaHtml = '';
             if (r.criteriaRatings && !r.isDirectRating && Object.keys(r.criteriaRatings).length > 0) {
                 const criteriaKeys = Object.keys(r.criteriaRatings);
@@ -1150,7 +1043,6 @@ async function showObjectReviews(placeId, placeName) {
     }
 }
 
-// Global functions for review actions
 window.voteReview = async function(reviewId, isLike, placeId, placeName) {
     if (!currentUser) {
         showNotification('Войдите, чтобы голосовать', 'error');
@@ -1162,15 +1054,12 @@ window.voteReview = async function(reviewId, isLike, placeId, placeName) {
             body: JSON.stringify({ isLike })
         });
         
-        // Очистить кэш чтобы получить свежие голоса
         placeReviewsCache.delete(placeId);
         
-        // Refresh reviews panel if open
         if (els.objectReviewsPanel && !els.objectReviewsPanel.classList.contains('hidden') && els.objectReviewsTitle.textContent.includes(placeName)) {
              await showObjectReviews(placeId, placeName);
         }
         
-        // Also refresh profile if we are logged in
         if (getToken()) {
             await loadReviews();
         }
@@ -1185,7 +1074,6 @@ window.deleteReview = async function(reviewId, placeId, placeName) {
     try {
         await api(`/reviews/${reviewId}`, { method: 'DELETE' });
         
-        // Очистить кэш
         placeReviewsCache.delete(placeId);
         
         await showObjectReviews(placeId, placeName);
@@ -1193,7 +1081,6 @@ window.deleteReview = async function(reviewId, placeId, placeName) {
             await loadProfile();
         }
         
-        // Обновить карту
         await loadPlacesFromJson();
     } catch (e) {
         console.error(e);
@@ -1202,12 +1089,10 @@ window.deleteReview = async function(reviewId, placeId, placeName) {
 };
 
 window.editReview = function(reviewId, rating, comment, placeId, photoUrl, criteriaRatings = null, isDirectRating = true) {
-    // Reuse the review form but change its behavior
     openReviewForm(placeId, reviewId, rating, comment, photoUrl, criteriaRatings, isDirectRating);
 };
 
 
-// Создание метки
 function createPlacemark(place) {
     const reviewsInfo = calculateRatingSync(place.id);
     const rating = reviewsInfo.count > 0
@@ -1243,14 +1128,12 @@ function createPlacemark(place) {
         address: place.address
     };
 
-    // Добавляем метаданные для фильтрации и кластеризации
     placemark.properties.set({
         placeType: place.type,
         placeId: place.id,
         placeName: place.name
     });
 
-    // Load reviews when clicked
     placemark.events.add('click', () => {
         showObjectReviews(place.id, place.name);
     });
@@ -1258,38 +1141,31 @@ function createPlacemark(place) {
     return placemark;
 }
 
-// Применить фильтры с учетом кластеризации
 function applyFilters() {
     if (!clusterer) return;
     
     const activeTypes = Array.from(document.querySelectorAll('#filters input:checked'))
         .map(cb => cb.dataset.type);
 
-    // Получаем только видимые метки по фильтру
     const visiblePlacemarks = allPlacemarks.filter(pm => {
         const type = pm.properties.get('placeType');
         return activeTypes.includes(type);
     });
     
-    // Очищаем кластеризатор
     clusterer.removeAll();
     
-    // Добавляем только видимые метки
     if (visiblePlacemarks.length > 0) {
         clusterer.add(visiblePlacemarks);
     }
     
-    // Также обновляем видимость меток
     allPlacemarks.forEach(pm => {
         const type = pm.properties.get('placeType');
         const shouldBeVisible = activeTypes.includes(type);
         
-        // Устанавливаем видимость метки
         pm.options.set('visible', shouldBeVisible);
     });
 }
 
-// Настройка фильтров с поддержкой двойного клика
 function setupFilters() {
     const checkboxes = document.querySelectorAll('#filters input');
     
@@ -1298,77 +1174,60 @@ function setupFilters() {
         let originalState = null; // Сохраняем исходное состояние перед двойным кликом
         let changeTimeout = null; // Таймаут для обработки одиночного клика
         
-        // Сохраняем состояние перед кликом (для обработки двойного клика)
         cb.addEventListener('mousedown', function() {
             originalState = cb.checked;
         });
         
-        // Обработка одиночного клика через событие change
         cb.addEventListener('change', function() {
-            // Отменяем предыдущий таймаут
             if (changeTimeout) {
                 clearTimeout(changeTimeout);
             }
             
-            // Устанавливаем таймаут для обработки одиночного клика
-            // Если произойдет двойной клик, таймаут будет отменен
             changeTimeout = setTimeout(() => {
                 applyFilters();
                 changeTimeout = null;
             }, 300); // Небольшая задержка для проверки двойного клика
         });
         
-        // Обработка двойного клика на чекбокс
         cb.addEventListener('dblclick', function(e) {
             e.preventDefault();
             e.stopPropagation();
             
-            // Отменяем таймаут одиночного клика
             if (changeTimeout) {
                 clearTimeout(changeTimeout);
                 changeTimeout = null;
             }
             
-            // Восстанавливаем исходное состояние (отменяем изменение браузера)
             if (originalState !== null) {
                 cb.checked = originalState;
             }
             
-            // Обрабатываем двойной клик
             handleDoubleClick(clickType);
             
-            // Сбрасываем состояние
             originalState = null;
         });
         
-        // Обработка двойного клика на label
         const label = cb.closest('label');
         if (label) {
             label.addEventListener('dblclick', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                // Отменяем таймаут одиночного клика
                 if (changeTimeout) {
                     clearTimeout(changeTimeout);
                     changeTimeout = null;
                 }
                 
-                // Сохраняем текущее состояние перед обработкой
                 const currentState = cb.checked;
                 
-                // Восстанавливаем исходное состояние (отменяем изменение браузера)
                 if (originalState !== null) {
                     cb.checked = originalState;
                 } else {
-                    // Если originalState не был сохранен, отменяем текущее изменение
                     cb.checked = !currentState;
                 }
                 
-                // Обрабатываем двойной клик
                 handleDoubleClick(clickType);
                 
-                // Сбрасываем состояние
                 originalState = null;
             });
         }
@@ -1384,24 +1243,19 @@ function setupFilters() {
     }
 }
 
-// Функция для обработки двойного клика
 function handleDoubleClick(typeToShow) {
     const allCheckboxes = document.querySelectorAll('#filters input');
     const allTypes = Array.from(allCheckboxes).map(cb => cb.dataset.type);
     
-    // Проверяем текущее состояние
     const checkedCheckboxes = Array.from(allCheckboxes).filter(cb => cb.checked);
     const checkedTypes = checkedCheckboxes.map(cb => cb.dataset.type);
     
-    // Если выбран только этот тип - включаем все обратно
     if (checkedTypes.length === 1 && checkedTypes[0] === typeToShow) {
-        // Включаем все
         allCheckboxes.forEach(cb => {
             cb.checked = true;
         });
         showNotification('Показаны все типы объектов');
     } else {
-        // Иначе показываем только этот тип
         allCheckboxes.forEach(cb => {
             cb.checked = (cb.dataset.type === typeToShow);
         });
@@ -1412,7 +1266,6 @@ function handleDoubleClick(typeToShow) {
     applyFilters();
 }
 
-// Режим добавления объекта
 function setupAddButton() {
     const btn = document.getElementById('add-place-btn');
     if(!btn) return; // Button removed from HTML
@@ -1455,7 +1308,6 @@ async function submitNewPlace() {
     const [lat, lng] = pendingCoords;
 
     try {
-        // Отправляем на сервер
         const res = await api('/places', {
             method: 'POST',
             body: JSON.stringify({
@@ -1478,22 +1330,18 @@ async function submitNewPlace() {
             count: 0
         };
 
-        // Добавляем в список
         basePlaces.push(newPlace);
         allPlacesMap.set(newPlace.id, newPlace);
         
-        // Создаем новую метку и добавляем в общий список
         const newPlacemark = createPlacemark(newPlace);
         allPlacemarks.push(newPlacemark);
         
-        // Пересчитываем фильтры
         applyFilters();
 
         document.getElementById('place-name').value = '';
         document.getElementById('add-place-modal').style.display = 'none';
         showNotification(`Объект "${name}" успешно добавлен!`, 'success');
         
-        // Проверяем достижения после добавления места
         if (getToken()) {
             await checkAchievementsAfterAction();
         }
@@ -1503,13 +1351,10 @@ async function submitNewPlace() {
     }
 }
 
-// === СИСТЕМА ОТЗЫВОВ (через API) ===
 
-// Кэш отзывов для карты
 let placeReviewsCache = new Map();
 
 async function getPlaceReviews(placeId) {
-    // Проверяем кэш
     if (placeReviewsCache.has(placeId)) {
         return placeReviewsCache.get(placeId);
     }
@@ -1539,7 +1384,6 @@ async function calculateRating(placeId) {
     };
 }
 
-// Синхронная версия для начальной отрисовки (использует кэш)
 function calculateRatingSync(placeId) {
     const reviews = placeReviewsCache.get(placeId) || [];
     if (reviews.length === 0) {
@@ -1561,14 +1405,12 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
         return;
     }
 
-    // Проверяем авторизацию
     if (!getToken()) {
         showNotification('Для добавления отзыва необходимо войти в систему', 'error');
         showModal('login');
         return;
     }
 
-    // Если это новый отзыв, проверяем, не оставлял ли пользователь уже отзыв
     if (!reviewId) {
         try {
             const res = await api(`/reviews/check/${idStr}`);
@@ -1586,14 +1428,12 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
     window.currentReviewId = reviewId;
     window.currentReviewPlaceType = place.type;
 
-    // Флаги для удаления/наличия фото при редактировании
     window.currentReviewHasPhoto = !!photoUrl;
     window.currentReviewDeletePhoto = false;
 
     document.getElementById('review-place-name').textContent = reviewId ? `Редактирование: ${place.name}` : place.name;
     document.getElementById('review-modal').style.display = 'flex';
     
-    // Загружаем критерии для типа объекта
     let criteria = {};
     try {
         const criteriaRes = await api(`/reviews/criteria/${place.type}`);
@@ -1604,16 +1444,13 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
 
     window.currentReviewCriteria = criteria;
 
-    // Определяем режим оценки
     const useCriteria = !isDirectRating && criteriaRatings && Object.keys(criteriaRatings).length > 0;
     document.getElementById('rating-type-general').checked = !useCriteria;
     document.getElementById('rating-type-criteria').checked = useCriteria;
     
-    // Показываем/скрываем соответствующие элементы
     document.getElementById('star-rating').style.display = useCriteria ? 'none' : 'flex';
     document.getElementById('criteria-rating').style.display = useCriteria ? 'block' : 'none';
 
-    // Сбросить форму общего рейтинга
     window.selectedRating = rating;
     document.querySelectorAll('#star-rating span').forEach((s, i) => {
         const isActive = i + 1 <= rating;
@@ -1621,7 +1458,6 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
         s.classList.toggle('star-active', isActive);
     });
 
-    // Настроить критерии
     const criteriaContainer = document.getElementById('criteria-rating');
     criteriaContainer.innerHTML = '';
     
@@ -1641,7 +1477,6 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
             `;
             criteriaContainer.appendChild(div);
 
-            // Устанавливаем значение если есть
             if (criteriaRatings && criteriaRatings[key]) {
                 const value = criteriaRatings[key];
                 div.querySelectorAll('.criteria-star-rating span').forEach((s, i) => {
@@ -1651,7 +1486,6 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
                 });
             }
 
-            // Обработчик клика на звезды критерия
             div.querySelectorAll('.criteria-star-rating span').forEach(star => {
                 star.addEventListener('click', function() {
                     const criterionKey = this.closest('.criteria-star-rating').dataset.criterion;
@@ -1662,7 +1496,6 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
                     }
                     window.selectedCriteriaRatings[criterionKey] = value;
 
-                    // Обновляем отображение звезд для этого критерия
                     this.closest('.criteria-star-rating').querySelectorAll('span').forEach((s, i) => {
                         const isActive = i + 1 <= value;
                         s.textContent = isActive ? '★' : '☆';
@@ -1673,7 +1506,6 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
         });
     }
 
-    // Инициализируем выбранные критерии
     if (criteriaRatings) {
         window.selectedCriteriaRatings = { ...criteriaRatings };
     } else {
@@ -1682,7 +1514,6 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
 
     document.getElementById('review-comment').value = comment;
 
-    // Показать превью существующего фото если есть (для редактирования)
     const photoPreview = document.getElementById('photo-preview');
     const photoPreviewImg = document.getElementById('photo-preview-img');
     const photoInput = document.getElementById('review-photo');
@@ -1699,7 +1530,6 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
         if (photoPreviewImg) photoPreviewImg.src = '';
     }
 
-    // Сбросить input файла при открытии
     if (photoInput) photoInput.value = '';
     if (removePhotoBtn) {
         removePhotoBtn.style.display = photoUrl ? 'inline-block' : 'none';
@@ -1707,7 +1537,6 @@ async function openReviewForm(placeId, reviewId = null, rating = 0, comment = ''
 }
 
 function setupReviewModal() {
-    // Переключение между общим рейтингом и критериями
     document.getElementById('rating-type-general')?.addEventListener('change', function() {
         if (this.checked) {
             document.getElementById('star-rating').style.display = 'flex';
@@ -1724,7 +1553,6 @@ function setupReviewModal() {
         }
     });
 
-    // Звезды рейтинга
     document.querySelectorAll('#star-rating span').forEach(star => {
         star.addEventListener('click', function () {
             const value = parseInt(this.dataset.value);
@@ -1738,7 +1566,6 @@ function setupReviewModal() {
         });
     });
 
-    // Обработка превью фото
     const photoInput = document.getElementById('review-photo');
     const photoPreview = document.getElementById('photo-preview');
     const photoPreviewImg = document.getElementById('photo-preview-img');
@@ -1747,11 +1574,9 @@ function setupReviewModal() {
     if (photoInput) {
         photoInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
-            // Если пользователь выбрал новый файл при редактировании, отменяем пометку на удаление
             window.currentReviewDeletePhoto = false;
 
             if (file) {
-                // Проверка размера
                 if (file.size > 5 * 1024 * 1024) {
                     alert('Размер файла не должен превышать 5MB');
                     photoInput.value = '';
@@ -1771,7 +1596,6 @@ function setupReviewModal() {
 
     if (removePhotoBtn) {
         removePhotoBtn.addEventListener('click', () => {
-            // Если это редактирование существующего фото — помечаем на удаление
             if (window.currentReviewHasPhoto) {
                 window.currentReviewDeletePhoto = true;
             }
@@ -1779,7 +1603,6 @@ function setupReviewModal() {
             photoInput.value = '';
             photoPreview.style.display = 'none';
             photoPreviewImg.src = '';
-            // Скрыть кнопку удаления после клика
             removePhotoBtn.style.display = 'none';
         });
     }
@@ -1788,7 +1611,6 @@ function setupReviewModal() {
     if(cancelBtn) {
         cancelBtn.addEventListener('click', () => {
             document.getElementById('review-modal').style.display = 'none';
-            // Очистить форму
             photoInput.value = '';
             photoPreview.style.display = 'none';
         });
@@ -1806,7 +1628,6 @@ function setupReviewModal() {
             const reviewId = window.currentReviewId;
             const photoFile = photoInput?.files[0];
 
-            // Валидация
             if (useCriteria) {
                 const criteriaKeys = Object.keys(window.currentReviewCriteria || {});
                 if (criteriaKeys.length === 0) {
@@ -1828,7 +1649,6 @@ function setupReviewModal() {
             try {
                 let reviewResponse;
                 if (reviewId) {
-                    // Обновление существующего отзыва
                     reviewResponse = await api(`/reviews/${reviewId}`, {
                         method: 'PUT',
                         body: JSON.stringify({
@@ -1839,7 +1659,6 @@ function setupReviewModal() {
                         })
                     });
                 } else {
-                    // Создание нового отзыва
                     reviewResponse = await api('/reviews', {
                         method: 'POST',
                         body: JSON.stringify({
@@ -1852,7 +1671,6 @@ function setupReviewModal() {
                     });
                 }
 
-                // 2. Если есть фото - загружаем его отдельно
                 if (photoFile && reviewResponse?.id) {
                     const formData = new FormData();
                     formData.append('photo', photoFile);
@@ -1865,31 +1683,24 @@ function setupReviewModal() {
                     });
                 }
 
-                // Очистить кэш для этого места
                 placeReviewsCache.delete(placeId);
                 
                 document.getElementById('review-modal').style.display = 'none';
                 
-                // Очистить форму
                 if (photoInput) {
                     photoInput.value = '';
                     photoPreview.style.display = 'none';
                 }
                 
-                // Обновить карту и профиль
                 await loadPlaceReviewsForMap();
-                // Обновляем все метки с новыми рейтингами
                 createAllPlacemarks();
                 applyFilters();
                 
-                // Обновить профиль если авторизован (обновит очки и проверит достижения)
                 if (getToken()) {
                     await loadProfile();
-                    // Дополнительно проверяем достижения после создания отзыва
                     await checkAchievementsAfterAction();
                 }
                 
-                // Refresh reviews panel if open
                 if (els.objectReviewsPanel && els.objectReviewsTitle.textContent.includes(placeName)) {
                     showObjectReviews(placeId, placeName);
                 }
@@ -1903,7 +1714,6 @@ function setupReviewModal() {
     }
 }
 
-// Загрузка всех отзывов для объектов на карте
 async function loadPlaceReviewsForMap() {
     const placeIds = basePlaces.map(p => p.id);
     for (const placeId of placeIds) {
@@ -1927,13 +1737,10 @@ function getFriendlyTypeName(type) {
     return map[type] || type;
 }
 
-// Показать временное уведомление
 function showNotification(message, type = 'info') {
-    // Создаем элемент уведомления
     const notification = document.createElement('div');
     notification.className = 'notification';
     
-    // Разные стили для разных типов уведомлений
     if (type === 'error') {
         notification.style.background = 'rgba(220, 53, 69, 0.9)';
     } else if (type === 'success') {
@@ -1961,12 +1768,10 @@ function showNotification(message, type = 'info') {
     
     document.body.appendChild(notification);
     
-    // Показываем с анимацией
     setTimeout(() => {
         notification.style.opacity = '1';
     }, 10);
     
-    // Автоматически скрываем через 3 секунды
     setTimeout(() => {
         notification.style.opacity = '0';
         setTimeout(() => {

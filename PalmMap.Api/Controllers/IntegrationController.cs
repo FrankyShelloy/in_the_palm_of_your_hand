@@ -5,10 +5,6 @@ using PalmMap.Api.Data;
 
 namespace PalmMap.Api.Controllers;
 
-/// <summary>
-/// API для интеграции с городскими системами.
-/// Требует API-ключ в заголовке X-Api-Key.
-/// </summary>
 [ApiController]
 [Route("api/v1/integration")]
 [EnableRateLimiting("api")]
@@ -23,9 +19,6 @@ public class IntegrationController : ControllerBase
         _configuration = configuration;
     }
 
-    /// <summary>
-    /// Проверка API-ключа
-    /// </summary>
     private bool ValidateApiKey()
     {
         var apiKey = Request.Headers["X-Api-Key"].FirstOrDefault();
@@ -34,17 +27,12 @@ public class IntegrationController : ControllerBase
         
         if (string.IsNullOrWhiteSpace(validKey))
         {
-            // В режиме разработки без ключа - разрешаем доступ
             return _configuration.GetValue<bool>("Integration:AllowAnonymous", false);
         }
         
         return apiKey == validKey;
     }
 
-    /// <summary>
-    /// Получить все места с агрегированной статистикой отзывов
-    /// GET /api/v1/integration/places
-    /// </summary>
     [HttpGet("places")]
     [ProducesResponseType(typeof(List<PlaceExportDto>), 200)]
     [ProducesResponseType(401)]
@@ -83,7 +71,6 @@ public class IntegrationController : ControllerBase
             })
             .ToListAsync();
 
-        // Фильтрация по рейтингу и количеству отзывов (после агрегации)
         if (minRating.HasValue)
             places = places.Where(p => p.AverageRating >= minRating.Value).ToList();
         
@@ -99,10 +86,6 @@ public class IntegrationController : ControllerBase
         });
     }
 
-    /// <summary>
-    /// Получить детальную информацию о месте
-    /// GET /api/v1/integration/places/{id}
-    /// </summary>
     [HttpGet("places/{id}")]
     [ProducesResponseType(typeof(PlaceDetailExportDto), 200)]
     [ProducesResponseType(401)]
@@ -129,7 +112,6 @@ public class IntegrationController : ControllerBase
         if (place == null)
             return NotFound(new { error = "Place not found" });
 
-        // Добавляем статистику отзывов
         var reviews = await _db.Reviews
             .Where(r => r.PlaceId == id)
             .ToListAsync();
@@ -148,10 +130,6 @@ public class IntegrationController : ControllerBase
         return Ok(place);
     }
 
-    /// <summary>
-    /// Получить отзывы для места
-    /// GET /api/v1/integration/places/{id}/reviews
-    /// </summary>
     [HttpGet("places/{id}/reviews")]
     [ProducesResponseType(typeof(List<ReviewExportDto>), 200)]
     [ProducesResponseType(401)]
@@ -203,10 +181,6 @@ public class IntegrationController : ControllerBase
         });
     }
 
-    /// <summary>
-    /// Получить общую статистику платформы
-    /// GET /api/v1/integration/stats
-    /// </summary>
     [HttpGet("stats")]
     [ProducesResponseType(typeof(PlatformStatsDto), 200)]
     [ProducesResponseType(401)]
@@ -241,10 +215,6 @@ public class IntegrationController : ControllerBase
         return Ok(stats);
     }
 
-    /// <summary>
-    /// Получить места в заданном радиусе от точки
-    /// GET /api/v1/integration/places/nearby
-    /// </summary>
     [HttpGet("places/nearby")]
     [ProducesResponseType(typeof(List<PlaceExportDto>), 200)]
     [ProducesResponseType(401)]
@@ -258,9 +228,6 @@ public class IntegrationController : ControllerBase
         if (!ValidateApiKey())
             return Unauthorized(new { error = "Invalid or missing API key" });
 
-        // Простой расчёт расстояния (приближённый, для небольших расстояний)
-        // 1 градус широты ≈ 111 км
-        // 1 градус долготы ≈ 111 * cos(широта) км
         var latDelta = radiusKm / 111.0;
         var lonDelta = radiusKm / (111.0 * Math.Cos(lat * Math.PI / 180));
 
@@ -290,7 +257,6 @@ public class IntegrationController : ControllerBase
             })
             .ToListAsync();
 
-        // Вычисляем точное расстояние и фильтруем
         places = places
             .Select(p => {
                 p.DistanceKm = CalculateDistance(lat, lon, p.Latitude, p.Longitude);
@@ -309,10 +275,6 @@ public class IntegrationController : ControllerBase
         });
     }
 
-    /// <summary>
-    /// Экспорт данных в формате GeoJSON
-    /// GET /api/v1/integration/export/geojson
-    /// </summary>
     [HttpGet("export/geojson")]
     [ProducesResponseType(200)]
     [ProducesResponseType(401)]
@@ -358,9 +320,6 @@ public class IntegrationController : ControllerBase
         return Ok(geoJson);
     }
 
-    /// <summary>
-    /// Расчёт расстояния между двумя точками (формула Haversine)
-    /// </summary>
     private static double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
     {
         const double R = 6371; // Радиус Земли в км

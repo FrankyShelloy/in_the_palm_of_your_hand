@@ -33,25 +33,20 @@
         });
     }
 
-    // Initial setup
     const currentTheme = getTheme();
     setTheme(currentTheme);
 
-    // Listen for system changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
         if (!localStorage.getItem('theme')) {
             setTheme('system');
         }
     });
 
-    // Expose to global scope for button clicks
     window.setAppTheme = setTheme;
 
-    // Initialize buttons when DOM is ready
     document.addEventListener('DOMContentLoaded', () => {
         updateActiveButton(getTheme());
         
-        // Add click listeners
         document.querySelectorAll('.theme-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 setAppTheme(btn.dataset.theme);

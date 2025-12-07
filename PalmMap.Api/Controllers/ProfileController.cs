@@ -34,10 +34,8 @@ public class ProfileController : ControllerBase
             return Unauthorized();
         }
 
-        // Проверяем и обновляем достижения
         var progressResult = await _achievementService.CheckAndAwardAsync(user);
 
-        // Получаем все достижения с прогрессом
         var allAchievements = await _db.Achievements
             .OrderBy(a => a.ProgressType)
             .ThenBy(a => a.TargetValue)
@@ -88,7 +86,6 @@ public class ProfileController : ControllerBase
         });
     }
 
-    // Получить рейтинг: топ-10 пользователей и позицию текущего пользователя
     [HttpGet("ratings")]
     public async Task<IActionResult> GetRatings()
     {
@@ -98,21 +95,17 @@ public class ProfileController : ControllerBase
             return Unauthorized();
         }
 
-        // Получить всех пользователей, отсортировано по очкам (убывание)
         var allUsers = await _db.Users
             .OrderByDescending(u => u.Points)
             .ThenByDescending(u => u.Level)
             .ToListAsync();
 
-        // Топ-10
         var top10 = allUsers.Take(10)
             .Select((u, idx) => new UserRatingEntry(idx + 1, u.Id, u.DisplayName ?? "Аноним", u.Points, u.Level))
             .ToList();
 
-        // Позиция текущего пользователя (1-indexed)
         var userPosition = allUsers.FindIndex(u => u.Id == user.Id) + 1;
 
-        // Текущий пользователь (если не в топ-10)
         var currentUserRating = new UserRatingEntry(userPosition, user.Id, user.DisplayName ?? "Аноним", user.Points, user.Level);
 
         return Ok(new UserRatingsResponse(top10, userPosition, currentUserRating));
